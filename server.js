@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const {getDate} = require("./api/getDate");
 
 // MongoDB サーバーの接続文字列
 const dbURI = "mongodb://0.0.0.0:27017/Blogging";
@@ -26,7 +25,7 @@ const userSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
     title : String,
     content : String,
-    date : getDate(),
+    date : String,
     author : String,
     image : String,
 });

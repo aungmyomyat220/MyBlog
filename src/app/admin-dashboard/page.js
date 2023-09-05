@@ -5,6 +5,7 @@ import Author from '../../image/joe.jpeg'
 import {createPost} from "../../../api/api";
 import {getDate} from "../../../api/getDate";
 const adminDashboard = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [postData, setPostData] = useState({
         title : "",
         content : "",
