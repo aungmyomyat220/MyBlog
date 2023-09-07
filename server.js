@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     userEmail : String,
     password : String,
     role : String,
+    image : String
 });
 
 const postSchema = new mongoose.Schema({
@@ -40,8 +41,9 @@ app.use(cors());
 app.post('/users', async (req, res) => {
     try {
         const userData = req.body
-        await User.create(userData)
-        res.status(201).json({ message: 'User created successfully',userData});
+        const newUser = new User(userData);
+        await newUser.save();
+        res.status(201).json(newUser);
     } catch (error) {
         // Handle any errors
         console.error('Error creating user:', error);

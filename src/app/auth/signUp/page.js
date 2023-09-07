@@ -23,10 +23,11 @@ const Page = () => {
     };
 
     const handleInputChange = (e) => {
-        const { value, name,type,files } = e.target;
+        const { value, name,type} = e.target;
+        const file = e.target.files? e.target.files[0]:null
             setUser((prevUser) => ({
                 ...prevUser,
-                [name]: type === 'file' ? files : value,
+                [name]: type === 'file' ? URL.createObjectURL(file): value,
             }))
     };
 
@@ -59,7 +60,7 @@ const Page = () => {
                 "role": ""
             });
             setError("");
-            router.push('/auth/signIn');
+            router.push('/Home');
         } catch (error) {
             setError("An error occurred while creating the user."); // Handle API error
         }
