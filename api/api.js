@@ -38,6 +38,14 @@ export const createPost = async (postData) => {
     }
 };
 
+export const getUser = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/users`);
+        return await response.json();
+    } catch (error) {
+        console.error("Error getting users:", error);
+    }
+};
 
 export const getPost = async () => {
     try {

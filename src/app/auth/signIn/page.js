@@ -1,6 +1,37 @@
-import React from 'react';
+"use client"
+import React, {useState} from 'react';
+import { getUser} from "../../../../api/api";
+import {useQuery} from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+    const router = useRouter()
+    const [checkUser,setCheckUser] = useState({
+        email : "",
+        password : ""
+    })
+    const handleInputChange = (e) =>{
+        const {name , value } = e.target
+        setCheckUser({
+            [name] : value
+        })
+        console.log(checkUser)
+    }
+
+    const { data: users } = useQuery({ queryKey: ['users'], queryFn: getUser })
+
+    const handleClick = (e) => {
+        e.preventDefault()
+        const foundUser = users.find((user) => user.email === checkUser.email && user.password === checkUser.password);
+
+        if (foundUser) {
+            foundUser.role === "author"? router.push(`/admin-dashboard/${foundUser._id}`) : router.push("/Home")
+        } else {
+            alert("Your Account Does Not Exist.Register First")
+        }
+    };
+
+
     return (
         <>
             <div className="bg-gray-100 flex justify-center items-center h-screen">
@@ -8,16 +39,16 @@ const Page = () => {
                 <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
                 <form>
                     <div className="mb-4">
-                        <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">Username:</label>
-                        <input type="text" id="username" name="username" required
-                               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
+                        <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+                        <input type="email" name="email" required
+                               onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
                     </div>
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Password:</label>
                         <input type="password" id="password" name="password" required
-                               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
+                               onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
                     </div>
-                    <button type="submit"
+                    <button type="submit" onClick={handleClick}
                             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-400">Login</button>
                 </form>
             </div>

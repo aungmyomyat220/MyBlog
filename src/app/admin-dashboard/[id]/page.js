@@ -1,12 +1,16 @@
 'use client'
 import React, {useRef, useState} from 'react';
 import Image from "next/image";
-import Author from '../../image/joe.jpeg'
-import {createPost} from "../../../api/api";
-import {getDate} from "../../../api/getDate";
+import Author from '../../../image/joe.jpeg'
+import {createPost, getUser} from "../../../../api/api";
+import {getDate} from "../../../../api/getDate";
 import ImagePicker from "@/image/upload.png";
+import {useParams} from "next/navigation";
+import {useQuery} from "@tanstack/react-query";
+import {log} from "next/dist/server/typescript/utils";
 const adminDashboard = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const {id} = useParams()
+    const fileInputRef = useRef(null);
     const [postData, setPostData] = useState({
         title : "",
         content : "",
@@ -15,10 +19,13 @@ const adminDashboard = () => {
         image : ""
     })
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [error, setError] = useState("");
-    const fileInputRef = useRef(null);
+    const { data: fetchedUsers } = useQuery(['users'], getUser);
+    let matchedUser = null; // Initialize matchedUser with a default value
+    if (fetchedUsers && Array.isArray(fetchedUsers)) {
+        matchedUser = fetchedUsers.find(user => user._id === id);
+    }
 
+    console.log(matchedUser.image)
     const openFilePicker = () => {
         fileInputRef.current.click();
     };
@@ -33,10 +40,11 @@ const adminDashboard = () => {
             date : getDate(),
         }));
     };
-    const postUpload = async (e) =>{
+    const postUpload = async () =>{
         await createPost(postData);
         alert("Post Uploaded");
     }
+
     return (
         <>
             <div className='flex flex-col w-full h-screen justify-center items-center text-black'>
@@ -44,22 +52,25 @@ const adminDashboard = () => {
                     <div className="p-8 rounded shadow-md w-full max-w-xl flex flex-col items-center">
                         <span className='font-bold text-2xl py-4 border-b border-black w-full text-center'>Create Post</span>
                         <div className='pt-8 pb-5 flex w-full px-5'>
-                            <Image src={Author} alt='author' className='w-12 h-12 rounded-full'/>
-                            <span className='text-lg font-medium ml-3 mt-2'>Admin</span>
+                            {matchedUser && (
+                                <>
+                                    <Image src={matchedUser.image} alt={matchedUser.userName} className='w-12 h-12 rounded-full' width={10} height={10}/>
+                                    <span className='text-lg font-medium ml-3 mt-2'>{matchedUser.userName}</span>
+                                </>
+                            )}
+                            {/*<Image src={matchedUser.image} alt='author' className='w-12 h-12 rounded-full'/>*/}
+                            {/*<span className='text-lg font-medium ml-3 mt-2'>Admin</span>*/}
                         </div>
                         <div className='flex flex-col'>
                             <div className="my-5">
                                 <label className="block font-medium mb-1">Upload Image</label>
                                 <div onClick={openFilePicker} className='mt-2' >
                                     {postData.image ? (
-                                        // eslint-disable-next-line @next/next/no-img-element
-
                                         <div className="p-10 flex justify-center items-center">
                                             <Image src={postData.image} alt="Selected" width="300" height={15} className="w-full h-32" />
                                         </div>
                                     ) : (
                                         <div>
-
                                             <div className="border border-dashed border-blue-900 p-10 flex justify-center items-center">
                                                 <Image src={ImagePicker} alt="ImagePicker" className="w-6 h-6"></Image>
                                             </div>

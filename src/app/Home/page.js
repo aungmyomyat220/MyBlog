@@ -9,8 +9,6 @@ import {useQuery} from "@tanstack/react-query";
 export default function Home() {
     const router = useRouter()
     const {data :posts, error, isLoading} = useQuery({queryKey: ['get'], queryFn: getPost})
-
-    console.log(posts)
     if (isLoading) {
         return <div className='flex flex-col w-full h-screen justify-center items-center'>
             <span className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></span>
