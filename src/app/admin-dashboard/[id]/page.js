@@ -8,6 +8,7 @@ const Page = () => {
     const [showButton, setShowButton] = useState(false);
     const [isRotated, setIsRotated] = useState(false);
     const [showText, setShowText] = useState(false);
+    const [imageURL, setImageURL] = useState('');
     const [postData, setPostData] = useState({
         title : "",
         content : "",
@@ -36,9 +37,13 @@ const Page = () => {
         e.preventDefault()
         const { value, name,type } = e.target;
         const file = e.target.files? e.target.files[0]:null
+        if (type === 'file') {
+            const imageUrl = URL.createObjectURL(file);
+            setImageURL(imageUrl);
+        }
         setPostData((prevPostData) => ({
             ...prevPostData,
-            [name]: type === 'file' ? URL.createObjectURL(file): value,
+            [name]: type === 'file' ? imageURL: value,
             date : getDate(),
         }));
     };
