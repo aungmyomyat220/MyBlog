@@ -72,7 +72,7 @@ const Page = () => {
             <div className="flex flex-col w-full h-screen items-center mt-10">
                 <div className="w-full flex flex-col max-w-7xl justify-center items-center">
                     <div className="w-full flex justify-between">
-                        <span className="font-bold text-5xl">Medium</span>
+                        <span className="font-bold text-5xl">My Blog</span>
                         <div>
                             <button className="bg-green-600 text-white rounded-full px-3 py-1 mr-3" onClick={postUpload}>Publish</button>
                         </div>
@@ -91,7 +91,8 @@ const Page = () => {
                             ""
                         }
 
-                        <div ref={inputRef} className="mt-5">
+                        <div ref={inputRef} className="mt-5 flex">
+                            <div>
                             {showButton && (
                                 <button className="rounded-full px-2 text-2xl border border-black" style={buttonStyles}
                                         onClick={handleButtonClick}>+</button>
@@ -117,13 +118,17 @@ const Page = () => {
                                         />
                                 </>
                             )}
-                            <input
-                                className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
-                                placeholder="Tell Your Story"
-                                name="content"
-                                onClick={handleInputClick}
-                                onChange={handleInputChange}
-                            />
+                            </div>
+
+                                <textarea
+                                    className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
+                                    placeholder="Tell Your Story"
+                                    name="content"
+                                    onClick={handleInputClick}
+                                    onChange={handleInputChange}
+                                    rows={100}
+                                    cols={90}
+                                />
                         </div>
                     </div>
                 </div>
