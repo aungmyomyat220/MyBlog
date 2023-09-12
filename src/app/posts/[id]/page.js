@@ -6,7 +6,6 @@ import {getPost} from "../../../../api/api";
 
 const Post = () => {
     const { id } = useParams(); // Call useParams unconditionally
-    // const postId = Number(id);
     const [selectedImage, setSelectedImage] = useState(null);
 
     const openImage = (image) => {
@@ -47,9 +46,6 @@ const Post = () => {
                     {filterPost.author}
                 </div>
                 <div>
-                    {/*<div key={index} className="relative cursor-pointer" >*/}
-                    {/*    <img src={filterPost.image} alt={`Image ${index}`} className='h-52 md:h-fit cursor-pointer' />*/}
-                    {/*</div>*/}
                     <img
                         src={filterPost.image}
                         alt=''
@@ -67,7 +63,7 @@ const Post = () => {
                 {selectedImage && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="absolute inset-0 bg-black opacity-75" onClick={closeImage}></div>
-                        <div className="z-50 p-4 bg-white rounded-lg shadow-lg">
+                        <div className="z-50 p-2 bg-white rounded-lg shadow-lg">
                             <img src={selectedImage} alt="Selected Image" className="w-full max-w-2xl h-96" />
                             <button className="absolute top-0 right-0 mt-2 mr-2 text-gray-700 hover:text-gray-900" onClick={closeImage}>
                                 Close

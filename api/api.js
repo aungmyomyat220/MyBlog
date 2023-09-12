@@ -24,7 +24,7 @@ export const createPost = async (postData) => {
         const response = await fetch(`${API_BASE_URL}/posts`, {
             method: "POST",
             headers: {
-                "Content-Type": "mu",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(postData),
         });
