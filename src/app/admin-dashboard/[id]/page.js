@@ -8,7 +8,7 @@ const Page = () => {
     const [showButton, setShowButton] = useState(false);
     const [isRotated, setIsRotated] = useState(false);
     const [showText, setShowText] = useState(false);
-    const [imageURL, setImageURL] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
     const [postData, setPostData] = useState({
         title : "",
         content : "",
@@ -37,13 +37,13 @@ const Page = () => {
         e.preventDefault()
         const { value, name,type } = e.target;
         const file = e.target.files? e.target.files[0]:null
-        if (type === 'file') {
-            const imageUrl = URL.createObjectURL(file);
-            setImageURL(imageUrl);
+        if (type === 'file' && file) {
+            const url = URL.createObjectURL(file);
+            setSelectedImage(url);
         }
         setPostData((prevPostData) => ({
             ...prevPostData,
-            [name]: type === 'file' ? imageURL: value,
+            [name]: type === 'file' ? file: value,
             date : getDate(),
         }));
     };
@@ -88,9 +88,9 @@ const Page = () => {
                                 placeholder="Title" name="title" onChange={handleInputChange}
                             />
 
-                        {postData.image ?
+                        {selectedImage?
                             <div className="flex justify-center my-10" hidden={true}>
-                                <Image src={postData.image} alt="pp" className="h-80" width={500} height={150}/>
+                                <Image src={selectedImage} alt="pp" className="h-80" width={500} height={150}/>
                             </div>
                             :
                             ""
