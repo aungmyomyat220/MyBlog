@@ -8,13 +8,12 @@ const Page = () => {
     const [showButton, setShowButton] = useState(false);
     const [isRotated, setIsRotated] = useState(false);
     const [showText, setShowText] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
     const [postData, setPostData] = useState({
         title : "",
         content : "",
         date : "",
         author : "",
-        image : ""
+        image : null
     })
     const inputRef = useRef()
     useEffect(() => {
@@ -37,13 +36,10 @@ const Page = () => {
         e.preventDefault()
         const { value, name,type } = e.target;
         const file = e.target.files? e.target.files[0]:null
-        if (type === 'file' && file) {
-            const url = URL.createObjectURL(file);
-            setSelectedImage(url);
-        }
+        const url = "blob:http://localhost:3000/bb654b39-ea2d-4a03-bc91-12a1aeef2d87"
         setPostData((prevPostData) => ({
             ...prevPostData,
-            [name]: type === 'file' ? file: value,
+            [name]: type === 'file' ? url: value,
             date : getDate(),
         }));
     };
@@ -88,9 +84,9 @@ const Page = () => {
                                 placeholder="Title" name="title" onChange={handleInputChange}
                             />
 
-                        {selectedImage?
+                        {postData.image?
                             <div className="flex justify-center my-10" hidden={true}>
-                                <Image src={selectedImage} alt="pp" className="h-80" width={500} height={150}/>
+                                <Image src={postData.image} alt="pp" className="h-80" width={500} height={150}/>
                             </div>
                             :
                             ""
@@ -124,7 +120,6 @@ const Page = () => {
                                 </>
                             )}
                             </div>
-
                                 <textarea
                                     className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
                                     placeholder="Tell Your Story"

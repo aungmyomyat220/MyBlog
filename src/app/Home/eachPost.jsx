@@ -31,7 +31,7 @@ const EachPost = () => {
                     <img
                         src={post.image}
                         alt=''
-                        className='h-52 mb-2 px-3 cursor-pointer'
+                        className='h-52 mb-2 px-3 cursor-pointer hover:scale-105 transition-transform'
                         onClick={() => router.push(`/posts/${post._id}`)}
                     />
                     <div className='px-4 flex flex-col sm:mt-3'>
