@@ -36,10 +36,9 @@ const Page = () => {
         e.preventDefault()
         const { value, name,type } = e.target;
         const file = e.target.files? e.target.files[0]:null
-        const url = "blob:http://localhost:3000/bb654b39-ea2d-4a03-bc91-12a1aeef2d87"
         setPostData((prevPostData) => ({
             ...prevPostData,
-            [name]: type === 'file' ? url: value,
+            [name]: type === 'file' ? URL.createObjectURL(file): value,
             date : getDate(),
         }));
     };
