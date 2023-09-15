@@ -15,7 +15,6 @@ const Page = () => {
         setCheckUser({
             [name] : value
         })
-        console.log(checkUser)
     }
 
     const { data: users } = useQuery({ queryKey: ['users'], queryFn: getUser })
@@ -25,9 +24,11 @@ const Page = () => {
         const foundUser = users.find((user) => user.email === checkUser.email && user.password === checkUser.password);
 
         if (foundUser) {
-            foundUser.role === "author"? router.push(`/admin-dashboard/${foundUser._id}`) : router.push("/Home")
+            // Store user ID in session storage
+            sessionStorage.setItem('userId', foundUser._id);
+            foundUser.role === "author" ? router.push(`/profile`) : router.push("/Home")
         } else {
-            alert("Your Account Does Not Exist.Register First")
+            alert("Your Account Does Not Exist. Register First")
         }
     };
 

@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
-
+import HomeTab from "@/app/profile/HomeTab";
+import AboutTab from "@/app/profile/AboutTab";
 const ContentPage = () => {
     const [activeTab, setActiveTab] = useState('Home');
 
@@ -31,6 +32,11 @@ const ContentPage = () => {
                     About
                 </span>
             </div>
+            {
+                activeTab === "Home" ?
+                    <HomeTab/> : <AboutTab/>
+            }
+
         </>
     );
 };

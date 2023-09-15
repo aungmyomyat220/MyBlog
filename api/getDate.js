@@ -5,6 +5,10 @@ export const getDate  = () => {
     const day = currentDate.getDate();
     const formattedMonth = month < 10 ? `0${month}` : month;
     const formattedDay = day < 10 ? `0${day}` : day;
-    const formattedDate = `${year}-${formattedMonth}-${formattedDay}`;
-    return formattedDate
+
+    return {
+        day: formattedDay,
+        month : formattedMonth,
+        date: `${year}-${formattedMonth}-${formattedDay}`
+    };
 }
