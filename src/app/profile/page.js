@@ -1,11 +1,21 @@
 import React from 'react';
-import Header from "@/app/profile/header";
+import Sidebar from "@/app/profile/sidebar";
+import contentPage from "@/app/profile/contentPage";
+import ContentPage from "@/app/profile/contentPage";
+import Home from "@/app/Home/page";
+import HomeTab from "@/app/profile/HomeTab";
 const Page = () => {
     return (
         <>
-            <div className="w-full h-screen flex justify-center items-center">
-                <div className="w-full h-screen flex flex-col items-center bg-black max-w-7xl">
-                    <Header/>
+            <div className='w-full h-screen'>
+                <div className='w-full flex'>
+                    <div className='w-1/3 h-screen border-r border-gray-300'>
+                        <Sidebar/>
+                    </div>
+                    <div className='w-2/3'>
+                        <ContentPage/>
+                        <HomeTab/>
+                    </div>
                 </div>
             </div>
         </>
