@@ -37,7 +37,7 @@ const Post = () => {
         <div className='flex flex-col items-center w-full h-screen'>
             <div className='max-w-5xl w-full h-32 flex flex-col mt-10 px-5'>
                 <div>
-                    <span className='text-3xl font-bold'>Blog.</span>
+                    <span className='text-3xl font-bold'>My Blog</span>
                 </div>
                 <div className='text-6xl font-semibold mt-12 mb-5'>
                     {filterPost.title}
@@ -55,7 +55,13 @@ const Post = () => {
                 </div>
                 <div className='flex flex-col justify-center items-center w-full'>
                     <div className='w-full max-w-2xl flex flex-col'>
-                        <span className='my-6'>{filterPost.date}</span>
+                        <span className='my-6'>
+                              {new Date(filterPost.date).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: '2-digit',
+                                  day: '2-digit',
+                              })}
+                        </span>
                         <span className='leading-7 tracking-normal'>{filterPost.content}</span>
                     </div>
                 </div>

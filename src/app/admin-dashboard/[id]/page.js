@@ -39,7 +39,7 @@ const Page = () => {
         setPostData((prevPostData) => ({
             ...prevPostData,
             [name]: type === 'file' ? URL.createObjectURL(file): value,
-            date : getDate().date,
+            date : new Date(),
         }));
     };
 

@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import HomeTab from "@/app/profile/HomeTab";
 import AboutTab from "@/app/profile/AboutTab";
-const ContentPage = () => {
+const ContentPage = (props) => {
     const [activeTab, setActiveTab] = useState('Home');
-
+    const {userId} = props
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };

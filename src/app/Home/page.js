@@ -33,7 +33,7 @@ export default function Home() {
                 <div className='flex flex-col w-full justify-center items-center'>
                     <div className='max-w-5xl w-full'>
                         <div className='flex flex-col items-center mt-20 sm:flex-row sm:justify-between sm:pl-3'>
-                            <span className='text-4xl font-bold'>Myanmar Comic</span>
+                            <span className='text-4xl font-bold'>My Blog</span>
                             <span className='px-6 mt-3 text-center'>
                                 <button className='bg-gray-600 px-6 py-1 text-white rounded-md' value="login" onClick={handleLoginClick}>Login</button>
                                 <button className='bg-gray-600 px-6 py-1 text-white rounded-md ml-3' value='signup' onClick={handleLoginClick}>SignUp</button>

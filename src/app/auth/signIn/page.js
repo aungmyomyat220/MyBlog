@@ -10,21 +10,21 @@ const Page = () => {
         email : "",
         password : ""
     })
-    const handleInputChange = (e) =>{
-        const {name , value } = e.target
-        setCheckUser({
-            [name] : value
-        })
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setCheckUser((prevCheckUser) => ({
+            ...prevCheckUser,
+            [name]: value,
+        }));
+    };
 
-    const { data: users } = useQuery({ queryKey: ['users'], queryFn: getUser })
+    const { data: users} = useQuery({ queryKey: ['SignInUser'], queryFn: getUser })
 
     const handleClick = (e) => {
         e.preventDefault()
         const foundUser = users.find((user) => user.email === checkUser.email && user.password === checkUser.password);
-
+        console.log(`SignIn page => ${foundUser.userName}`)
         if (foundUser) {
-            // Store user ID in session storage
             sessionStorage.setItem('userId', foundUser._id);
             foundUser.role === "author" ? router.push(`/profile`) : router.push("/Home")
         } else {

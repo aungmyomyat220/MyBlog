@@ -7,8 +7,6 @@ export const getDate  = () => {
     const formattedDay = day < 10 ? `0${day}` : day;
 
     return {
-        day: formattedDay,
-        month : formattedMonth,
         date: `${year}-${formattedMonth}-${formattedDay}`
     };
 }

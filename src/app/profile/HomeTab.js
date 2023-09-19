@@ -4,29 +4,30 @@ import {useQuery} from "@tanstack/react-query";
 import {getPost} from "../../../api/api";
 import Image from "next/image";
 import Author from "../../image/author-1.jpg"
-
 const HomeTab = () => {
-    const {data :posts = []} = useQuery({queryKey: ['get'], queryFn: getPost})
+    const {data :posts = []} = useQuery({queryKey: ['getPostForLoginUser'], queryFn: getPost})
     const formatDate = (date) => {
         const postDate = new Date(date);
         const now = new Date();
 
-        const options = {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true // Use 12-hour format
-        };
-        console.log("Post Date => "+ postDate)
-        console.log("Now Date =>" +  now)
+        // Calculate the time difference in milliseconds
+        const timeDifference = now - postDate;
+        const modifyTimeDiff = timeDifference + 180000
 
-        // Calculate the time difference in seconds
-        const secondsDifference = Math.floor((now - postDate) / 1000);
-
-        if (secondsDifference < 60) {
+        if (timeDifference < 60000) { // Less than 1 minute
             return 'just now';
+        } else if (timeDifference < 3600000) { // Less than 1 hour
+            const minutesDifference = Math.floor(timeDifference / 60000);
+            return minutesDifference === 1 ? '1 minute ago' : `${minutesDifference} minutes ago`;
+        } else if (timeDifference < 86400000) { // Less than 1 day
+            const hoursDifference = Math.floor(timeDifference / 3600000);
+            return hoursDifference === 1 ? '1 hour ago' : `${hoursDifference} hours ago`;
+        } else if (timeDifference < 2592000000) { // Less than 30 days (approximately 1 month)
+            const daysDifference = Math.floor(timeDifference / 86400000);
+            return daysDifference === 1 ? '1 day ago' : `${daysDifference} days ago`;
         } else {
-            // Format the postDate in 12-hour format
-            return postDate.toLocaleString('en-US', options);
+            const monthsDifference = Math.floor(timeDifference / 2592000000);
+            return monthsDifference === 1 ? '1 month ago' : `${monthsDifference} months ago`;
         }
     };
 

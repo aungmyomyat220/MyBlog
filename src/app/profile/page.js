@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import Sidebar from "@/app/profile/sidebar";
 import contentPage from "@/app/profile/contentPage";
