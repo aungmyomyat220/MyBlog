@@ -19,7 +19,7 @@ const Page = () => {
     };
 
     const { data: users} = useQuery({ queryKey: ['SignInUser'], queryFn: getUser })
-
+    console.log(users)
     const handleClick = (e) => {
         e.preventDefault()
         const foundUser = users.find((user) => user.email === checkUser.email && user.password === checkUser.password);

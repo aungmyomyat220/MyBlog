@@ -12,7 +12,6 @@ const HomeTab = () => {
 
         // Calculate the time difference in milliseconds
         const timeDifference = now - postDate;
-        const modifyTimeDiff = timeDifference + 180000
 
         if (timeDifference < 60000) { // Less than 1 minute
             return 'just now';
@@ -31,22 +30,26 @@ const HomeTab = () => {
         }
     };
 
+    posts.sort((a, b) => {
+        const timeDifferenceA = new Date() - new Date(a.date);
+        const timeDifferenceB = new Date() - new Date(b.date);
+        return timeDifferenceA - timeDifferenceB;
+    });
+
     return (
         <>
             {posts.map(post => (
-                    <div className='grid grid-cols-5 px-8 py-10 border-b border-gray-300 mx-5' key={post._id}>
-                        <div className='flex flex-col mx-5 col-span-4'>
-                            <span className='mb-3 text-gray-500'>{formatDate(post.date)}</span>
-                            <span className='font-bold mb-3 text-lg'>{post.title}</span>
-                            <span className='line-clamp-3'>{post.content}</span>
-                        </div>
-                        <div>
-                            <Image src={Author} alt={post.title} width={180} height={200} className='rounded ml-7'></Image>
-                        </div>
+                <div className='grid grid-cols-5 px-8 py-10 border-b border-gray-300 mx-5' key={post._id}>
+                    <div className='flex flex-col mx-5 col-span-4'>
+                        <span className='mb-3 text-gray-500'>{formatDate(post.date)}</span>
+                        <span className='font-bold mb-3 text-lg'>{post.title}</span>
+                        <span className='line-clamp-3'>{post.content}</span>
                     </div>
-            ))
-            }
-
+                    <div>
+                        <Image src={Author} alt={post.title} width={180} height={200} className='rounded ml-7'></Image>
+                    </div>
+                </div>
+            ))}
         </>
     );
 };

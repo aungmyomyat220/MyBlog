@@ -32,11 +32,12 @@ const ContentPage = (props) => {
                     About
                 </span>
             </div>
-            {
-                activeTab === "Home" ?
-                    <HomeTab/> : <AboutTab/>
-            }
-
+            <div className='border-l border-gray-300'>
+                {
+                    activeTab === "Home" ?
+                        <HomeTab/> : <AboutTab/>
+                }
+            </div>
         </>
     );
 };
