@@ -3,10 +3,17 @@ import React, {useState} from 'react';
 import { useQuery } from "@tanstack/react-query";
 import {useParams} from "next/navigation";
 import {getPost} from "../../../../api/api";
+import Image from "next/image";
+import Author from '../../../image/jj.png'
+import Like from '../../../image/love.png'
+import Love from '../../../image/heart.png'
+import Comment from '../../../image/chat.png'
 
 const Post = () => {
     const { id } = useParams(); // Call useParams unconditionally
     const [selectedImage, setSelectedImage] = useState(null);
+    const [love ,setLove] = useState(false)
+    const [likeCount ,setLikeCount] = useState(130)
 
     const openImage = (image) => {
         setSelectedImage(image);
@@ -15,6 +22,16 @@ const Post = () => {
     const closeImage = () => {
         setSelectedImage(null);
     };
+
+    const like = () => {
+        setLove(true)
+        setLikeCount((prevLikeCount) => prevLikeCount + 1);
+    }
+
+    const unLike = () => {
+        setLove(false)
+        setLikeCount((prevLikeCount) => prevLikeCount - 1);
+    }
 
     const { data: posts, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: getPost })
 
@@ -42,8 +59,35 @@ const Post = () => {
                 <div className='text-6xl font-semibold mt-12 mb-5'>
                     {filterPost.title}
                 </div>
-                <div className='mb-8 font-bold'>
-                    {filterPost.author}
+                <div className='font-bold flex my-6 '>
+                    <div>
+                        <Image src={Author} alt='author' className='w-12 h-12'/>
+                    </div>
+                    <div className='flex flex-col ml-3'>
+                        <span className='text-lg'>{filterPost.author}</span>
+                        <span className='mt-1 text-sm font-thin'>
+                              {new Date(filterPost.date).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: '2-digit',
+                                  day: '2-digit',
+                              })}
+                        </span>
+                    </div>
+
+                </div>
+                <div className='border-y mb-7 py-4 pl-6 flex text-gray-500 text-sm'>
+                    <div className='flex mr-5 cursor-pointer'>
+                        {
+                            love?  <Image src={Love} alt="Like" className='w-5 h-5 mr-2' onClick={unLike}/>
+                                : <Image src={Like} alt="Like" className='w-5 h-5 mr-2' onClick={like}/>
+                        }
+                        <span>{likeCount}</span>
+                    </div>
+                    <div className='flex mr-5 cursor-pointer'>
+                        <Image src={Comment} alt="Like" className='w-5 h-5 mr-2'/>
+                        <span>7</span>
+                    </div>
+
                 </div>
                 <div>
                     <img
@@ -54,14 +98,7 @@ const Post = () => {
                     />
                 </div>
                 <div className='flex flex-col justify-center items-center w-full'>
-                    <div className='w-full max-w-2xl flex flex-col'>
-                        <span className='my-6'>
-                              {new Date(filterPost.date).toLocaleDateString('en-US', {
-                                  year: 'numeric',
-                                  month: '2-digit',
-                                  day: '2-digit',
-                              })}
-                        </span>
+                    <div className='w-full max-w-2xl flex flex-col mt-10'>
                         <span className='leading-7 tracking-normal'>{filterPost.content}</span>
                     </div>
                 </div>
