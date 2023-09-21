@@ -3,16 +3,18 @@ import React from 'react';
 import {useQuery} from "@tanstack/react-query";
 import {getPost} from "../../../api/api";
 import Image from "next/image";
-import Author from "../../image/author-1.jpg"
+import Joe from "../../image/joe.jpeg"
+import {useSelector} from "react-redux";
+import Love from "@/image/heart.png";
+import Like from "@/image/love.png";
+import Comment from "@/image/chat.png";
 const HomeTab = () => {
+    const { loveData } = useSelector((state) => state.love);
     const {data :posts = []} = useQuery({queryKey: ['getPostForLoginUser'], queryFn: getPost})
     const formatDate = (date) => {
         const postDate = new Date(date);
         const now = new Date();
-
-        // Calculate the time difference in milliseconds
         const timeDifference = now - postDate;
-
         if (timeDifference < 60000) { // Less than 1 minute
             return 'just now';
         } else if (timeDifference < 3600000) { // Less than 1 hour
@@ -44,9 +46,20 @@ const HomeTab = () => {
                         <span className='mb-3 text-gray-500'>{formatDate(post.date)}</span>
                         <span className='font-bold mb-3 text-lg'>{post.title}</span>
                         <span className='line-clamp-3'>{post.content}</span>
+
+                        <div className='flex mr-5 cursor-pointer mt-8'>
+                            {
+                                <Image src={Like} alt="Like" className='w-5 h-5 mr-2'/>
+                            }
+                            <span>{loveData[post._id]?.loveCount}</span>
+                            <div className='flex mr-5 cursor-pointer'>
+                                <Image src={Comment} alt="Like" className='w-5 h-5 mr-2'/>
+                                <span>7</span>
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <Image src={Author} alt={post.title} width={180} height={200} className='rounded ml-7'></Image>
+                        <Image src={Joe} alt={post.title} width={180} height={200} className='rounded ml-7'></Image>
                     </div>
                 </div>
             ))}

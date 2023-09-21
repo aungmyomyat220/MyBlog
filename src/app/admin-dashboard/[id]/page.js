@@ -2,45 +2,47 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from "next/image";
 import imagePicker from '../../../image/noun-image-1066765.png'
-import {getDate} from "../../../../api/getDate";
-import {createPost, getUser} from "../../../../api/api";
+import {
+    setTitle,
+    setContent,
+    setImage,
+    setShowButton,
+    setIsRotated,
+    setShowText,
+    setDate
+} from '../../../../Global Redux/createSlice/postSlice';
+import {createPost} from "../../../../api/api";
+import {useDispatch, useSelector} from "react-redux";
 const Page = () => {
-    const [showButton, setShowButton] = useState(false);
-    const [isRotated, setIsRotated] = useState(false);
-    const [showText, setShowText] = useState(false);
-    const [postData, setPostData] = useState({
-        title : "",
-        content : "",
-        date : "",
-        author : "",
-        image : null
-    })
+    const dispatch = useDispatch();
+    const postData = useSelector((state) => state.post);
+
     const inputRef = useRef()
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (inputRef.current && !inputRef.current.contains(event.target)) {
-                setShowButton(false);
-                setShowText(false)
-                setIsRotated(false)
+                dispatch(setShowButton(false))
+                dispatch(setShowText(false))
+                dispatch(setIsRotated(false))
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
-
-        // Clean up the event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
 
     const handleInputChange = (e) => {
-        e.preventDefault()
-        const { value, name,type } = e.target;
-        const file = e.target.files? e.target.files[0]:null
-        setPostData((prevPostData) => ({
-            ...prevPostData,
-            [name]: type === 'file' ? URL.createObjectURL(file): value,
-            date : new Date(),
-        }));
+        e.preventDefault();
+        const { value, type } = e.target;
+        const file = e.target.files ? e.target.files[0] : null;
+        if (type === 'file') {
+            dispatch(setImage(URL.createObjectURL(file)));
+        } else {
+            dispatch(setTitle(value));
+            dispatch(setContent(value))
+        }
+        dispatch(setDate(new Date()));
     };
 
     const postUpload = async () =>{
@@ -49,17 +51,17 @@ const Page = () => {
     }
 
     const handleInputClick = () => {
-        setShowButton(true);
+        dispatch(setShowButton(true))
     };
 
     const handleButtonClick = () => {
-        setIsRotated(!isRotated);
-        setShowText((prevShowText) => !prevShowText);
+        dispatch(setIsRotated(!postData.isRotated))
+        dispatch(setShowText(!postData.showText))
     };
 
     const buttonStyles = {
-        transform: isRotated ? 'rotate(45deg)' : 'rotate(0deg)',
-        transition: 'transform 0.4s ease', // Add a smooth transition effect
+        transform: postData.isRotated? 'rotate(45deg)' : 'rotate(0deg)',
+        transition: 'transform 0.5s ease', // Add a smooth transition effect
     };
 
     const fileInputRef = useRef(null);
@@ -93,11 +95,11 @@ const Page = () => {
 
                         <div ref={inputRef} className="mt-5 flex">
                             <div>
-                            {showButton && (
+                            {postData.showButton && (
                                 <button className="rounded-full px-2 text-2xl border border-black" style={buttonStyles}
                                         onClick={handleButtonClick}>+</button>
                             )}
-                            {showText && (
+                            {postData.showText && (
                                 <>
                                       <span className="text-lg absolute bg-white ml-4 -mt-2 w-full">
                                         <Image

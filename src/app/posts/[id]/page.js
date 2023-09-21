@@ -8,12 +8,14 @@ import Author from '../../../image/jj.png'
 import Like from '../../../image/love.png'
 import Love from '../../../image/heart.png'
 import Comment from '../../../image/chat.png'
+import { useDispatch, useSelector } from 'react-redux';
+import { loveToggle } from '../../../../Global Redux/createSlice/loveSlice';
 
 const Post = () => {
     const { id } = useParams(); // Call useParams unconditionally
     const [selectedImage, setSelectedImage] = useState(null);
-    const [love ,setLove] = useState(false)
-    const [likeCount ,setLikeCount] = useState(130)
+    const dispatch = useDispatch();
+    const { loveData } = useSelector((state) => state.love);
 
     const openImage = (image) => {
         setSelectedImage(image);
@@ -23,14 +25,12 @@ const Post = () => {
         setSelectedImage(null);
     };
 
-    const like = () => {
-        setLove(true)
-        setLikeCount((prevLikeCount) => prevLikeCount + 1);
-    }
+    const like = (postId) => {
+        dispatch(loveToggle(postId));
+    };
 
-    const unLike = () => {
-        setLove(false)
-        setLikeCount((prevLikeCount) => prevLikeCount - 1);
+    const handleLoveClick = () => {
+
     }
 
     const { data: posts, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: getPost })
@@ -49,7 +49,6 @@ const Post = () => {
     })
 
     const filterPost = filterArr[0]
-    console.log("filterPost => " + filterPost)
     return (
         <div className='flex flex-col items-center w-full h-screen'>
             <div className='max-w-5xl w-full h-32 flex flex-col mt-10 px-5'>
@@ -65,7 +64,7 @@ const Post = () => {
                     </div>
                     <div className='flex flex-col ml-3'>
                         <span className='text-lg'>{filterPost.author}</span>
-                        <span className='mt-1 text-sm font-thin'>
+                        <span className='mt-1 text-sm font-medium'>
                               {new Date(filterPost.date).toLocaleDateString('en-US', {
                                   year: 'numeric',
                                   month: '2-digit',
@@ -78,10 +77,10 @@ const Post = () => {
                 <div className='border-y mb-7 py-4 pl-6 flex text-gray-500 text-sm'>
                     <div className='flex mr-5 cursor-pointer'>
                         {
-                            love?  <Image src={Love} alt="Like" className='w-5 h-5 mr-2' onClick={unLike}/>
-                                : <Image src={Like} alt="Like" className='w-5 h-5 mr-2' onClick={like}/>
+                            loveData[id]?.isLoved ?  <Image src={Love} alt="Like" className='w-5 h-5 mr-2' onClick={()=> like(id)}/>
+                                : <Image src={Like} alt="Like" className='w-5 h-5 mr-2' onClick={()=> like(id)}/>
                         }
-                        <span>{likeCount}</span>
+                        <span>{loveData[id]?.loveCount}</span>
                     </div>
                     <div className='flex mr-5 cursor-pointer'>
                         <Image src={Comment} alt="Like" className='w-5 h-5 mr-2'/>

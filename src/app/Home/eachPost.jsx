@@ -1,18 +1,26 @@
 import React, {useEffect} from 'react';
 import Image from "next/image";
 import Author1 from "@/image/joe.jpeg";
+import Eye from "@/image/view.png";
 import {useRouter} from "next/navigation";
 import {useQuery} from "@tanstack/react-query";
 import {getPost} from "../../../api/api";
+import {useDispatch, useSelector} from "react-redux";
+import { viewCount } from '../../../Global Redux/createSlice/viewSlice';
 
 const EachPost = () => {
-
+    const dispatch = useDispatch();
+    const { viewCounts } = useSelector((state) => state.view);
     const router = useRouter()
     useEffect(() => {
         router.prefetch('/posts');
     }, [router]);
 
     const {data: posts, error, isLoading} = useQuery({queryKey: ['get'], queryFn: getPost})
+
+    const viewIncrease = (postId) => {
+        dispatch(viewCount(postId))
+    }
 
     if (isLoading) {
         return <div className='flex flex-col w-full h-screen justify-center items-center'>
@@ -33,13 +41,19 @@ const EachPost = () => {
                                 src={post.image}
                                 alt=''
                                 className='h-52 mb-2 px-3 cursor-pointer hover:scale-105 transition-transform'
-                                onClick={() => router.push(`/posts/${post._id}`)}
+                                onClick={() => {
+                                    viewIncrease(post._id)
+                                    router.push(`/posts/${post._id}`);
+                                }}
                             /> : ""
                         }
                         <div className='px-4 flex flex-col sm:mt-3'>
                 <span
                     className='text-2xl font-semibold mb-3 hover:underline'
-                    onClick={() => router.push(`/posts/${post._id}`)}
+                    onClick={() => {
+                        viewIncrease(post._id)
+                        router.push(`/posts/${post._id}`);
+                    }}
                 >
                     {post.title}
                 </span>
@@ -57,9 +71,15 @@ const EachPost = () => {
                         ? post.content.split(' ').slice(0, 59).join(' ') + '......'
                         : post.content}
                 </span>
-                            <div className='mt-3 flex'>
-                                <Image src={Author1} alt='' className='w-12 h-12 rounded-full'></Image>
-                                <span className='font-bold text-lg ml-2 mt-2'>{post.author}</span>
+                            <div className='mt-3 flex justify-between'>
+                                <div className="flex">
+                                    <Image src={Author1} alt='' className='w-12 h-12 rounded-full'></Image>
+                                    <span className='font-bold text-lg ml-2 mt-2'>{post.author}</span>
+                                </div>
+                                <div className='flex items-center text-gray-500'>
+                                    <Image src={Eye} alt="View" className="w-5 h-5 mr-2"/>
+                                    <span>{viewCounts[post._id] || 0} View{viewCounts[post._id] > 1 && "s"}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

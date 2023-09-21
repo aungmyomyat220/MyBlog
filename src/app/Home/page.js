@@ -5,6 +5,7 @@ import {useRouter} from "next/navigation";
 import EachPost from './eachPost'
 import {getPost} from "../../../api/api";
 import {useQuery} from "@tanstack/react-query";
+import {useSelector} from "react-redux";
 
 export default function Home() {
     const router = useRouter()
