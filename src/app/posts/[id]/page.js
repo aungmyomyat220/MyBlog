@@ -2,20 +2,20 @@
 import React, {useState} from 'react';
 import { useQuery } from "@tanstack/react-query";
 import {useParams} from "next/navigation";
-import {getPost} from "../../../../api/api";
+import {getPost, updatePost} from "../../../../api/api";
 import Image from "next/image";
 import Author from '../../../image/jj.png'
 import Like from '../../../image/love.png'
 import Love from '../../../image/heart.png'
 import Comment from '../../../image/chat.png'
 import { useDispatch, useSelector } from 'react-redux';
-import { loveToggle } from '../../../../Global Redux/createSlice/loveSlice';
+import { setLoveReact } from '../../../../Global Redux/createSlice/postSlice';
 
 const Post = () => {
     const { id } = useParams(); // Call useParams unconditionally
     const [selectedImage, setSelectedImage] = useState(null);
     const dispatch = useDispatch();
-    const { loveData } = useSelector((state) => state.love);
+    const postData = useSelector((state) => state.post);
 
     const openImage = (image) => {
         setSelectedImage(image);
@@ -26,12 +26,18 @@ const Post = () => {
     };
 
     const like = (postId) => {
-        dispatch(loveToggle(postId));
+        dispatch(setLoveReact(postId));
     };
 
     const handleLoveClick = () => {
-
+        console.log(postData)
+        updatePost(postData)
     }
+
+    const handleBothClick = () => {
+        like(id);
+        handleLoveClick();
+    };
 
     const { data: posts, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: getPost })
 
@@ -77,10 +83,10 @@ const Post = () => {
                 <div className='border-y mb-7 py-4 pl-6 flex text-gray-500 text-sm'>
                     <div className='flex mr-5 cursor-pointer'>
                         {
-                            loveData[id]?.isLoved ?  <Image src={Love} alt="Like" className='w-5 h-5 mr-2' onClick={()=> like(id)}/>
-                                : <Image src={Like} alt="Like" className='w-5 h-5 mr-2' onClick={()=> like(id)}/>
+                            postData.loveData[id]?.isLoved ?  <Image src={Love} alt="Like" className='w-5 h-5 mr-2' onClick={handleBothClick}/>
+                                : <Image src={Like} alt="Like" className='w-5 h-5 mr-2' onClick={handleBothClick}/>
                         }
-                        <span>{loveData[id]?.loveCount}</span>
+                        <span>{postData.loveData[id]?.loveCount}</span>
                     </div>
                     <div className='flex mr-5 cursor-pointer'>
                         <Image src={Comment} alt="Like" className='w-5 h-5 mr-2'/>
