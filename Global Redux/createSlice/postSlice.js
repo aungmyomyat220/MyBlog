@@ -8,13 +8,29 @@ const postSlice = createSlice({
         content: '',
         date: '',
         author: '',
-        like : 0,
+        loveData: {},
         image: null,
         showButton: false,
         isRotated: false,
         showText: false,
     },
     reducers: {
+        setLoveReact: (state, action) => {
+            const postId = action.payload;
+            if (state.loveData[postId]) {
+                state.loveData[postId].isLoved = !state.loveData[postId].isLoved;
+                if (state.loveData[postId].isLoved) {
+                    state.loveData[postId].loveCount++;
+                } else {
+                    state.loveData[postId].loveCount--;
+                }
+            } else {
+                state.loveData[postId] = {
+                    isLoved: true,
+                    loveCount: 1,
+                };
+            }
+        },
         setTitle: (state, action) => {
             state.title = action.payload;
         },
@@ -47,6 +63,7 @@ export const {
     setContent,
     setDate,
     setAuthor,
+    setLoveReact,
     setImage,
     setShowButton,
     setIsRotated,

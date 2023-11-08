@@ -38,6 +38,7 @@ const postSchema = new mongoose.Schema({
     content : String,
     date : String,
     author : String,
+    like : String,
     image : String,
 });
 
@@ -115,6 +116,24 @@ app.get("/users", async (req, res) => {
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
+    }
+});
+
+app.put("/posts/:postId", async (req, res) => {
+    const postId = req.params.postId;
+    const updatedData = req.body; // Assuming you send the updated data in the request body
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+
+        if (!updatedPost) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        res.json(updatedPost);
+    } catch (error) {
+        console.error("Error updating post:", error);
+        res.status(500).json({ error: "Error updating post" });
     }
 });
 

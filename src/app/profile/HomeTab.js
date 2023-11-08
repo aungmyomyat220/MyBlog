@@ -9,7 +9,7 @@ import Love from "@/image/heart.png";
 import Like from "@/image/love.png";
 import Comment from "@/image/chat.png";
 const HomeTab = () => {
-    const { loveData } = useSelector((state) => state.love);
+    const { loveData } = useSelector((state) => state.post);
     const {data :posts = []} = useQuery({queryKey: ['getPostForLoginUser'], queryFn: getPost})
     const formatDate = (date) => {
         const postDate = new Date(date);
@@ -51,7 +51,7 @@ const HomeTab = () => {
                             {
                                 <Image src={Like} alt="Like" className='w-5 h-5 mr-2'/>
                             }
-                            <span>{loveData[post._id]?.loveCount}</span>
+                            <span>{loveData.loveCount}</span>
                             <div className='flex mr-5 cursor-pointer'>
                                 <Image src={Comment} alt="Like" className='w-5 h-5 mr-2'/>
                                 <span>7</span>
