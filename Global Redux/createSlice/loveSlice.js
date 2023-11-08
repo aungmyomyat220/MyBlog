@@ -1,10 +1,8 @@
 // loveSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-
 const loveSlice = createSlice({
     name: 'love',
     initialState: {
-        // Initialize an empty object to store love data for each post
         loveData: {},
     },
     reducers: {

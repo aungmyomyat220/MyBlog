@@ -39,7 +39,7 @@ const Page = () => {
         if (type === 'file') {
             dispatch(setImage(URL.createObjectURL(file)));
         } else {
-            dispatch(setTitle(value));
+            dispatch(setTitle(value))
             dispatch(setContent(value))
         }
         dispatch(setDate(new Date()));

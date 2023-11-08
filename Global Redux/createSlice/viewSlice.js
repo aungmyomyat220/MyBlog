@@ -1,4 +1,3 @@
-// loveSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const viewSlice = createSlice({

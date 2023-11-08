@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loveToggle } from '../../../../Global Redux/createSlice/loveSlice';
 
 const Post = () => {
-    const { id } = useParams(); // Call useParams unconditionally
+    const { id } = useParams();
     const [selectedImage, setSelectedImage] = useState(null);
     const dispatch = useDispatch();
     const { loveData } = useSelector((state) => state.love);
@@ -29,10 +29,6 @@ const Post = () => {
         dispatch(loveToggle(postId));
     };
 
-    const handleLoveClick = () => {
-
-    }
-
     const { data: posts, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: getPost })
 
     if (isLoading) {
@@ -47,8 +43,8 @@ const Post = () => {
     const filterArr = posts.filter((post) =>{
         return post._id === id
     })
-
     const filterPost = filterArr[0]
+
     return (
         <div className='flex flex-col items-center w-full h-screen'>
             <div className='max-w-5xl w-full h-32 flex flex-col mt-10 px-5'>

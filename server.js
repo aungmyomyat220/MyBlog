@@ -1,13 +1,23 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const session = require("express-session");
 
-// MongoDB サーバーの接続文字列
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+let userSession;
+
+// MongoDB
 const dbURI = "mongodb://0.0.0.0:27017/Blogging";
-
-// MongoDB にローカルで接続する
 mongoose
-    .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(dbURI)
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -34,9 +44,38 @@ const postSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 const Post = mongoose.model("Post", postSchema);
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+// Session Middleware
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false,
+}));
+
+// Middleware to check authentication
+async function authenticate(req, res, next) {
+    const { userEmail, password } = req.body;
+    console.log(userEmail)
+    console.log(password)
+    try {
+        const user = await User.findOne({ userEmail: userEmail, password: password });
+        if (user) {
+            next();
+        } else {
+            res.status(401).send("Authentication Failed");
+        }
+    } catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+app.post('/login', authenticate, (req, res) => {
+    userSession = req.session
+    userSession.userId = "user1"
+    console.log(userSession)
+    res.send(`Authentication Successful`);
+});
 
 app.post('/users', async (req, res) => {
     try {
@@ -45,7 +84,6 @@ app.post('/users', async (req, res) => {
         await newUser.save();
         res.status(201).json(newUser);
     } catch (error) {
-        // Handle any errors
         console.error('Error creating user:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }

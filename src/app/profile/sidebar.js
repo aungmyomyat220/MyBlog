@@ -6,24 +6,15 @@ import {getUser} from "../../../api/api";
 const Sidebar = () => {
     const {data :users = []} = useQuery({queryKey: ['getUserInSideBar'], queryFn: getUser})
     const [loginUser, setLoginUser] = useState(null);
-    const [loginUserId, setLoginUserId] = useState(sessionStorage.getItem("userId"));
 
-    // Update loginUserId when it changes in session storage
-    useEffect(() => {
-        const storedUserId = sessionStorage.getItem("userId");
-        if (storedUserId !== loginUserId) {
-            setLoginUserId(storedUserId);
-        }
-    }, [loginUserId]);
-
-    // Fetch and update loginUser when loginUserId changes
-    useEffect(() => {
-        if (loginUserId) {
-            const user = users.find(user => user._id === loginUserId);
-            console.log(user);
-            setLoginUser(user);
-        }
-    }, [loginUserId, users]);
+    // // Fetch and update loginUser when loginUserId changes
+    // useEffect(() => {
+    //     if (loginUserId) {
+    //         const user = users.find(user => user._id === loginUserId);
+    //         console.log(user);
+    //         setLoginUser(user);
+    //     }
+    // }, [loginUserId, users]);
 
     return (
         <>
