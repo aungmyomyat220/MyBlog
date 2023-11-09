@@ -27,14 +27,20 @@ const Page = () => {
                     icon: 'success',
                     title: 'Login Successful',
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 1000,
                 });
-
-                setTimeout(() => {
-                    router.push('/profile');
-                }, 1000);
+                router.push('/profile');
             }
           } catch (error) {
+            if (error.response.status === 401) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: 'Invalid username or password',
+                    showConfirmButton: true,
+                    timer: null,
+                });
+            }
             console.error('Error authenticating user', error);
           }
         setCheckUser("");

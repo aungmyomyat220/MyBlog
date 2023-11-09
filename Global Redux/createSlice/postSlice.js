@@ -10,9 +10,6 @@ const postSlice = createSlice({
         author: '',
         loveData: {},
         image: null,
-        showButton: false,
-        isRotated: false,
-        showText: false,
     },
     reducers: {
         setLoveReact: (state, action) => {
@@ -46,15 +43,6 @@ const postSlice = createSlice({
         setImage: (state, action) => {
             state.image = action.payload;
         },
-        setShowButton: (state, action) => {
-            state.showButton = action.payload;
-        },
-        setIsRotated: (state, action) => {
-            state.isRotated = action.payload;
-        },
-        setShowText: (state, action) => {
-            state.showText = action.payload;
-        },
     },
 });
 
@@ -65,9 +53,6 @@ export const {
     setAuthor,
     setLoveReact,
     setImage,
-    setShowButton,
-    setIsRotated,
-    setShowText,
 } = postSlice.actions;
 
 export default postSlice.reducer;

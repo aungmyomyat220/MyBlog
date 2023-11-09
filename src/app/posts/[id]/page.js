@@ -29,19 +29,14 @@ const Post = () => {
         dispatch(setLoveReact(postId));
     };
 
-<<<<<<< HEAD
-=======
     const handleLoveClick = () => {
         console.log(postData)
-        updatePost(postData)
     }
 
     const handleBothClick = () => {
         like(id);
         handleLoveClick();
     };
-
->>>>>>> 38b4d438934ae56a2de34352ed468b4df7e74716
     const { data: posts, error, isLoading } = useQuery({ queryKey: ['posts'], queryFn: getPost })
 
     if (isLoading) {

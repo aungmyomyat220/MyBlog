@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const sessions = require('express-session');
-const session = require("express-session");
+const sessions = require("express-session");
 
 const app = express();
 app.use(express.json());
@@ -57,8 +56,8 @@ app.use(sessions({
 // Middleware to check authentication
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
-    console.log(userEmail)
-    console.log(password)
+    console.log("Email",userEmail)
+    console.log("password",password)
     try {
         const user = await User.findOne({ userEmail: userEmail, password: password });
         if (user) {
@@ -72,9 +71,6 @@ async function authenticate(req, res, next) {
 }
 
 app.post('/login', authenticate, (req, res) => {
-    userSession = req.session
-    userSession.userId = "user1"
-    console.log(userSession)
     res.send(`Authentication Successful`);
 });
 

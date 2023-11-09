@@ -2,72 +2,63 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Image from "next/image";
 import imagePicker from '../../../image/noun-image-1066765.png'
-import {
-    setTitle,
-    setContent,
-    setImage,
-    setShowButton,
-    setIsRotated,
-    setShowText,
-    setDate
-} from '../../../../Global Redux/createSlice/postSlice';
 import {createPost} from "../../../../api/api";
-import {useDispatch, useSelector} from "react-redux";
+
 const Page = () => {
-    const dispatch = useDispatch();
-    const postData = useSelector((state) => state.post);
-
-    const inputRef = useRef()
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (inputRef.current && !inputRef.current.contains(event.target)) {
-                dispatch(setShowButton(false))
-                dispatch(setShowText(false))
-                dispatch(setIsRotated(false))
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
+       const {postData , setPostData} = useState({
+           title : "",
+           content : "",
+           author : "",
+           date : new Date(),
+           image : ""
+       })
+    // const {showButton ,setShowButton } = useState(false)
+    // const {showText ,setShowText } = useState(false)
+    // const {isRotated ,setIsRotated } = useState(false)
+    //
+    // const inputRef = useRef()
+    // useEffect(() => {
+    //     const handleClickOutside = (event) => {
+    //         if (inputRef.current && !inputRef.current.contains(event.target)) {
+    //         }
+    //     };
+    //     document.addEventListener('mousedown', handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClickOutside);
+    //     };
+    // }, []);
+    //
     const handleInputChange = (e) => {
-        e.preventDefault();
-        const { value, type } = e.target;
-        const file = e.target.files ? e.target.files[0] : null;
-        if (type === 'file') {
-            dispatch(setImage(URL.createObjectURL(file)));
-        } else {
-            dispatch(setTitle(value))
-            dispatch(setContent(value))
-        }
-        dispatch(setDate(new Date()));
+        const { name, value } = e.target;
+        setPostData((prevPostData) => ({
+            ...prevPostData,
+            [name]: value,
+        }));
     };
-
+    //
     const postUpload = async () =>{
         await createPost(postData);
         alert("Post Uploaded");
     }
-
-    const handleInputClick = () => {
-        dispatch(setShowButton(true))
-    };
-
-    const handleButtonClick = () => {
-        dispatch(setIsRotated(!postData.isRotated))
-        dispatch(setShowText(!postData.showText))
-    };
-
-    const buttonStyles = {
-        transform: postData.isRotated? 'rotate(45deg)' : 'rotate(0deg)',
-        transition: 'transform 0.5s ease', // Add a smooth transition effect
-    };
-
-    const fileInputRef = useRef(null);
-    const openFilePicker = () => {
-        fileInputRef.current.click();
-    };
+    //
+    // const handleInputClick = () => {
+    //     setShowButton(true)
+    // };
+    //
+    // const handleButtonClick = () => {
+    //     setIsRotated(!isRotated)
+    //     setShowText(!showText)
+    // };
+    //
+    // const buttonStyles = {
+    //     transform: isRotated? 'rotate(45deg)' : 'rotate(0deg)',
+    //     transition: 'transform 0.5s ease', // Add a smooth transition effect
+    // };
+    //
+    // const fileInputRef = useRef(null);
+    // const openFilePicker = () => {
+    //     fileInputRef.current.click();
+    // };
 
     return (
         <>
@@ -95,11 +86,11 @@ const Page = () => {
 
                         <div ref={inputRef} className="mt-5 flex">
                             <div>
-                            {postData.showButton && (
+                            {showButton && (
                                 <button className="rounded-full px-2 text-2xl border border-black" style={buttonStyles}
                                         onClick={handleButtonClick}>+</button>
                             )}
-                            {postData.showText && (
+                            {showText && (
                                 <>
                                       <span className="text-lg absolute bg-white ml-4 -mt-2 w-full">
                                         <Image
