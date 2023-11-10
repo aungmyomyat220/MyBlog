@@ -17,6 +17,7 @@ const Page = () => {
             [name]: value,
         }));
     };
+    console.log(checkUser);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,7 +44,6 @@ const Page = () => {
             }
             console.error('Error authenticating user', error);
           }
-        setCheckUser("");
       };
 
     return (
