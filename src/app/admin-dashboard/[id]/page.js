@@ -10,7 +10,9 @@ const Page = () => {
         content: "",
         author: "",
         date: new Date(),
-        image: ""
+        like : "",
+        comment : "",
+        image: "",
     });
 
     const [showButton, setShowButton] = useState(false);
@@ -34,7 +36,10 @@ const Page = () => {
 
     const handleInputClick = () => {
         setShowButton((prevShowButton) => !prevShowButton);
-        showImage
+        if(showText){
+            setShowText((prevShowText) => !prevShowText);
+            setIsRotated(!isRotated)
+        }
     };
 
     const fileInputRef = useRef(null);

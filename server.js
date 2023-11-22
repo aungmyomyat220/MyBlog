@@ -37,8 +37,9 @@ const postSchema = new mongoose.Schema({
     content : String,
     date : String,
     author : String,
-    like : String,
     image : String,
+    comment : String,
+    like : String
 });
 
 const User = mongoose.model("User", userSchema);

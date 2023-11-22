@@ -9,6 +9,7 @@ const postSlice = createSlice({
         date: '',
         author: '',
         loveData: {},
+        comment : "",
         image: null,
     },
     reducers: {
