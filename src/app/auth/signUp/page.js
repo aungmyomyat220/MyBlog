@@ -13,13 +13,19 @@ const Page = () => {
         "password": "",
         "confirmPassword": "",
         "role": "",
-        "image" : ""
     });
-    const [error, setError] = useState(""); // State to store the error message
-
+    const [error, setError] = useState("");
+    const [image,setImage]= useState("")
     const fileInputRef = useRef(null);
-    const openFilePicker = () => {
-        fileInputRef.current.click();
+    const convertToBase64 = (e) => {
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        reader.onload = () => {
+            setImage(reader.result);
+        };
+        reader.onerror = (error) => {
+            console.log("Error", error);
+        };
     };
 
     const handleInputChange = (e) => {
@@ -29,6 +35,10 @@ const Page = () => {
                 ...prevUser,
                 [name]: type === 'file' ? URL.createObjectURL(file): value,
             }))
+    };
+
+    const handleImageClick = () => {
+        document.getElementById('fileInput').click();
     };
 
     const handleClick = async (e) => {
@@ -80,13 +90,20 @@ const Page = () => {
                         <form>
                             <div className="my-5">
                                 <label className="block text-gray-700 font-medium mb-1">Profile Picture</label>
-                                <div onClick={openFilePicker} className='mt-2' >
-                                    {user.image ? (
-                                        <img src={user.image} alt="Selected" width="300" className="w-16 h-16 rounded-full" />
+                                <div>
+                                    <input
+                                        accept="image/*"
+                                        type="file"
+                                        id="fileInput"
+                                        onChange={convertToBase64}
+                                        style={{ display: 'none' }}
+                                    />
+                                    {image == null || image === '' ? (
+                                        <Image src={ImagePicker} alt="ImagePicker" className="w-16 h-16" onClick={handleImageClick}></Image>
                                     ) : (
-                                        <div>
-                                            <Image src={ImagePicker} alt="ImagePicker" className="w-16 h-16"></Image>
-                                        </div>
+                                        <>
+                                            <img src={image} alt="Selected" width="300" className="w-16 h-16 rounded-full" onClick={handleImageClick} />
+                                        </>
                                     )}
                                 </div>
                                 <input
