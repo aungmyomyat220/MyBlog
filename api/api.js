@@ -20,6 +20,7 @@ export const createUser = async (userData) => {
 };
 
 export const createPost = async (postData) => {
+    console.log("API.PostData =>",postData)
     try {
         const response = await fetch(`${API_BASE_URL}/posts`, {
             method: "POST",
