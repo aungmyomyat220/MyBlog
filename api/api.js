@@ -64,7 +64,7 @@ export const createPost = async (postData) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "",
+                "Access-Control-Allow-Origin": true,
             },
             body: JSON.stringify(postData),
         });

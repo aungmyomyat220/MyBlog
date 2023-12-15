@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function Home() {
   const router = useRouter();
   const {
-    data: posts,
+    data: posts =[],
     error,
     isLoading,
   } = useQuery({ queryKey: ["get"], queryFn: getPost });
@@ -72,7 +72,11 @@ export default function Home() {
                 >
                   {posts[0].title}
                 </span>
-                <span>{posts[0].date}</span>
+                <span>{new Date(posts[0].date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}</span>
                 <span></span>
               </div>
               <div className="px-4 mt-5 flex flex-col">

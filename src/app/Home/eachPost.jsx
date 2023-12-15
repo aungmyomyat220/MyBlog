@@ -83,7 +83,7 @@ const EachPost = () => {
                   <Image
                     src={post.authorImage}
                     alt=""
-                    className="w-11 h-12 rounded-full"
+                    className="w-11 h-11 rounded-full"
                     width={0}
                     height={0}
                   ></Image>

@@ -11,14 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoveReact } from "../../../../Global Redux/createSlice/postSlice";
 
 const Post = () => {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    const userData = sessionStorage["user"];
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
   const dispatch = useDispatch();
@@ -77,7 +69,7 @@ const Post = () => {
         </div>
         <div className="font-bold flex my-6 ">
           <div>
-            <Image src={post.image} alt="author" className="w-12 h-12 rounded-full" width={0} height={0} />
+            <Image src={filterPost.authorImage} alt="author" className="w-12 h-12 rounded-full" width={0} height={0} />
           </div>
           <div className="flex flex-col ml-3">
             <span className="text-lg">{filterPost.author}</span>
@@ -114,7 +106,7 @@ const Post = () => {
             <span>7</span>
           </div>
         </div>
-        <div>
+        <div className="flex justify-center">
           <img
             src={filterPost.image}
             alt=""
