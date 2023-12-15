@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 let userSession;
 
 // MongoDB
@@ -37,9 +37,8 @@ const postSchema = new mongoose.Schema({
     content : String,
     date : String,
     author : String,
+    authorId : String,
     image : String,
-    comment : String,
-    like : String
 });
 
 const User = mongoose.model("User", userSchema);
@@ -107,7 +106,7 @@ app.post('/posts', async (req, res) => {
         const postData = req.body;
         const newPost = new Post(postData);
         await newPost.save();
-        res.status(201).json(newPost); // Send the saved post as a JSON response
+        res.status(201).json(newPost);
     } catch (error) {
         res.status(500).json({ error: 'Failed to create post' });
     }

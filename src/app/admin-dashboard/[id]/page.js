@@ -3,10 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import imagePicker from "../../../image/noun-image-1066765.png";
 import { createPost } from "../../../../api/api";
-import { useParams } from "next/navigation";
 
 const Page = () => {
-  const { id } = useParams();
   const [user, setUser] = useState({});
   const [image, setImage] = useState("");
 
@@ -21,9 +19,9 @@ const Page = () => {
     title: "",
     content: "",
     author: user.userName,
-    author_id: user._id,
+    authorId: user._id,
     date: new Date(),
-    image: "",
+    image: image
   });
 
   const [showButton, setShowButton] = useState(false);
@@ -47,6 +45,9 @@ const Page = () => {
     setPostData((prevPostData) => ({
       ...prevPostData,
       [name]: value,
+      image : image,
+      author: user.userName,
+      authorId: user._id,
     }));
   };
 
@@ -133,11 +134,12 @@ const Page = () => {
                 )}
               </div>
               <div className="flex flex-col">
-                {image && 
-                    setShowText(false)
-                    setIsRotated(false)
-                    <Image width={100} height={100} src={image}></Image>
-                }
+                    {image?
+                    <div className="w-full flex justify-center my-5">
+                        <Image width={500} height={400} src={image} alt="preview"></Image>    
+                    </div> : ""              
+                    }
+                
                 <textarea
                   className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
                   placeholder="Tell Your Story"
