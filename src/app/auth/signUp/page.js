@@ -4,8 +4,11 @@ import { useRouter } from "next/navigation";
 import { createUser } from "../../../../api/api";
 import Image from "next/image";
 import ImagePicker from "@/image/plus.jpg";
+import Swal from "sweetalert2";
 
 const Page = () => {
+    const [error, setError] = useState("");
+    const [image,setImage]= useState("")
     const router = useRouter()
     const [user, setUser] = useState({
         "userName": "",
@@ -13,9 +16,9 @@ const Page = () => {
         "password": "",
         "confirmPassword": "",
         "role": "",
+        "image" : image
     });
-    const [error, setError] = useState("");
-    const [image,setImage]= useState("")
+
     const fileInputRef = useRef(null);
     const convertToBase64 = (e) => {
         var reader = new FileReader();
@@ -29,11 +32,11 @@ const Page = () => {
     };
 
     const handleInputChange = (e) => {
-        const { value, name,type} = e.target;
-        const file = e.target.files? e.target.files[0]:null
+        const { value, name} = e.target;
             setUser((prevUser) => ({
                 ...prevUser,
-                [name]: type === 'file' ? URL.createObjectURL(file): value,
+                [name]: value,
+                image : image
             }))
     };
 
@@ -62,15 +65,25 @@ const Page = () => {
 
         // If all validations pass, create the user
         try {
-            await createUser(user);
-            setUser({
-                "userName": "",
-                "userEmail": "",
-                "password": "",
-                "role": ""
-            });
-            setError("");
-            router.push('/Home');
+            const response = await createUser(user);
+            if(response.statusCode === 409){
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Registered User',
+                    text: 'Email already registered',
+                    showConfirmButton: true,
+                    timer: null,
+                });
+            }else{
+                setUser({
+                    "userName": "",
+                    "userEmail": "",
+                    "password": "",
+                    "role": ""
+                });
+                setError("");
+                router.push('signIn');
+            }
         } catch (error) {
             setError("An error occurred while creating the user."); // Handle API error
         }

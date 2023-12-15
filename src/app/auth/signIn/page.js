@@ -1,8 +1,8 @@
 "use client"
 import React, {useState} from 'react';
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import Swal from 'sweetalert2';
+import { Login } from "../../../../api/api";
 const Page = () => {
     const router = useRouter()
     const [checkUser,setCheckUser] = useState({
@@ -17,13 +17,13 @@ const Page = () => {
             [name]: value,
         }));
     };
-    console.log(checkUser);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/login', checkUser);
-            if (response.status === 200) {
+            const response = await Login(checkUser)
+            if (response.statusCode === 200) {
+                sessionStorage.setItem('user', JSON.stringify(response.user));
                 await Swal.fire({
                     icon: 'success',
                     title: 'Login Successful',
@@ -31,9 +31,7 @@ const Page = () => {
                     timer: 1000,
                 });
                 router.push('/profile');
-            }
-          } catch (error) {
-            if (error.response.status === 401) {
+            }else if(response.statusCode === 401) {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Login Failed',
@@ -42,6 +40,7 @@ const Page = () => {
                     timer: null,
                 });
             }
+          } catch (error) {
             console.error('Error authenticating user', error);
           }
       };

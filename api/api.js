@@ -11,6 +11,11 @@ export const createUser = async (userData) => {
         });
         if (response.ok) {
             return await response.json();
+        }else if(response.status === 409){
+            return{
+                error: 'User already exists',
+                statusCode: 409,
+            }
         } else {
             console.error("Error creating user:", response.statusText);
         }
@@ -18,6 +23,39 @@ export const createUser = async (userData) => {
         console.error("Error creating user:", error);
     }
 };
+
+//Login API Function
+export const Login = async (checkUser) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkUser),
+        });
+
+        if (response.status === 200) {
+            const responseData = await response.json();
+            return {
+                user: responseData.user,
+                statusCode: 200,
+            };
+        } else if (response.status === 401){
+            return{
+                error: 'Invalid Username or Password',
+                statusCode: 401,
+            }
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        return {
+            error: 'An unexpected error occurred',
+            statusCode: 500,
+        };
+    }
+};
+
 
 export const createPost = async (postData) => {
     console.log("API.PostData =>",postData)

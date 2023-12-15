@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 let userSession;
 
 // MongoDB
@@ -57,11 +57,10 @@ app.use(sessions({
 // Middleware to check authentication
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
-    console.log("Email",userEmail)
-    console.log("password",password)
     try {
         const user = await User.findOne({ userEmail: userEmail, password: password });
         if (user) {
+            req.session.user = user;
             next();
         } else {
             res.status(401).send("Authentication Failed");
@@ -71,11 +70,27 @@ async function authenticate(req, res, next) {
     }
 }
 
+//Check UserExist middleware
+async function checkAlreadyRegisteredUser(req,res,next){
+    const  { userEmail } = req.body;
+    try {
+        const alreadyRegisteredUser = await User.findOne({ userEmail: userEmail });
+        if(alreadyRegisteredUser){
+            res.status(409).send("User Already Registered")
+        }else{
+            next();
+        }
+    }catch (e) {
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 app.post('/login', authenticate, (req, res) => {
-    res.send(`Authentication Successful`);
+    const user = req.session.user;
+    res.status(200).send({ message: 'Authentication Successful', user })
 });
 
-app.post('/users', async (req, res) => {
+app.post('/users',checkAlreadyRegisteredUser, async (req, res) => {
     try {
         const userData = req.body
         const newUser = new User(userData);
