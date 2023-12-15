@@ -20,6 +20,7 @@ const Page = () => {
     content: "",
     author: user.userName,
     authorId: user._id,
+    authorImage : user.image,
     date: new Date(),
     image: image
   });
@@ -48,6 +49,7 @@ const Page = () => {
       image : image,
       author: user.userName,
       authorId: user._id,
+      authorImage : user.image,
     }));
   };
 

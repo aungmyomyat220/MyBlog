@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import writepost from '../../image/write.png';
 import { useRouter } from "next/navigation";
-import { Router } from 'next/router';
 
 const Sidebar = () => {
   const router = useRouter()
@@ -22,7 +21,7 @@ const Sidebar = () => {
   return (
     <>
       <div className='pt-14 flex flex-col items-center'>
-        <Image src={user.image} alt='profile' className='rounded-full' width={90} height={0}/>
+        <img src={user.image} alt='profile' className='rounded-full w-32 h-32'/>
         <span className='text-black font-bold text-xl my-5'>{user.userName || 'Guest'}</span>
         <div className='flex flex-row'>
           <button className='px-3 py-2 bg-blue-600 text-white rounded-xl'>Edit Profile</button>

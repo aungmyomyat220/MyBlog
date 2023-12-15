@@ -38,6 +38,7 @@ const postSchema = new mongoose.Schema({
     date : String,
     author : String,
     authorId : String,
+    authorImage : String,
     image : String,
 });
 
