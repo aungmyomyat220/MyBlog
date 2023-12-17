@@ -1,10 +1,21 @@
 'use client'
 import React from 'react';
 import Sidebar from "@/app/profile/sidebar";
-import contentPage from "@/app/profile/contentPage";
+import isAuthenticated  from '../auth/authenticate';
 import ContentPage from "@/app/profile/contentPage";
+import { useLayoutEffect } from 'react';
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+    const router = useRouter()
+    useLayoutEffect(() => {
+        const isAuth = isAuthenticated;
+        if(!isAuth){
+          router.push("/")
+        }else{
+          router.push("/profile")
+        }
+      }, [])
     return (
         <>
             <div className='w-full h-screen'>

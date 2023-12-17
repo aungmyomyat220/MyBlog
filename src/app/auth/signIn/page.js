@@ -30,7 +30,7 @@ const Page = () => {
                     showConfirmButton: false,
                     timer: 1000,
                 });
-                router.push('/profile');
+                router.push('/Home');
             }else if(response.statusCode === 401) {
                 await Swal.fire({
                     icon: 'error',

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import EachPost from "./eachPost";
 import { getPost } from "../../../api/api";
 import { useQuery } from "@tanstack/react-query";
+import NavBar from './navbar'
 
 export default function Home() {
   const router = useRouter();
@@ -24,38 +25,12 @@ export default function Home() {
     return <div>Error: {error.message}</div>;
   }
 
-  const handleLoginClick = (e) => {
-    e.preventDefault();
-    const checkBtn = e.target.value;
-    checkBtn === "login"
-      ? router.push("/auth/signIn")
-      : router.push("/auth/signUp");
-  };
-
   return (
     <>
       {posts.length > 0 && (
         <div className="flex flex-col w-full justify-center items-center">
+          <NavBar></NavBar>
           <div className="max-w-5xl w-full">
-            <div className="flex flex-col items-center mt-20 sm:flex-row sm:justify-between sm:pl-3">
-              <span className="text-4xl font-bold">My Blog</span>
-              <span className="px-6 mt-3 text-center">
-                <button
-                  className="bg-gray-600 px-6 py-1 text-white rounded-md"
-                  value="login"
-                  onClick={handleLoginClick}
-                >
-                  Login
-                </button>
-                <button
-                  className="bg-gray-600 px-6 py-1 text-white rounded-md ml-3"
-                  value="signup"
-                  onClick={handleLoginClick}
-                >
-                  SignUp
-                </button>
-              </span>
-            </div>
             <div className="w-full px-4 mt-12">
               <img
                 src={posts[0].image}
