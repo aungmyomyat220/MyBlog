@@ -5,6 +5,7 @@ import isAuthenticated  from '../auth/authenticate';
 import ContentPage from "@/app/profile/contentPage";
 import { useLayoutEffect } from 'react';
 import { useRouter } from "next/navigation";
+import Navbar from '../Home/navbar';
 
 const Page = () => {
     const router = useRouter()
@@ -19,6 +20,7 @@ const Page = () => {
     return (
         <>
             <div className='w-full h-screen'>
+            <Navbar></Navbar>
                 <div className='w-full flex'>
                     <div className='w-2/3 h-screen pl-32'>
                         <ContentPage/>

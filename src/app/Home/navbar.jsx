@@ -28,10 +28,14 @@ const Navbar = () => {
     }
   }, user);
 
+  const goToHome = () => {
+    router.push('/Home')
+  }
+
   return (
     <div className="flex justify-between items-center w-full py-4 px-10 border-b border-gray-300">
       <div className="flex">
-        <span className="text-3xl font-bold mr-10">My Blog</span>
+        <span className="text-3xl font-bold mr-10 cursor-pointer" onClick={goToHome}>My Blog</span>
         <div className="container-input">
           <input
             type="text"
