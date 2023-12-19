@@ -180,7 +180,7 @@
 /*Hide ScrollBar*/
 .no-scrollbar{
   overflow-y: auto;
-  height: 480px;
+  height: 430px;
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {

@@ -5,10 +5,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Image from "next/image";
 
-// eslint-disable-next-line react/display-name
 const Navbar = () => {
   const [showProfile, setShowProfile] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
   const router = useRouter();
+  
   const handleLoginClick = (e) => {
     e.preventDefault();
     const checkBtn = e.target.value;
@@ -23,19 +24,33 @@ const Navbar = () => {
 
   const user = JSON.parse(sessionStorage.getItem("user"));
   useEffect(() => {
-    if(user){
+    if (user) {
       setShowProfile(true);
     }
-  }, user);
+  }, [user]);
 
   const goToHome = () => {
-    router.push('/Home')
-  }
+    router.push("/Home");
+  };
 
+  const showDropDown = () => {
+    setDropDown(!dropDown);
+  };
+
+  const logout = () =>{
+    router.push('/auth/signIn')
+    sessionStorage.clear()
+  }
+ 
   return (
     <div className="flex justify-between items-center w-full py-4 px-10 border-b border-gray-300">
       <div className="flex">
-        <span className="text-3xl font-bold mr-10 cursor-pointer" onClick={goToHome}>My Blog</span>
+        <span
+          className="text-3xl font-bold mr-10 cursor-pointer"
+          onClick={goToHome}
+        >
+          My Blog
+        </span>
         <div className="container-input">
           <input
             type="text"
@@ -77,7 +92,36 @@ const Navbar = () => {
             </svg>
           </button>
           <div className="cursor-pointer">
-            <Image src={user.image} alt="userprofile" width={0} height={0} className='rounded-full ml-5 w-11 h-11' onClick={()=>{router.push('/profile')}}></Image>
+            <Image
+              src={user.image}
+              alt="userprofile"
+              width={0}
+              height={0}
+              className="rounded-full ml-5 w-11 h-11"
+              onClick={showDropDown}
+            ></Image>
+            {dropDown && (
+              <div
+                id="dropdown"
+                class="z-10 absolute right-5 mt-3 w-32 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+              >
+                <ul
+                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  <li onClick={()=>{router.push('/profile')}}>
+                    <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      View Profile
+                    </a>
+                  </li>
+                  <li onClick={logout}>
+                    <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -100,6 +144,6 @@ const Navbar = () => {
       )}
     </div>
   );
-}
+};
 
 export default Navbar;

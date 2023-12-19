@@ -21,7 +21,7 @@ const ContentPage = (props) => {
       <div className="text-black p-8">
         <span className="text-4xl font-bold">Your Profile</span>
       </div>
-      <div className="text-lg text-black mt-3 grid grid-cols-2">
+      <div className="text-lg text-black grid grid-cols-2">
         <span
           className={`px-5 border-b-2 py-3 cursor-pointer ${
             activeTab === "Home" ? "border-black" : "border-gray-300"

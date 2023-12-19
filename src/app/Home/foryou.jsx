@@ -46,7 +46,7 @@ const Foryou = () => {
 
   return (
     <div className="no-scrollbar">
-      {filteredPosts.map((post) => (
+      {(user ? filteredPosts : posts).map((post) => (
         <div
           className="grid grid-cols-5 border-b border-gray-300 mt-8 cursor-pointer"
           key={post._id}

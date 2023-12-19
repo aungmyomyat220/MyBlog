@@ -22,7 +22,7 @@ const Page = () => {
             <div className='w-full h-screen'>
             <Navbar></Navbar>
                 <div className='w-full flex'>
-                    <div className='w-2/3 h-screen pl-32'>
+                    <div className='w-2/3 pl-32'>
                         <ContentPage/>
                     </div>
                     <div className='w-1/3 border-l-2 border-gray-300 ml-32'>
