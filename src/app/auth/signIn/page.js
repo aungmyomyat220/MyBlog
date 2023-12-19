@@ -72,14 +72,14 @@ const Page = () => {
       <div className="flex flex-col justify-center items-center w-full h-screen">
         <div className="max-w-5xl bg-gray-300 w-full h-[600px] rounded-xl flex p-2">
 
-          <div className={`w-1/2 flex justify-center order-${signUp ? 1 : 2}`}>
+          <div className={`w-1/2 flex justify-center order-${signUp? 2: 1} transition-all duration-500`}>
             <Image src={LoginBanner} width={900} height={1500} alt="loginbanner"></Image>
           </div>
 
-          <div className="w-1/2 bg-white rounded-lg flex flex-col items-center justify-center">
+          <div className="w-1/2 bg-white rounded-lg flex flex-col items-center justify-center order-1 transition-all duration-500">
             <div className="font-bold text-3xl font-sans">Welcome back!</div>
             <div className="mt-2 text-xs">Please enter your details</div>
-            <div className="ml-24 mt-12">
+            <div className="mt-12">
               <div className="relative h-11 w-80 ">
                 <input
                   placeholder="example@gmail.com"

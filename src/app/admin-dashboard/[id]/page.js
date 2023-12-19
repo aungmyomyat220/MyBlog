@@ -34,7 +34,6 @@ const Page = () => {
     reader.readAsDataURL(e.target.files[0]);
     reader.onload = () => {
       setImage(reader.result);
-      console.log(reader.result);
     };
     reader.onerror = (error) => {
       console.log("Error", error);
