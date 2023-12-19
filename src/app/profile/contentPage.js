@@ -2,6 +2,7 @@
 import React, { useState,useEffect } from "react";
 import HomeTab from "@/app/profile/HomeTab";
 import AboutTab from "@/app/profile/AboutTab";
+
 const ContentPage = (props) => {
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabClick = (tabName) => {

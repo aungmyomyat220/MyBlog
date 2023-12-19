@@ -2,6 +2,7 @@
 import NavBar from "./navbar";
 import { useState } from "react";
 import Foryou from "./foryou";
+import Suggestion from "./suggestion";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("foryou");
@@ -46,7 +47,7 @@ export default function Home() {
 
           {/*Second Div*/}
           <div className="col-span-2 border-l pt-14 pl-10">
-            <div>Second Div</div>
+            <Suggestion></Suggestion>
           </div>
         </div>
       </div>
