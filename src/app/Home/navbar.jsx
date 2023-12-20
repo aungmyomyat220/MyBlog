@@ -9,7 +9,14 @@ const Navbar = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const router = useRouter();
-  
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    const userData = sessionStorage["user"];
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
   const handleLoginClick = (e) => {
     e.preventDefault();
     const checkBtn = e.target.value;
@@ -22,7 +29,6 @@ const Navbar = () => {
     router.push(`admin-dashboard/${user._id}`);
   };
 
-  const user = JSON.parse(sessionStorage.getItem("user"));
   useEffect(() => {
     if (user) {
       setShowProfile(true);
@@ -103,19 +109,19 @@ const Navbar = () => {
             {dropDown && (
               <div
                 id="dropdown"
-                class="z-10 absolute right-5 mt-3 w-32 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+                className="z-10 absolute right-5 mt-3 w-32 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
               >
                 <ul
-                  class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdownDefaultButton"
                 >
-                  <li onClick={()=>{router.push('/profile')}}>
-                    <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  <li onClick={()=>{router.push(`/profile/${user._id}`)}}>
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       View Profile
                     </a>
                   </li>
                   <li onClick={logout}>
-                    <a class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <a className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       Logout
                     </a>
                   </li>

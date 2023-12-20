@@ -1,15 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getPost } from "../../../api/api";
+import { getPost } from "../../../../api/api";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import Like from "@/image/love.png";
 import Comment from "@/image/chat.png";
-import { formatDate } from "../../../api/getDate";
-import { useRouter } from "next/navigation";
+import { formatDate } from "../../../../api/getDate";
+import {useParams, useRouter} from "next/navigation";
 
 const HomeTab = () => {
+  const {id} = useParams()
   const router = useRouter();
   const { loveData } = useSelector((state) => state.post);
   const [user, setUser] = useState({});
@@ -25,7 +26,8 @@ const HomeTab = () => {
     queryKey: ["getPostForLoginUser"],
     queryFn: getPost,
   });
-  const filterPosts = posts.filter((post) => post.authorId === user._id);
+  console.log("Posts =>",posts)
+  const filterPosts = posts.filter((post) => post.authorId === id);
 
   posts.sort((a, b) => {
     const timeDifferenceA = new Date() - new Date(a.date);

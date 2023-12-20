@@ -1,20 +1,21 @@
 'use client'
 import React from 'react';
-import Sidebar from "@/app/profile/sidebar";
-import isAuthenticated  from '../auth/authenticate';
-import ContentPage from "@/app/profile/contentPage";
+import Sidebar from "./sidebar";
+import isAuthenticated  from '../../auth/authenticate';
+import ContentPage from "./contentPage";
 import { useLayoutEffect } from 'react';
-import { useRouter } from "next/navigation";
-import Navbar from '../Home/navbar';
+import { useRouter,useParams } from "next/navigation";
+import Navbar from '../../Home/navbar';
 
 const Page = () => {
+    const {id} = useParams()
     const router = useRouter()
     useLayoutEffect(() => {
         const isAuth = isAuthenticated;
         if(!isAuth){
           router.push("/")
         }else{
-          router.push("/profile")
+          router.push(`/profile/${id}`)
         }
       }, [])
     return (

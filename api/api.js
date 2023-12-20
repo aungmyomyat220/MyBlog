@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_BASE_URL = "http://localhost:8000";
 
 export const createUser = async (userData) => {
@@ -58,7 +60,6 @@ export const Login = async (checkUser) => {
 
 
 export const createPost = async (postData) => {
-    console.log("API.PostData =>",postData)
     try {
         const response = await fetch(`${API_BASE_URL}/posts`, {
             method: "POST",

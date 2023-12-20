@@ -1,7 +1,7 @@
 "use client";
-import React, { useState,useEffect } from "react";
+import React, { useState} from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import { getPost } from "../../../../api/api";
 import Image from "next/image";
 import Like from "../../../image/love.png";
@@ -15,6 +15,7 @@ const Post = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const dispatch = useDispatch();
   const postData = useSelector((state) => state.post);
+  const router = useRouter()
 
   const openImage = (image) => {
     setSelectedImage(image);
@@ -69,10 +70,10 @@ const Post = () => {
         </div>
         <div className="font-bold flex my-6 ">
           <div>
-            <Image src={filterPost.authorImage} alt="author" className="w-12 h-12 rounded-full" width={0} height={0} />
+            <Image src={filterPost.authorImage} alt="author"  onClick={()=> {router.push(`/profile/${filterPost.authorId}`)}} className="w-12 h-12 rounded-full cursor-pointer" width={0} height={0} />
           </div>
           <div className="flex flex-col ml-3">
-            <span className="text-lg">{filterPost.author}</span>
+            <span className="text-lg hover:underline cursor-pointer" onClick={()=> {router.push(`/profile/${filterPost.authorId}`)}}>{filterPost.author}</span>
             <span className="mt-1 text-sm font-medium">
               {new Date(filterPost.date).toLocaleDateString("en-US", {
                 year: "numeric",

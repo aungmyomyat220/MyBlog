@@ -43,7 +43,7 @@ const Suggestion = () => {
     <div>
       <div className="flex items-baseline">
         <span className="text-lg font-medium mr-2">Top Hits</span>
-        <Image src={fire} height={20} width={20}></Image>
+        <Image src={fire} height={20} width={20} alt='fire'></Image>
       </div>
       <div>
         {topThreePosts.map((post) => (
@@ -79,11 +79,12 @@ const Suggestion = () => {
                 <img
                   src={user.image}
                   alt={user.userName}
-                  className="rounded-full w-9 h-9"
+                  className="rounded-full w-9 h-9 cursor-pointer"
+                  onClick={()=> router.push(`/profile/${user._id}`)}
                 ></img>
               </span>
               <div className="px-3 flex flex-col">
-                <span className="font-bold">{user.userName}</span>
+                <span className="font-bold hover:underline cursor-pointer" onClick={()=> router.push(`/profile/${user._id}`)}>{user.userName}</span>
                 <span className="text-left text-sm text-gray-500">
                   .net C# 10years experience developer
                 </span>

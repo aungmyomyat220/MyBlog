@@ -26,11 +26,11 @@ const Foryou = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col w-full h-screen justify-center items-center">
-        <div class="cube-loader">
-          <div class="cube cube1"></div>
-          <div class="cube cube2"></div>
-          <div class="cube cube3"></div>
-          <div class="cube cube4"></div>
+        <div className="cube-loader">
+          <div className="cube cube1"></div>
+          <div className="cube cube2"></div>
+          <div className="cube cube3"></div>
+          <div className="cube cube4"></div>
         </div>
       </div>
     );
@@ -53,7 +53,7 @@ const Foryou = () => {
         >
           <div className="flex flex-col mx-5 col-span-4">
             <div className="flex">
-              <span>{post.author}</span>
+              <span className='hover:underline' onClick={()=> router.push(`/profile/${post.authorId}`)}>{post.author}</span>
               <span>・</span>
               <span className="mb-3 text-gray-500">
                 {formatDate(post.date)}

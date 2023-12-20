@@ -1,9 +1,12 @@
 "use client";
 import React, { useState,useEffect } from "react";
-import HomeTab from "@/app/profile/HomeTab";
-import AboutTab from "@/app/profile/AboutTab";
+import HomeTab from "./HomeTab";
+import AboutTab from "./AboutTab";
+import {getAllUsersHook} from "../../../../hooks/getAllUsersHook";
+import {useParams} from "next/navigation";
 
 const ContentPage = (props) => {
+  const {id} = useParams()
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -16,11 +19,18 @@ const ContentPage = (props) => {
       setUser(JSON.parse(userData));
     }
   }, []);
+  const {data = []} = getAllUsersHook()
+  const viewedUser = data.filter((user) => user._id === id)
+  const confirmUser = viewedUser[0]
 
   return (
     <>
       <div className="text-black p-8">
-        <span className="text-4xl font-bold">Your Profile</span>
+        <span className="text-4xl font-bold">
+          {
+            confirmUser && confirmUser._id === user._id ? "Your Profile" : confirmUser&&confirmUser.userName
+          }
+        </span>
       </div>
       <div className="text-lg text-black grid grid-cols-2">
         <span
