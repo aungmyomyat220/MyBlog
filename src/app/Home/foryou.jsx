@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getPost } from "../../../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "../../../api/getDate";
@@ -15,13 +15,19 @@ const Foryou = () => {
       setUser(JSON.parse(userData));
     }
   }, []);
+
   const {
     data: posts = [],
     error,
     isLoading,
-  } = useQuery({ queryKey: ["get"], queryFn: getPost });
+  } = useQuery({
+    queryKey: ["get"],
+    queryFn: getPost,
+    refetchOnMount : true,
+    refetchOnWindowFocus : true
+  });
 
-  const filteredPosts = posts.filter(post => post.authorId !== user._id);
+  const filteredPosts = posts.filter((post) => post.authorId !== user._id);
 
   if (isLoading) {
     return (
@@ -53,7 +59,12 @@ const Foryou = () => {
         >
           <div className="flex flex-col mx-5 col-span-4">
             <div className="flex">
-              <span className='hover:underline' onClick={()=> router.push(`/profile/${post.authorId}`)}>{post.author}</span>
+              <span
+                className="hover:underline"
+                onClick={() => router.push(`/profile/${post.authorId}`)}
+              >
+                {post.author}
+              </span>
               <span>・</span>
               <span className="mb-3 text-gray-500">
                 {formatDate(post.date)}

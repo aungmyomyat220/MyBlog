@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import imagePicker from "../../../image/noun-image-1066765.png";
 import { createPost } from "../../../../api/api";
+import Swal from "sweetalert2";
 
 const Page = () => {
   const [user, setUser] = useState({});
@@ -30,7 +31,7 @@ const Page = () => {
   const [isRotated, setIsRotated] = useState(false);
 
   const convertToBase64 = (e) => {
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.onload = () => {
       setImage(reader.result);
@@ -53,8 +54,26 @@ const Page = () => {
   };
 
   const postUpload = async () => {
-    await createPost(postData);
-    alert("Post Uploaded");
+    const response = await createPost(postData);
+    if(response.status === 200 || 201){
+      await Swal.fire({
+        icon: "success",
+        title: "Post Uploaded Successfully",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      setImage("")
+      setPostData({
+        title: "",
+        content: "",
+        author: user.userName,
+        authorId: user._id,
+        authorImage: user.image,
+        date: new Date(),
+        image: "",
+      });
+    }
+
   };
 
   const handleInputClick = () => {
