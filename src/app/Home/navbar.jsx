@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import writepost from "../../image/write.png";
 import { useState ,useEffect} from "react";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -43,8 +44,21 @@ const Navbar = () => {
   };
 
   const logout = () =>{
-    router.push('/auth/signIn')
-    sessionStorage.clear()
+    Swal.fire({
+      text: "Do you want to Logout",
+      icon : "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Logout"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push('/auth/signIn')
+        sessionStorage.clear()
+      }
+    });
+
+
   }
  
   return (

@@ -4,6 +4,7 @@ import Image from "next/image";
 import imagePicker from "../../../image/noun-image-1066765.png";
 import { createPost } from "../../../../api/api";
 import Swal from "sweetalert2";
+import Close from "../../../image/cross.png"
 
 const Page = () => {
   const [user, setUser] = useState({});
@@ -160,7 +161,7 @@ const Page = () => {
                       <div className="w-full flex justify-center my-5">
                         <Image width={500} height={400} src={image} alt="preview"></Image>
                         <div className='flex items-start ml-5'>
-                          <button onClick={()=>{setImage("")}}>X</button>
+                          <Image src={close}  alt='close button' height={20} width={20}/>
                         </div>
                       </div> : ""
                   }
