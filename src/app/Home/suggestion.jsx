@@ -47,7 +47,7 @@ const Suggestion = () => {
       </div>
       <div>
         {topThreePosts.map((post) => (
-          <div className="flex flex-col my-6">
+          <div className="flex flex-col my-6" key={post._id}>
             <div className="flex items-center">
               <span key={post._id}>
                 <Image
@@ -74,7 +74,7 @@ const Suggestion = () => {
         <span className="font-medium text-lg">Who to Follow</span>
         {filteredUsers.map((user) => {
           return (
-            <div className="h-20 flex mt-3">
+            <div className="h-20 flex mt-3" key={user._id}>
               <span>
                 <img
                   src={user.image}

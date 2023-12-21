@@ -1,8 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import writepost from "../../image/write.png";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState ,useEffect} from "react";
 import Image from "next/image";
 
 const Navbar = () => {
@@ -30,8 +29,8 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      setShowProfile(true);
+    if (user._id) {
+      setShowProfile(true)
     }
   }, [user]);
 

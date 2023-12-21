@@ -49,34 +49,15 @@ const Page = () => {
   };
 
   return (
-    // <>
-    //     <div className="bg-gray-100 flex justify-center items-center h-screen">
-    //     <div className="bg-white p-8 rounded shadow-md w-96">
-    //         <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
-    //             <div className="mb-4">
-    //                 <label className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-    //                 <input type="email" name="userEmail" required
-    //                        onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
-    //             </div>
-    //             <div className="mb-4">
-    //                 <label className="block text-gray-700 text-sm font-bold mb-2">Password:</label>
-    //                 <input type="password" name="password" required
-    //                        onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
-    //             </div>
-    //             <button type="submit" onClick={handleSubmit}
-    //                     className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-400">Login</button>
-    //     </div>
-    //     </div>
-    // </>
     <>
       <div className="flex flex-col justify-center items-center w-full h-screen">
         <div className="max-w-5xl bg-gray-300 w-full h-[600px] rounded-xl flex p-2">
 
-          <div className={`w-1/2 flex justify-center order-${signUp? 2: 1} transition-all duration-500`}>
+          <div className={`w-1/2 flex justify-center transition-all duration-500 ${signUp? "order-2" : "order-1"}`}>
             <Image src={LoginBanner} width={900} height={1500} alt="loginbanner"></Image>
           </div>
 
-          <div className="w-1/2 bg-white rounded-lg flex flex-col items-center justify-center order-1 transition-all duration-500">
+          <div className={`w-1/2 bg-white rounded-lg flex flex-col items-center justify-center transition-all duration-500 ${signUp? "order-1" : "order-2"}`}>
             <div className="font-bold text-3xl font-sans">Welcome back!</div>
             <div className="mt-2 text-xs">Please enter your details</div>
             <div className="mt-12">
@@ -104,7 +85,7 @@ const Page = () => {
                   Password
                 </label>
               </div>
-              <div className="text-gray-400 text-xs mt-3 flex justify-end cursor-pointer">
+              <div className="text-gray-400 text-xs mt-3 flex justify-end cursor-pointer hover:text-black">
                 Forget password?
               </div>
               <div className="w-80 bg-black mt-5 py-2 rounded-full flex justify-center cursor-pointer" onClick={handleSubmit}>
@@ -113,7 +94,8 @@ const Page = () => {
                 </button>
               </div>
               <div className="text-sm text-center mt-6">
-                    Don't have an account?<span className="font-bold"><span className="cursor-pointer" onClick={()=>{setSignUp(true)}}> Sign Up</span></span>
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                    Don't have an account?<span className="cursor-pointer font-bold" onClick={()=>{setSignUp(true)}}> Sign Up</span>
                 </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const Page = () => {
   const [user, setUser] = useState({});
   const [image, setImage] = useState("");
+  const ref = useRef()
 
   useEffect(() => {
     const userData = sessionStorage["user"];
@@ -62,26 +63,13 @@ const Page = () => {
         showConfirmButton: false,
         timer: 1000,
       });
-      setImage("")
       setPostData({
         title: "",
         content: "",
-        author: user.userName,
-        authorId: user._id,
-        authorImage: user.image,
-        date: new Date(),
-        image: "",
       });
+      setImage("")
     }
 
-  };
-
-  const handleInputClick = () => {
-    setShowButton((prevShowButton) => !prevShowButton);
-    if (showText) {
-      setShowText((prevShowText) => !prevShowText);
-      setIsRotated(!isRotated);
-    }
   };
 
   const fileInputRef = useRef(null);
@@ -98,6 +86,19 @@ const Page = () => {
     setShowText((prevShowText) => !prevShowText);
     setIsRotated(!isRotated);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowButton(false)
+        setShowText(false);
+      }
+    };
+    document.body.addEventListener('click', handleClickOutside);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, [ref]);
 
   return (
     <>
@@ -121,56 +122,62 @@ const Page = () => {
               name="title"
               onChange={handleInputChange}
             />
-            <div className="flex flex-row mt-4">
-              <div>
-                {showButton && (
-                  <button
-                    className="rounded-full px-2 text-2xl border border-black"
-                    style={buttonStyles}
-                    onClick={showImage}
-                  >
-                    +
-                  </button>
-                )}
-                {showText && (
-                  <>
+            <div ref={ref}>
+              <div className="flex flex-row mt-4">
+                <div>
+                  {showButton && (
+                      <button
+                          className="rounded-full px-2 text-2xl border border-black"
+                          style={buttonStyles}
+                          onClick={showImage}
+                      >
+                        +
+                      </button>
+                  )}
+                  {showText && (
+                      <>
                     <span className="text-lg absolute bg-white ml-4 -mt-2 w-full">
                       <Image
-                        src={imagePicker}
-                        alt="picture"
-                        className="w-14 h-12"
-                        onClick={openFilePicker}
-                        name="image"
+                          src={imagePicker}
+                          alt="picture"
+                          className="w-14 h-12"
+                          onClick={openFilePicker}
+                          name="image"
                       />
                     </span>
-                    <input
-                      ref={fileInputRef}
-                      name="image"
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={convertToBase64}
-                    />
-                  </>
-                )}
-              </div>
-              <div className="flex flex-col">
-                    {image?
-                    <div className="w-full flex justify-center my-5">
-                        <Image width={500} height={400} src={image} alt="preview"></Image>    
-                    </div> : ""              
-                    }
-                
-                <textarea
-                  className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
-                  placeholder="Tell Your Story"
-                  name="content"
-                  onClick={handleInputClick}
-                  onChange={handleInputChange}
-                  rows={100}
-                  cols={90}
-                />
+                        <input
+                            ref={fileInputRef}
+                            name="image"
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={convertToBase64}
+                        />
+                      </>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  {image?
+                      <div className="w-full flex justify-center my-5">
+                        <Image width={500} height={400} src={image} alt="preview"></Image>
+                        <div className='flex items-start ml-5'>
+                          <button onClick={()=>{setImage("")}}>X</button>
+                        </div>
+                      </div> : ""
+                  }
+
+                  <textarea
+                      className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
+                      placeholder="Tell Your Story"
+                      name="content"
+                      onClick={() => setShowButton(true)}
+                      onChange={handleInputChange}
+                      rows={100}
+                      cols={90}
+                  />
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
