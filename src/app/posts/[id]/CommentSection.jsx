@@ -40,7 +40,7 @@ const CommentSection = (props) => {
   return (
     <div className="flex justify-end">
       <div className="w-96 border-l border-gray-200 bg-white h-screen backdrop-brightness-200 fixed z-50 shadow-black transition delay-500 p-5">
-        <span className={`font-bold text-xl`}>Comments (10)</span>
+        <span className={`font-bold text-xl`}>Comments ({post.comments.length})</span>
         <div className={"border border-gray-400 mt-5 h-32 rounded-lg"}>
           <textarea
             maxLength={100}
