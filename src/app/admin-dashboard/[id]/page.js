@@ -25,7 +25,9 @@ const Page = () => {
     authorId: user._id,
     authorImage : user.image,
     date: new Date(),
-    image: image
+    image: image,
+    like : '',
+    comment : []
   });
 
   const [showButton, setShowButton] = useState(false);
@@ -69,6 +71,7 @@ const Page = () => {
         content: "",
       });
       setImage("")
+      setIsRotated(false)
     }
 
   };
@@ -93,6 +96,7 @@ const Page = () => {
       if (ref.current && !ref.current.contains(event.target)) {
         setShowButton(false)
         setShowText(false);
+        setIsRotated(false)
       }
     };
     document.body.addEventListener('click', handleClickOutside);

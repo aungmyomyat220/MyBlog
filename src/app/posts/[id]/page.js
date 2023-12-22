@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 import {useParams, useRouter} from "next/navigation";
 import { getPost } from "../../../../api/api";
@@ -9,13 +9,28 @@ import Love from "../../../image/heart.png";
 import Comment from "../../../image/chat.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoveReact } from "../../../../Global Redux/createSlice/postSlice";
+import CommentSection from "@/app/posts/[id]/CommentSection";
 
 const Post = () => {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [comment,setComment] = useState(false)
   const dispatch = useDispatch();
   const postData = useSelector((state) => state.post);
+  const ref = useRef()
   const router = useRouter()
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setComment(false)
+            }
+        };
+        document.body.addEventListener('click', handleClickOutside);
+        return () => {
+            document.body.removeEventListener('click', handleClickOutside);
+        };
+    }, [ref]);
 
   const openImage = (image) => {
     setSelectedImage(image);
@@ -37,6 +52,11 @@ const Post = () => {
     like(id);
     handleLoveClick();
   };
+
+  const openComment = () => {
+      setComment(!comment)
+  }
+
   const {
     data: posts,
     error,
@@ -60,8 +80,14 @@ const Post = () => {
   const filterPost = filterArr[0];
 
   return (
-    <div className="flex flex-col items-center w-full h-screen">
-      <div className="max-w-5xl w-full h-32 flex flex-col mt-10 px-5">
+      <>
+      {comment &&
+          <div ref={ref}>
+              <CommentSection post={filterPost}></CommentSection>
+          </div>
+      }
+        <div className={`flex flex-col items-center w-full h-[2000px] ${comment? ' opacity-50 backdrop-brightness-50 ' : 'opacity-100'}`}>
+          <div className="max-w-5xl w-full h-32 flex flex-col mt-10 px-5">
         <div>
           <span className="text-3xl font-bold">My Blog</span>
         </div>
@@ -103,16 +129,18 @@ const Post = () => {
             <span>{postData.loveData[id]?.loveCount}</span>
           </div>
           <div className="flex mr-5 cursor-pointer">
-            <Image src={Comment} alt="Like" className="w-5 h-5 mr-2" />
-            <span>7</span>
+            <Image src={Comment} alt="Like" className="w-5 h-5 mr-2" onClick={openComment} />
+            <span>{filterPost.comments.length}</span>
           </div>
         </div>
         <div className="flex justify-center">
           <img
             src={filterPost.image}
             alt=""
-            className="h-52 md:h-fit cursor-pointer"
+            className="md:h-fit cursor-pointer"
             onClick={() => openImage(filterPost.image)}
+            height={0}
+            width={600}
           />
         </div>
         <div className="flex flex-col justify-center items-center w-full">
@@ -144,23 +172,9 @@ const Post = () => {
             </div>
           </div>
         )}
-
-        {/*Footer*/}
-        <div className="bg-gray-200 flex flex-col mt-10  md:grid md:grid-cols-6 justify-center items-center text-center px-3 sm:px-2 py-20">
-          <span className="font-bold text-3xl col-span-3 mr-3">
-            Statically Generated with Next.js.
-          </span>
-          <button className="bg-black px-10 py-3 sm:mx-10 border col-span-2 text-white my-8 font-medium hover:bg-white hover:text-black duration-300 hover:border-black">
-            <a href="https://nextjs.org/">Read Documentation</a>
-          </button>
-          <span className="font-bold">
-            <a href="https://github.com/aungmyomyat4980/BlogFridayTest.git">
-              View on GitHub
-            </a>
-          </span>
-        </div>
       </div>
-    </div>
+        </div>
+      </>
   );
 };
 

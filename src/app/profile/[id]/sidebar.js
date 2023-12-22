@@ -70,7 +70,7 @@ const Sidebar = () => {
             </div>
           </span>
                                 <span>
-            <button className="inbox-btn">
+            <button id="inbox-btn">
               <svg
                   viewBox="0 0 512 512"
                   height="16"

@@ -11,7 +11,6 @@ app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-let userSession;
 
 // MongoDB
 const dbURI = "mongodb://0.0.0.0:27017/Blogging";
@@ -40,6 +39,14 @@ const postSchema = new mongoose.Schema({
     authorId : String,
     authorImage : String,
     image : String,
+    like : String,
+    comments: [
+        {
+            cName: String,
+            cContent: String,
+            cDate: String
+        }
+    ]
 });
 
 const User = mongoose.model("User", userSchema);
@@ -131,23 +138,22 @@ app.get("/users", async (req, res) => {
     }
 });
 
-app.put("/posts/:postId", async (req, res) => {
+app.patch("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
-    const updatedData = req.body; // Assuming you send the updated data in the request body
+    const updatedData = req.body;
 
     try {
         const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
-
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
-
         res.json(updatedPost);
     } catch (error) {
         console.error("Error updating post:", error);
         res.status(500).json({ error: "Error updating post" });
     }
 });
+
 
 app.listen(8000, () => {
     console.log("Server started on port 8000");

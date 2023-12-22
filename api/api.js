@@ -1,5 +1,3 @@
-import axios from "axios";
-
 const API_BASE_URL = "http://localhost:8000";
 
 export const createUser = async (userData) => {
@@ -100,19 +98,19 @@ export const getPost = async () => {
 export const updatePost = async (postId, updatedData) => {
     try {
         const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-            method: 'PUT', // Use 'PUT' for updating data
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedData), // Provide the updated data in JSON format
+            body: JSON.stringify(updatedData),
         });
 
         if (!response.ok) {
             throw new Error(`Failed to update post (status ${response.status})`);
         }
-        return await response.json(); // Optionally, you can return the updated post data
+        return await response.json();
     } catch (error) {
         console.error("Error updating post:", error);
-        throw error; // Rethrow the error to handle it elsewhere if needed
+        throw error;
     }
 };
