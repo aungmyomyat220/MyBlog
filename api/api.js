@@ -114,3 +114,23 @@ export const updatePost = async (postId, updatedData) => {
         throw error;
     }
 };
+
+export const updateUser = async (userId, followerId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update post (status ${response.status})`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error updating post:", error);
+        throw error;
+    }
+};

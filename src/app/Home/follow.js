@@ -1,3 +1,3 @@
-export default function Follow (id,userId) {
+export default function Follow (followerList) {
 
 }

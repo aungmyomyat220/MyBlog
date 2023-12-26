@@ -27,6 +27,9 @@ const userSchema = new mongoose.Schema({
     userName : String,
     userEmail : String,
     password : String,
+    followers : [{
+        followerId : String
+    }],
     image : String
 });
 

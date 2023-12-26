@@ -15,6 +15,9 @@ const Page = ({onchange}) => {
         "userEmail": "",
         "password": "",
         "confirmPassword": "",
+        "followers" : [{
+            followerId : ""
+        }],
         "image" : image
     });
 

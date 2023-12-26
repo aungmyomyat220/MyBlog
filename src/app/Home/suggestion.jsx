@@ -40,8 +40,9 @@ const Suggestion = () => {
     fetchData();
   }, []);
 
-  const follow = (id) => {
-    Follow(id,user._id)
+  const follow = (followUser) => {
+    const followerList = followUser.followers.push(user._id)
+    Follow(followerList)
   }
 
   return (
@@ -81,12 +82,14 @@ const Suggestion = () => {
           return (
             <div className="h-20 flex mt-3" key={user._id}>
               <span>
-                <img
+                <Image
                   src={user.image}
                   alt={user.userName}
                   className="rounded-full w-9 h-9 cursor-pointer"
                   onClick={()=> router.push(`/profile/${user._id}`)}
-                ></img>
+                  height={0}
+                  width={0}
+                ></Image>
               </span>
               <div className="px-3 flex flex-col">
                 <span className="font-bold hover:underline cursor-pointer" onClick={()=> router.push(`/profile/${user._id}`)}>{user.userName}</span>
@@ -95,7 +98,7 @@ const Suggestion = () => {
                 </span>
               </div>
               <span>
-                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(`${user._id}`)}}>
+                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(`${user}`)}}>
                   Follow
                 </button>
               </span>
