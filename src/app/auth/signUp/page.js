@@ -6,7 +6,7 @@ import Image from "next/image";
 import ImagePicker from "@/image/plus.jpg";
 import Swal from "sweetalert2";
 
-const Page = () => {
+const Page = ({onchange}) => {
     const [error, setError] = useState("");
     const [image,setImage]= useState("")
     const router = useRouter()
@@ -15,13 +15,12 @@ const Page = () => {
         "userEmail": "",
         "password": "",
         "confirmPassword": "",
-        "role": "",
         "image" : image
     });
 
     const fileInputRef = useRef(null);
     const convertToBase64 = (e) => {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.readAsDataURL(e.target.files[0]);
         reader.onload = () => {
             setImage(reader.result);
@@ -31,12 +30,18 @@ const Page = () => {
         };
     };
 
+    useEffect(() => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            image: image,
+        }));
+    }, [image]);
+
     const handleInputChange = (e) => {
         const { value, name} = e.target;
             setUser((prevUser) => ({
                 ...prevUser,
                 [name]: value,
-                image : image
             }))
     };
 
@@ -44,10 +49,14 @@ const Page = () => {
         document.getElementById('fileInput').click();
     };
 
+    const backToSignIn = (param) => {
+        onchange(param)
+    }
+
     const handleClick = async (e) => {
         e.preventDefault();
         // Check if any of the required fields are blank
-        if (!user.userName || !user.userEmail || !user.password || !user.confirmPassword || !user.role) {
+        if (!user.userName || !user.userEmail || !user.password || !user.confirmPassword) {
             setError("Please fill in all the required fields.");
             return;
         }
@@ -57,6 +66,12 @@ const Page = () => {
             setError("Please enter a valid email address.");
             return;
         }
+
+        if (user.password.length<5) {
+            setError("Please Enter password at least 5 digits");
+            return;
+        }
+
         // Check if the password and confirm password match
         if (user.password !== user.confirmPassword) {
             setError("Password and Confirm Password do not match.");
@@ -74,18 +89,20 @@ const Page = () => {
                     showConfirmButton: true,
                     timer: null,
                 });
-            }else{
-                setUser({
-                    "userName": "",
-                    "userEmail": "",
-                    "password": "",
-                    "role": ""
+            }else if(response.statusCode === 200 || 201){
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Account Successfully Created',
+                    showConfirmButton: false,
+                    timer: 2000,
                 });
                 setError("");
-                router.push('signIn');
+                onchange(false);
             }
         } catch (error) {
-            setError("An error occurred while creating the user."); // Handle API error
+            console.log(error)
+
         }
     };
 
@@ -94,69 +111,104 @@ const Page = () => {
     }, [router]);
 
     return (
-        <>
-            <div className='flex flex-col w-full h-screen justify-center items-center'>
-                <div className='w-full flex flex-col items-center'>
-                    <div className="bg-white p-8 rounded shadow-md w-full max-w-xl">
-                        <h2 className="text-3xl font-semibold mb-4">Sign Up Here</h2>
-                        {error && <div className="text-red-500 mb-4">{error}</div>} {/* Display error message */}
-                        <form>
-                            <div className="my-5">
-                                <label className="block text-gray-700 font-medium mb-1">Profile Picture</label>
-                                <div>
+        <div>
+
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                        <div className="font-bold text-3xl text-center mb-6">Hello There</div>
+                        <div>
+                            {error && <div className="text-red-500 mb-3">{error}</div>}
+                                <div className="mb-3">
+                                    <label className="block text-gray-700 font-medium mb-1">Profile Picture</label>
+                                    <div>
+                                        <input
+                                            accept="image/*"
+                                            type="file"
+                                            id="fileInput"
+                                            onChange={convertToBase64}
+                                            style={{ display: 'none' }}
+                                        />
+                                        {image == null || image === '' ? (
+                                            <Image src={ImagePicker} alt="ImagePicker" className="w-16 h-16" width={0} height={0} onClick={handleImageClick}></Image>
+                                        ) : (
+                                            <>
+                                                <Image src={image} alt="Selected" width="300" className="w-16 h-16 rounded-full" height={0} onClick={handleImageClick} />
+                                            </>
+                                        )}
+                                    </div>
                                     <input
-                                        accept="image/*"
                                         type="file"
-                                        id="fileInput"
-                                        onChange={convertToBase64}
+                                        name="image"
+                                        accept="image/*"
+                                        onChange={handleInputChange}
+                                        ref={fileInputRef}
                                         style={{ display: 'none' }}
                                     />
-                                    {image == null || image === '' ? (
-                                        <Image src={ImagePicker} alt="ImagePicker" className="w-16 h-16" onClick={handleImageClick}></Image>
-                                    ) : (
-                                        <>
-                                            <img src={image} alt="Selected" width="300" className="w-16 h-16 rounded-full" onClick={handleImageClick} />
-                                        </>
-                                    )}
                                 </div>
+
+                            <div className="relative h-11 w-80 ">
                                 <input
-                                    type="file"
-                                    name="image"
-                                    accept="image/*"
+                                    placeholder="Eg : Aung Myo Myat"
+                                    name="userName" required
                                     onChange={handleInputChange}
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
+                                    className="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
+                                    type="text"
                                 />
+                                <label className="after:content[''] pointer-events-none absolute left-0  -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-1.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.25] peer-placeholder-shown:text-blue-gray-500 peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                                    Name
+                                </label>
                             </div>
 
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium mb-1">Username</label>
-                                <input type="text" name="userName" onChange={handleInputChange}
-                                       className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Enter your Name" required />
+                            <div className="relative h-11 w-80 mt-4">
+                                <input
+                                    placeholder="example@gmail.com"
+                                    name="userEmail" required
+                                    onChange={handleInputChange}
+                                    className="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
+                                    type="email"
+                                />
+                                <label className="after:content[''] pointer-events-none absolute left-0  -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-1.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.25] peer-placeholder-shown:text-blue-gray-500 peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                                    Email
+                                </label>
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium mb-1">Email</label>
-                                <input type="email" name="userEmail" onChange={handleInputChange} className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Enter your eamil" required />
+
+                            <div className="relative h-11 w-80 mt-4">
+                                <input
+                                    placeholder="123456"
+                                    type="password"
+                                    name="password" required
+                                    onChange={handleInputChange}
+                                    className="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
+                                />
+                                <label className="after:content[''] pointer-events-none absolute left-0  -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-1.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.25] peer-placeholder-shown:text-blue-gray-500 peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                                    Password
+                                </label>
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium mb-1">Password</label>
-                                <input type="password" name="password" onChange={handleInputChange} className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Enter your password" required />
+
+                            <div className="relative h-11 w-80 mt-4">
+                                <input
+                                    placeholder="123456"
+                                    type="password"
+                                    name="confirmPassword" required
+                                    onChange={handleInputChange}
+                                    className="peer h-full w-full border-b border-blue-gray-200 bg-transparent pt-4 pb-1.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-500 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
+                                />
+                                <label className="after:content[''] pointer-events-none absolute left-0  -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500 transition-all after:absolute after:-bottom-1.5 after:block after:w-full after:scale-x-0 after:border-b-2 after:border-gray-500 after:transition-transform after:duration-300 peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[4.25] peer-placeholder-shown:text-blue-gray-500 peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
+                                    Confirm Password
+                                </label>
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium mb-1">Confirm Password</label>
-                                <input type="password" name="confirmPassword" onChange={handleInputChange} className="w-full px-3 py-2 border rounded focus:outline-none focus:border-blue-500" placeholder="Confirm your password" required />
+
+                            <div className="w-80 bg-black mt-8 py-2 rounded-full flex justify-center cursor-pointer" onClick={handleClick}>
+                                <button className="rounded-sm font-bold text-white">
+                                    SignUp
+                                </button>
                             </div>
-                            <div className="mb-6">
-                                <label className="block text-gray-700 font-medium mb-1">Role</label>
-                                <input type="radio" value='author' name="role" onChange={handleInputChange} className="mr-2" required /><label className='mr-8'>Author</label>
-                                <input type="radio" value='user' name="role" onChange={handleInputChange} className="mr-2" required /><label className='mr-8'>User</label>
+                            <div className="text-sm text-center mt-6">
+                                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                Already have an account?<span className="cursor-pointer font-bold" onClick={()=>{backToSignIn(false)}}> Sign In</span>
                             </div>
-                            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-200" onClick={handleClick}>Sign Up</button>
-                        </form>
-                    </div>
-                </div>
+
             </div>
-        </>
+        </div>
     );
 };
 

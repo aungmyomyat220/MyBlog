@@ -26,7 +26,6 @@ const HomeTab = () => {
     queryKey: ["getPostForLoginUser"],
     queryFn: getPost,
   });
-  console.log("Posts =>",posts)
   const filterPosts = posts.filter((post) => post.authorId === id);
 
   posts.sort((a, b) => {
@@ -78,7 +77,7 @@ const HomeTab = () => {
                     width={0}
                     height={0}
                   />
-                  <span>7</span>
+                  <span>{post.comments.length}</span>
                 </div>
               </div>
             </div>

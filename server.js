@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
     userName : String,
     userEmail : String,
     password : String,
-    role : String,
     image : String
 });
 

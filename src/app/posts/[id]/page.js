@@ -45,7 +45,7 @@ const Post = () => {
   };
 
   const handleLoveClick = () => {
-    console.log(postData);
+
   };
 
   const handleBothClick = () => {
@@ -124,19 +124,21 @@ const Post = () => {
                 alt="Like"
                 className="w-5 h-5 mr-2"
                 onClick={handleBothClick}
+                height={0}
+                width={0}
               />
             )}
             <span>{postData.loveData[id]?.loveCount}</span>
           </div>
           <div className="flex mr-5 cursor-pointer">
-            <Image src={Comment} alt="Like" className="w-5 h-5 mr-2" onClick={openComment} />
+            <Image src={Comment} alt="Like" className="w-6 h-6 mr-2" onClick={openComment} height={0} width={0} />
             <span>{filterPost.comments.length}</span>
           </div>
         </div>
         <div className="flex justify-center">
-          <img
+          <Image
             src={filterPost.image}
-            alt=""
+            alt="alt image"
             className="md:h-fit cursor-pointer"
             onClick={() => openImage(filterPost.image)}
             height={0}
@@ -158,10 +160,12 @@ const Post = () => {
               onClick={closeImage}
             ></div>
             <div className="z-50 p-2 bg-white rounded-lg shadow-lg">
-              <img
+              <Image
                 src={selectedImage}
                 alt="Selected Image"
                 className="w-full max-w-2xl h-96"
+                height={0}
+                width={0}
               />
               <button
                 className="absolute top-0 right-0 mt-2 mr-2 text-gray-700 hover:text-gray-900"

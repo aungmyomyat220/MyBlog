@@ -3,14 +3,14 @@ import React from 'react';
 import Sidebar from "./sidebar";
 import isAuthenticated  from '../../auth/authenticate';
 import ContentPage from "./contentPage";
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter,useParams } from "next/navigation";
 import Navbar from '../../Home/navbar';
 
 const Page = () => {
     const {id} = useParams()
     const router = useRouter()
-    useLayoutEffect(() => {
+    useEffect(() => {
         const isAuth = isAuthenticated;
         if(!isAuth){
           router.push("/")

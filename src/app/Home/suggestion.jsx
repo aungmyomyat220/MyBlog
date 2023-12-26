@@ -4,6 +4,7 @@ import Image from "next/image";
 import fire from "../../image/fire.png";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import Follow from "./follow"
 
 const Suggestion = () => {
   const [topThreePosts, setTopThreePosts] = useState([]);
@@ -38,6 +39,10 @@ const Suggestion = () => {
     };
     fetchData();
   }, []);
+
+  const follow = (id) => {
+    Follow(id,user._id)
+  }
 
   return (
     <div>
@@ -90,7 +95,7 @@ const Suggestion = () => {
                 </span>
               </div>
               <span>
-                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white">
+                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(`${user._id}`)}}>
                   Follow
                 </button>
               </span>

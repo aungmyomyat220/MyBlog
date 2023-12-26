@@ -1,13 +1,17 @@
 'use client'
 import './globals.css'
-import { Inter } from 'next/font/google'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { Provider } from 'react-redux';
 import {configureStore} from "@reduxjs/toolkit";
-const inter = Inter({ subsets: ['latin'] })
+import { Roboto } from 'next/font/google'
 import loveReducer from '../../Global Redux/createSlice/loveSlice';
 import viewReducer from '../../Global Redux/createSlice/viewSlice';
 import postReducer from '../../Global Redux/createSlice/postSlice';
+
+const roboto = Roboto({
+    weight: '400',
+    subsets: ['latin'],
+})
 
 const store = configureStore({
     reducer: {
@@ -31,7 +35,10 @@ export default function RootLayout({ children }) {
       <Provider store={store}>
           <QueryClientProvider client={queryClient}>
               <html lang="en">
-                  <body className={inter.className}>{children}</body>
+              <head>
+                  <title>My Blog</title>
+              </head>
+                  <body className={roboto.className}>{children}</body>
               </html>
           </QueryClientProvider>
       </Provider>

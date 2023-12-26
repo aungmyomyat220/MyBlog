@@ -92,7 +92,7 @@ const Foryou = () => {
               <img
                 src={post.image}
                 alt={post.title}
-                className="rounded ml-7 w-24 h-24 cursor-pointer hover:scale-105 transition-transform"
+                className="rounded ml-7 w-24 mb-8 h-24 cursor-pointer hover:scale-105 transition-transform"
                 onClick={() => {
                   handleClick(post._id);
                 }}

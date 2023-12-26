@@ -4,12 +4,15 @@ import Image from "next/image";
 import imagePicker from "../../../image/noun-image-1066765.png";
 import { createPost } from "../../../../api/api";
 import Swal from "sweetalert2";
-import Close from "../../../image/cross.png"
+import Close from "../../../image/close-button.png"
+import {useRouter} from "next/navigation";
 
 const Page = () => {
   const [user, setUser] = useState({});
+  const [error,setError] = useState("")
   const [image, setImage] = useState("");
   const ref = useRef()
+  const router = useRouter()
 
   useEffect(() => {
     const userData = sessionStorage["user"];
@@ -25,10 +28,17 @@ const Page = () => {
     authorId: user._id,
     authorImage : user.image,
     date: new Date(),
-    image: image,
+    image : image,
     like : '',
     comment : []
   });
+
+  useEffect(() => {
+    setPostData((prevPostData) => ({
+      ...prevPostData,
+      image: image,
+    }));
+  }, [image]);
 
   const [showButton, setShowButton] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -58,6 +68,12 @@ const Page = () => {
   };
 
   const postUpload = async () => {
+    if (postData.title === "" || postData.title === undefined || postData.title === null ||
+        postData.content === "" || postData.content === undefined || postData.content === null) {
+      setError("Fill both Titles and Content");
+      return false;
+    }
+
     const response = await createPost(postData);
     if(response.status === 200 || 201){
       await Swal.fire({
@@ -110,7 +126,7 @@ const Page = () => {
       <div className="flex flex-col w-full h-screen items-center mt-10">
         <div className="w-full flex flex-col max-w-7xl justify-center items-center">
           <div className="w-full flex justify-between">
-            <span className="font-bold text-5xl">My Blog</span>
+            <span className="font-bold text-5xl cursor-pointer" onClick={()=> {router.push('/Home')}}>My Blog</span>
             <div>
               <button
                 className="bg-green-600 text-white rounded-full px-3 py-1 mr-3"
@@ -120,10 +136,12 @@ const Page = () => {
               </button>
             </div>
           </div>
-          <div className="max-w-4xl w-full mt-16 flex flex-col font-serif">
+          <div className="max-w-4xl w-full mt-10 flex flex-col font-serif">
+            <div className={'w-full text-red-500 text-left text-2xl mb-7'}>{error}</div>
             <input
               className="hover:border-transparent focus:border-transparent outline-none px-4 text-5xl"
               placeholder="Title"
+              value={postData.title}
               name="title"
               onChange={handleInputChange}
             />
@@ -163,9 +181,9 @@ const Page = () => {
                 <div className="flex flex-col">
                   {image?
                       <div className="w-full flex justify-center my-5">
-                        <Image width={500} height={400} src={image} alt="preview"></Image>
+                        <Image width={500} height={400} src={image} alt="preview" onClick={()=>{setShowButton(!showButton),setShowText(false),setIsRotated(false)}}></Image>
                         <div className='flex items-start ml-5'>
-                          <Image src={close}  alt='close button' height={20} width={20}/>
+                          <Image src={Close}  alt='close button' height={30} width={30} onClick={()=>{setImage("")}}/>
                         </div>
                       </div> : ""
                   }
@@ -174,6 +192,7 @@ const Page = () => {
                       className="hover:border-transparent focus:border-transparent outline-none px-4 text-xl"
                       placeholder="Tell Your Story"
                       name="content"
+                      value={postData.content}
                       onClick={() => setShowButton(true)}
                       onChange={handleInputChange}
                       rows={100}

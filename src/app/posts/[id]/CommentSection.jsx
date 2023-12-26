@@ -45,6 +45,7 @@ const CommentSection = (props) => {
           <textarea
             maxLength={100}
             name = "comment"
+            value={commentContent}
             onChange={handleChange}
             className="hover:border-transparent focus:border-transparent outline-none w-full h-full rounded-lg px-3 py-2 resize-none"
           />
