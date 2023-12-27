@@ -1,5 +1,4 @@
 const API_BASE_URL = "http://localhost:8000";
-
 export const createUser = async (userData) => {
     try {
         const response = await fetch(`${API_BASE_URL}/users`, {
@@ -41,7 +40,13 @@ export const Login = async (checkUser) => {
                 user: responseData.user,
                 statusCode: 200,
             };
-        } else if (response.status === 401){
+        }else if(response.status === 404){
+            return{
+                error: 'Fill the requirements',
+                statusCode: 404,
+            }
+        }
+        else if (response.status === 401){
             return{
                 error: 'Invalid Username or Password',
                 statusCode: 401,
@@ -49,6 +54,37 @@ export const Login = async (checkUser) => {
         }
     } catch (error) {
         console.error('Error during login:', error);
+        return {
+            error: 'An unexpected error occurred',
+            statusCode: 500,
+        };
+    }
+};
+
+export const checkUserExist = async (checkUser) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/checkUserExist`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(checkUser),
+        });
+
+        if (response.status === 200) {
+            const responseData = await response.json();
+            return {
+                user: responseData.user,
+                statusCode: 200,
+            };
+        }else if(response.status === 404){
+            return{
+                error: 'User Not Found',
+                statusCode: 404,
+            }
+        }
+    } catch (error) {
+        console.error('Error while changing password:', error);
         return {
             error: 'An unexpected error occurred',
             statusCode: 500,
@@ -115,14 +151,14 @@ export const updatePost = async (postId, updatedData) => {
     }
 };
 
-export const updateUser = async (userId, followerId) => {
+export const updateUser = async (dataToUpdate,userId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(updatedData),
+            body: JSON.stringify(dataToUpdate),
         });
 
         if (!response.ok) {

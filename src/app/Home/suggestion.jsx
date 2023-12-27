@@ -40,9 +40,13 @@ const Suggestion = () => {
     fetchData();
   }, []);
 
-  const follow = (followUser) => {
-    const followerList = followUser.followers.push(user._id)
-    Follow(followerList)
+  const follow = (followUserId) => {
+    alert("Success Follow")
+    const followers = {
+      "followerId" : []
+    }
+    followers.followerId.push(followUserId)
+    Follow(followers,user._id)
   }
 
   return (
@@ -98,7 +102,7 @@ const Suggestion = () => {
                 </span>
               </div>
               <span>
-                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(`${user}`)}}>
+                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(user._id)}}>
                   Follow
                 </button>
               </span>

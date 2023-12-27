@@ -6,6 +6,7 @@ import { Login } from "../../../../api/api";
 import LoginBanner from '../../../image/undraw_font_re_efri.svg'
 import Image from "next/image";
 import SignUp from '../signUp/page'
+
 const Page = () => {
   const router = useRouter();
   const [signUp ,setSignUp] = useState(false)
@@ -39,7 +40,16 @@ const Page = () => {
           timer: 1000,
         });
         router.push("/Home");
-      } else if (response.statusCode === 401) {
+      }else if(response.statusCode === 404){
+        await Swal.fire({
+          icon: "warning",
+          title: "Attention",
+          text: "Fill the required fields",
+          showConfirmButton: true,
+          timer: null,
+        });
+      }
+      else if (response.statusCode === 401) {
         await Swal.fire({
           icon: "error",
           title: "Login Failed",
@@ -96,7 +106,7 @@ const Page = () => {
                   Password
                 </label>
               </div>
-              <div className="text-gray-400 text-xs mt-3 flex justify-end cursor-pointer hover:text-black">
+              <div className="text-gray-400 text-xs mt-3 flex justify-end cursor-pointer hover:text-black" onClick={()=>{router.push('/auth/reset')}}>
                 Forget password?
               </div>
               <div className="w-80 bg-black mt-5 py-2 rounded-full flex justify-center cursor-pointer" onClick={handleSubmit}>
@@ -118,3 +128,5 @@ const Page = () => {
 };
 
 export default Page;
+
+

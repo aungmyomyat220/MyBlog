@@ -68,7 +68,10 @@ async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
         const user = await User.findOne({ userEmail: userEmail, password: password });
-        if (user) {
+        if(userEmail === "" || password ===""){
+            res.status(404).send("Fill Input Values");
+        }
+        else if (user) {
             req.session.user = user;
             next();
         } else {
@@ -93,6 +96,23 @@ async function checkAlreadyRegisteredUser(req,res,next){
         res.status(500).send("Internal Server Error");
     }
 }
+
+async function checkUserExistOrNot(req,res,next){
+    const  { userEmail } = req.body;
+    try {
+        const userExist = await User.findOne({ userEmail: userEmail });
+        if(userExist){
+            console.log("User Exist")
+            next()
+        }
+    }catch (e) {
+        res.status(404).send("User Not Found");
+    }
+}
+
+app.post('/checkUserExist', checkUserExistOrNot, (req, res) => {
+    res.status(200).send({ message: 'User Exist' })
+});
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user;
@@ -153,6 +173,22 @@ app.patch("/posts/:postId", async (req, res) => {
     } catch (error) {
         console.error("Error updating post:", error);
         res.status(500).json({ error: "Error updating post" });
+    }
+});
+
+app.patch("/users/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    const updatedData = req.body;
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.json(updatedUser);
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Error updating user" });
     }
 });
 
