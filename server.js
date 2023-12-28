@@ -97,22 +97,22 @@ async function checkAlreadyRegisteredUser(req,res,next){
     }
 }
 
-async function checkUserExistOrNot(req,res,next){
-    const  { userEmail } = req.body;
-    try {
-        const userExist = await User.findOne({ userEmail: userEmail });
-        if(userExist){
-            console.log("User Exist")
-            next()
-        }
-    }catch (e) {
-        res.status(404).send("User Not Found");
-    }
-}
-
-app.post('/checkUserExist', checkUserExistOrNot, (req, res) => {
-    res.status(200).send({ message: 'User Exist' })
+app.get('/users', (req, res) => {
+    const userEmail = req.query.userEmail;
+    User.findOne({ userEmail: userEmail })
+        .then((checkUserExistOrNot) => {
+            if (checkUserExistOrNot) {
+                res.status(200).json({ user: 'found', userId : checkUserExistOrNot._id });
+            } else {
+                res.status(404).json({ error: 'User Not Found' });
+            }
+        })
+        .catch((error) => {
+            console.error('Error checking user existence:', error);
+            res.status(500).json({ error: 'An unexpected error occurred' });
+        });
 });
+
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user;

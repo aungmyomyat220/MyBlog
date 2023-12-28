@@ -61,20 +61,19 @@ export const Login = async (checkUser) => {
     }
 };
 
-export const checkUserExist = async (checkUser) => {
+export const checkUserExist = async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/checkUserExist`, {
-            method: "POST",
+        const response = await fetch(`${API_BASE_URL}/users?userEmail=${encodeURIComponent(email)}`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(checkUser),
         });
 
         if (response.status === 200) {
             const responseData = await response.json();
             return {
-                user: responseData.user,
+                userId: responseData.userId,
                 statusCode: 200,
             };
         }else if(response.status === 404){
@@ -164,7 +163,9 @@ export const updateUser = async (dataToUpdate,userId) => {
         if (!response.ok) {
             throw new Error(`Failed to update post (status ${response.status})`);
         }
-        return await response.json();
+        return {
+            "statusCode" : 200
+        }
     } catch (error) {
         console.error("Error updating post:", error);
         throw error;
