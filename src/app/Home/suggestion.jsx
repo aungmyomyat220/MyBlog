@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getPost, getUser } from "../../../api/api";
+import { getPost } from "../../../api/api";
 import Image from "next/image";
 import fire from "../../image/fire.png";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Follow from "./follow"
+import {getAllUsersHook} from "../../../hooks/getAllUsersHook";
 
 const Suggestion = () => {
   const [topThreePosts, setTopThreePosts] = useState([]);
@@ -17,14 +17,11 @@ const Suggestion = () => {
     }
   }, []);
 
-  const { data: users = [] } = useQuery({
-    queryKey: ["getUsers"],
-    queryFn: getUser,
-  });
+  const { data: users = [] } = getAllUsersHook()
 
-  // const filteredUsers = users.filter(
-  //   (filterUser) => filterUser._id !== user._id
-  // );
+  const filteredUsers = users.filter(
+    (filterUser) => filterUser._id !== user._id
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,37 +76,37 @@ const Suggestion = () => {
         ))}
       </div>
 
-      {/* Follower List */}
-      {/*<div className="mt-14">*/}
-      {/*  <span className="font-medium text-lg">Who to Follow</span>*/}
-      {/*  {filteredUsers.map((user) => {*/}
-      {/*    return (*/}
-      {/*      <div className="h-20 flex mt-3" key={user._id}>*/}
-      {/*        <span>*/}
-      {/*          <Image*/}
-      {/*            src={user.image}*/}
-      {/*            alt={user.userName}*/}
-      {/*            className="rounded-full w-9 h-9 cursor-pointer"*/}
-      {/*            onClick={()=> router.push(`/profile/${user._id}`)}*/}
-      {/*            height={0}*/}
-      {/*            width={0}*/}
-      {/*          ></Image>*/}
-      {/*        </span>*/}
-      {/*        <div className="px-3 flex flex-col">*/}
-      {/*          <span className="font-bold hover:underline cursor-pointer" onClick={()=> router.push(`/profile/${user._id}`)}>{user.userName}</span>*/}
-      {/*          <span className="text-left text-sm text-gray-500">*/}
-      {/*            .net C# 10years experience developer*/}
-      {/*          </span>*/}
-      {/*        </div>*/}
-      {/*        <span>*/}
-      {/*          <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(user._id)}}>*/}
-      {/*            Follow*/}
-      {/*          </button>*/}
-      {/*        </span>*/}
-      {/*      </div>*/}
-      {/*    );*/}
-      {/*  })}*/}
-      {/*</div>*/}
+       {/*Follower List*/}
+      <div className="mt-14">
+        <span className="font-medium text-lg">Who to Follow</span>
+        {filteredUsers.map((user) => {
+          return (
+            <div className="h-20 flex mt-3" key={user._id}>
+              <span>
+                <Image
+                  src={user.image}
+                  alt={user.userName}
+                  className="rounded-full w-9 h-9 cursor-pointer"
+                  onClick={()=> router.push(`/profile/${user._id}`)}
+                  height={0}
+                  width={0}
+                ></Image>
+              </span>
+              <div className="px-3 flex flex-col">
+                <span className="font-bold hover:underline cursor-pointer" onClick={()=> router.push(`/profile/${user._id}`)}>{user.userName}</span>
+                <span className="text-left text-sm text-gray-500">
+                  .net C# 10years experience developer
+                </span>
+              </div>
+              <span>
+                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(user._id)}}>
+                  Follow
+                </button>
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
