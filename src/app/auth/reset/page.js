@@ -34,7 +34,8 @@ const Page = () => {
         showConfirmButton: true,
         timer: null,
       });
-    } else if (response.statusCode === 200 || 201) {
+    }
+    else if (response.statusCode === 200 || 201) {
       setUserId(response.userId)
       const randomSixDigitNumber = getRandomSixDigitNumber();
       setRandomNumber(randomSixDigitNumber);
@@ -57,6 +58,9 @@ const Page = () => {
         .catch((error) => {
           console.error("Error sending email:", error);
         });
+    }
+    else{
+
     }
   };
 

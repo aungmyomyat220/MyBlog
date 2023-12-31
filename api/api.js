@@ -63,11 +63,12 @@ export const Login = async (checkUser) => {
 
 export const checkUserExist = async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users?userEmail=${encodeURIComponent(email)}`, {
-            method: "GET",
+        const response = await fetch(`${API_BASE_URL}/checkuser`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify({ userEmail: email })
         });
 
         if (response.status === 200) {

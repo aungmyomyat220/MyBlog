@@ -83,7 +83,7 @@ async function authenticate(req, res, next) {
 }
 
 //Check UserExist middleware
-async function checkAlreadyRegisteredUser(req,res,next){
+async function checkDuplicateUser(req,res,next){
     const  { userEmail } = req.body;
     try {
         const alreadyRegisteredUser = await User.findOne({ userEmail: userEmail });
@@ -97,21 +97,42 @@ async function checkAlreadyRegisteredUser(req,res,next){
     }
 }
 
-app.get('/users', (req, res) => {
-    const userEmail = req.query.userEmail;
-    User.findOne({ userEmail: userEmail })
-        .then((checkUserExistOrNot) => {
-            if (checkUserExistOrNot) {
-                res.status(200).json({ user: 'found', userId : checkUserExistOrNot._id });
-            } else {
-                res.status(404).json({ error: 'User Not Found' });
-            }
-        })
-        .catch((error) => {
-            console.error('Error checking user existence:', error);
-            res.status(500).json({ error: 'An unexpected error occurred' });
-        });
-});
+async function checkUserExist(req,res,next){
+    const  { userEmail } = req.body;
+    try {
+        const existUser = await User.findOne({ userEmail: userEmail });
+        if(existUser){
+            req.existUser = existUser;
+            next();
+        }else{
+            res.status(404).json({ error: 'User Not Found' });
+        }
+    }catch (e) {
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+app.post('/checkuser', checkUserExist ,(req,res) => {
+    const existUser = req.existUser
+    console.log(existUser)
+    res.status(200).json({ user: 'found', userId : existUser._id });
+})
+
+// app.get('/users', (req, res) => {
+//     const userEmail = req.query.userEmail;
+//     User.findOne({ userEmail: userEmail })
+//         .then((checkUserExistOrNot) => {
+//             if (checkUserExistOrNot) {
+//                 res.status(200).json({ user: 'found', userId : checkUserExistOrNot._id });
+//             } else {
+//                 res.status(404).json({ error: 'User Not Found' });
+//             }
+//         })
+//         .catch((error) => {
+//             console.error('Error checking user existence:', error);
+//             res.status(500).json({ error: 'An unexpected error occurred' });
+//         });
+// });
 
 
 app.post('/login', authenticate, (req, res) => {
@@ -119,7 +140,7 @@ app.post('/login', authenticate, (req, res) => {
     res.status(200).send({ message: 'Authentication Successful', user })
 });
 
-app.post('/users',checkAlreadyRegisteredUser, async (req, res) => {
+app.post('/users',checkDuplicateUser, async (req, res) => {
     try {
         const userData = req.body
         const newUser = new User(userData);
