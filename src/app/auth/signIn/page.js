@@ -107,7 +107,7 @@ const Page = () => {
                 </label>
               </div>
               <div className="text-gray-400 text-xs mt-3 flex justify-end cursor-pointer hover:text-black" onClick={()=>{router.push('/auth/reset')}}>
-                Forget password?
+                Forgot password?
               </div>
               <div className="w-80 bg-black mt-5 py-2 rounded-full flex justify-center cursor-pointer" onClick={handleSubmit}>
                 <button className="rounded-sm font-bold text-white">

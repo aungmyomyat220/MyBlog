@@ -27,9 +27,7 @@ const userSchema = new mongoose.Schema({
     userName : String,
     userEmail : String,
     password : String,
-    followers : [{
-        followerId : String
-    }],
+    followers : [],
     image : String
 });
 
@@ -198,15 +196,16 @@ app.patch("/posts/:postId", async (req, res) => {
 });
 
 app.patch("/users/:userId", async (req, res) => {
+    console.log("Server update user path work")
     const userId = req.params.userId;
     const updatedData = req.body;
-
+    console.log(userId,updatedData)
     try {
         const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
-        res.json(updatedUser);
+        res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ error: "Error updating user" });

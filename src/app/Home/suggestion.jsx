@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getPost } from "../../../api/api";
+import {getPost, updateUser} from "../../../api/api";
 import Image from "next/image";
 import fire from "../../image/fire.png";
 import { useRouter } from "next/navigation";
-import Follow from "./follow"
-import {getAllUsersHook} from "../../../hooks/getAllUsersHook";
+import {getAllUsersHook} from "../../../hooks/getAllUsersHook"
 
 const Suggestion = () => {
   const [topThreePosts, setTopThreePosts] = useState([]);
@@ -38,12 +37,13 @@ const Suggestion = () => {
   }, []);
 
   const follow = (followUserId) => {
-    alert("Success Follow")
-    const followers = {
-      "followerId" : []
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [followers ,setFollower] = useState({
+      followers : []
+    })
+    const follower = {
+      followers : followers
     }
-    followers.followerId.push(followUserId)
-    Follow(followers,user._id)
   }
 
   return (

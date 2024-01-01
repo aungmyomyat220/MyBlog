@@ -153,6 +153,7 @@ export const updatePost = async (postId, updatedData) => {
 
 export const updateUser = async (dataToUpdate,userId) => {
     try {
+        alert("Update user api work!!")
         const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
             method: 'PATCH',
             headers: {
