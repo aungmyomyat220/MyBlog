@@ -1,11 +1,15 @@
+'use client'
 import React, { useState, useEffect } from "react";
-import {getPost, updateUser} from "../../../api/api";
+import {getPost} from "../../../api/api";
 import Image from "next/image";
 import fire from "../../image/fire.png";
 import { useRouter } from "next/navigation";
 import {getAllUsersHook} from "../../../hooks/getAllUsersHook"
+import {getLoginUserFollower} from '../../../hooks/getLoginUserFollower'
 
 const Suggestion = () => {
+  const {mutateAsync} = getLoginUserFollower()
+  const [follower,setFollower] = useState([])
   const [topThreePosts, setTopThreePosts] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
@@ -19,7 +23,7 @@ const Suggestion = () => {
   const { data: users = [] } = getAllUsersHook()
 
   const filteredUsers = users.filter(
-    (filterUser) => filterUser._id !== user._id
+    (filterUser) => filterUser._id !== user._id && !follower.includes(filterUser._id)
   );
 
   useEffect(() => {
@@ -36,15 +40,18 @@ const Suggestion = () => {
     fetchData();
   }, []);
 
-  const follow = (followUserId) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [followers ,setFollower] = useState({
-      followers : []
-    })
-    const follower = {
-      followers : followers
+  const follow =  (followUserId) => {
+    const Id = user._id;
+    try {
+      setFollower((prevFollower) => {
+        const updated =  [...prevFollower,followUserId]
+        const res = mutateAsync({ Id, follower: updated });
+        return updated
+      });
+    } catch (error) {
+      console.error('Error in follow function:', error);
     }
-  }
+  };
 
   return (
     <div>
@@ -76,7 +83,6 @@ const Suggestion = () => {
         ))}
       </div>
 
-       {/*Follower List*/}
       <div className="mt-14">
         <span className="font-medium text-lg">Who to Follow</span>
         {filteredUsers.map((user) => {

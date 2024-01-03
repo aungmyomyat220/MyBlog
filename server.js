@@ -196,12 +196,10 @@ app.patch("/posts/:postId", async (req, res) => {
 });
 
 app.patch("/users/:userId", async (req, res) => {
-    console.log("Server update user path work")
     const userId = req.params.userId;
     const updatedData = req.body;
-    console.log(userId,updatedData)
     try {
-        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
+        const updatedUser = await User.findByIdAndUpdate({ _id: userId }, { followers: updatedData });
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -211,6 +209,7 @@ app.patch("/users/:userId", async (req, res) => {
         res.status(500).json({ error: "Error updating user" });
     }
 });
+
 
 
 app.listen(8000, () => {
