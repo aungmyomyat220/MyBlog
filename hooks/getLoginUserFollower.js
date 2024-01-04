@@ -1,13 +1,15 @@
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 export const getLoginUserFollower = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
+    const queryClient = useQueryClient()
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useMutation({
         mutationFn: ({Id,follower}) => {
-            const result =  axios.patch(`http://localhost:8000/users/${Id}`, follower)
-            return result.then(r=>{
-                r.data.user
-            })
+            return axios.patch(`http://localhost:8000/users/${Id}`, follower)
         },
+        onSuccess : () => {
+            queryClient.invalidateQueries("getAllUser")
+        }
     })
 };

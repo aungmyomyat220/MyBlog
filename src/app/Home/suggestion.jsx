@@ -10,7 +10,6 @@ import {getLoginUserFollower} from '../../../hooks/getLoginUserFollower'
 const Suggestion = () => {
   const {mutateAsync} = getLoginUserFollower()
   const [follower,setFollower] = useState([])
-  const [test,setTest] = useState([])
   const [topThreePosts, setTopThreePosts] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
@@ -22,9 +21,13 @@ const Suggestion = () => {
   }, []);
 
   const { data: users = [] } = getAllUsersHook()
-  const filteredUsers = users.filter(
-    (filterUser) => filterUser._id !== user._id && !follower.includes(filterUser._id)
+  const followerList = users.filter(
+      (filterUser) => filterUser._id === user._id
   );
+  const filteredUsers = users.filter(
+    (filterUser) => filterUser._id !== user._id && !followerList[0]?.followers.includes(filterUser._id)
+  );
+  const firstFourUsers = filteredUsers.slice(0, 3)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +48,7 @@ const Suggestion = () => {
     try {
       setFollower((prevFollower) => {
         const updated =  [...prevFollower,followUserId]
-        const res = mutateAsync({ Id, follower: updated });
+        mutateAsync({ Id, follower: updated });
         return updated
       });
     } catch (error) {
@@ -112,7 +115,11 @@ const Suggestion = () => {
             </div>
           );
         })}
-      </div>
+        {/*{*/}
+        {/*  filteredUsers.length>3 &&*/}
+        {/*<span onClick={()=>setSeeUser(!seeUser)} className={'hover:cursor-pointer hover:text-blue-500 pb-10 hover:underline'}>{seeUser?"Close":`See all (${filteredUsers.length})`}</span>*/}
+        {/*}*/}
+        </div>
     </div>
   );
 };
