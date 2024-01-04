@@ -10,6 +10,7 @@ import Comment from "../../../image/chat.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoveReact } from "../../../../Global Redux/createSlice/postSlice";
 import CommentSection from "@/app/posts/[id]/CommentSection";
+import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 
 const Post = () => {
   const { id } = useParams();
@@ -61,7 +62,7 @@ const Post = () => {
     data: posts,
     error,
     isLoading,
-  } = useQuery({ queryKey: ["posts"], queryFn: getPost });
+  } = getAllPostHook()
 
   if (isLoading) {
     return (

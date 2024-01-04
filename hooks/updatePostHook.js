@@ -1,14 +1,14 @@
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import {useQueryClient} from "@tanstack/react-query";
 
-export const getAllPost = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useQuery({
-        queryKey: ["posts"],
-        queryFn: getAllPost,
-    })
-}
+// export const getAllPost = () => {
+//     // eslint-disable-next-line react-hooks/rules-of-hooks
+//     return useQuery({
+//         queryKey: ["posts"],
+//         queryFn: getAllPost,
+//     })
+// }
 export const updatePostHook = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const queryClient = useQueryClient();
@@ -19,7 +19,7 @@ export const updatePostHook = () => {
         },
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("posts")
+                queryClient.invalidateQueries("getAllPost")
             },
         }
     );

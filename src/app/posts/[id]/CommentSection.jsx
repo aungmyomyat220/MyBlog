@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ViewComment from "@/app/posts/[id]/ViewComment";
-import {getAllPost, updatePostHook} from "../../../../hooks/updatePostHook";
+import {updatePostHook} from "../../../../hooks/updatePostHook";
 
 const CommentSection = (props) => {
   const {mutate} = updatePostHook()
