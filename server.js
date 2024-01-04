@@ -182,9 +182,11 @@ app.get("/users", async (req, res) => {
 app.patch("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
     const updatedData = req.body;
+    console.log("PostId",postId)
+    console.log("uypdateData",updatedData)
 
     try {
-        const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+        const updatedPost = await Post.findByIdAndUpdate({_id : postId}, {comments : updatedData}, { new: true });
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
@@ -198,6 +200,8 @@ app.patch("/posts/:postId", async (req, res) => {
 app.patch("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
     const updatedData = req.body;
+    console.log(userId)
+    console.log(updatedData)
     try {
         const updatedUser = await User.findByIdAndUpdate({ _id: userId }, { followers: updatedData });
         if (!updatedUser) {

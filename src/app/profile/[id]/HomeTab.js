@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getPost } from "../../../../api/api";
+import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import Like from "@/image/love.png";
@@ -22,10 +21,7 @@ const HomeTab = () => {
     }
   }, []);
 
-  const { data: posts = [] } = useQuery({
-    queryKey: ["getPostForLoginUser"],
-    queryFn: getPost,
-  });
+  const { data: posts = [] } = getAllPostHook()
   const filterPosts = posts.filter((post) => post.authorId === id);
 
   posts.sort((a, b) => {

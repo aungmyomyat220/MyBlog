@@ -1,5 +1,5 @@
 import React from 'react';
-import Cross from '../../../image/cross.png'
+import CommentUser from '../../../image/user.png'
 import Image from "next/image";
 
 const ViewComment = (props) => {
@@ -11,7 +11,7 @@ const ViewComment = (props) => {
                     <div key={comment._id}>
                         <div className={'flex mt-7'}>
                             <span>
-                                <Image src={Cross} alt={'profile'} height={0} width={0} className={'rounded-full w-10 h-10'}/>
+                                <Image src={CommentUser} alt={'profile'} height={0} width={0} className={'w-7 h-7 mt-1'}/>
                             </span>
                             <div className={'flex flex-col text-sm ml-3'}>
                                 <span>{comment.cName}</span>

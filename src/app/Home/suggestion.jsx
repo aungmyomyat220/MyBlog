@@ -10,6 +10,7 @@ import {getLoginUserFollower} from '../../../hooks/getLoginUserFollower'
 const Suggestion = () => {
   const {mutateAsync} = getLoginUserFollower()
   const [follower,setFollower] = useState([])
+  const [test,setTest] = useState([])
   const [topThreePosts, setTopThreePosts] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
@@ -21,7 +22,6 @@ const Suggestion = () => {
   }, []);
 
   const { data: users = [] } = getAllUsersHook()
-
   const filteredUsers = users.filter(
     (filterUser) => filterUser._id !== user._id && !follower.includes(filterUser._id)
   );

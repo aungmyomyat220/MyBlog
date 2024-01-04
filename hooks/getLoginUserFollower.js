@@ -1,7 +1,6 @@
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 import axios from "axios";
 export const getLoginUserFollower = () => {
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     return useMutation({
         mutationFn: ({Id,follower}) => {

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import ViewComment from "@/app/posts/[id]/ViewComment";
-import {updatePost} from "../../../../api/api";
+import {getAllPost, updatePostHook} from "../../../../hooks/updatePostHook";
 
 const CommentSection = (props) => {
+  const {mutate} = updatePostHook()
   const { post } = props;
   const [commentContent, setCommentContent] = useState("");
   const [user, setUser] = useState({});
@@ -29,11 +30,9 @@ const CommentSection = (props) => {
       cContent: commentContent,
       cDate: formattedDate,
     };
-
-    await updatePost(post._id, {
-      ...post,
-      comments: [...post.comments, commentUser],
-    });
+    const Id = post._id
+    const comments = [...post.comments, commentUser]
+    const res = await mutate({ Id, comments: comments });
     setCommentContent("");
   };
 
