@@ -182,9 +182,6 @@ app.get("/users", async (req, res) => {
 app.patch("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
     const updatedData = req.body;
-    console.log("PostId",postId)
-    console.log("uypdateData",updatedData)
-
     try {
         const updatedPost = await Post.findByIdAndUpdate({_id : postId}, {comments : updatedData}, { new: true });
         if (!updatedPost) {
