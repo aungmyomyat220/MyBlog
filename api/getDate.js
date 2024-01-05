@@ -16,7 +16,7 @@ export const formatDate = (date) => {
     const now = new Date();
     const timeDifference = now - postDate;
     if (timeDifference < 60000) { // Less than 1 minute
-        return 'just now';
+        return 'Just Now';
     } else if (timeDifference < 3600000) { // Less than 1 hour
         const minutesDifference = Math.floor(timeDifference / 60000);
         return minutesDifference === 1 ? '1 minute ago' : `${minutesDifference} minutes ago`;

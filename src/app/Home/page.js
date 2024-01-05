@@ -1,19 +1,27 @@
 "use client";
 import NavBar from "./navbar";
 import { useState } from "react";
-import Foryou from "./foryou";
+import ForYou from "./foryou";
 import Suggestion from "./suggestion";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("foryou");
+  const [searchMode,setSearchMode] = useState(false)
+  const [searchKey,setSearchKey] = useState("")
   const handleClick = (tabname) => {
     setActiveTab(tabname);
   };
 
+  const handleChange = (data) => {
+      const {key , searchMode} = data
+      setSearchMode(searchMode)
+      setSearchKey(key)
+  }
+
   return (
     <>
       <div className="flex flex-col w-full items-center h-screen">
-        <NavBar></NavBar>
+        <NavBar handleChange={handleChange}></NavBar>
         <div className="grid grid-cols-6 w-full px-36 h-full">
           {/*First Div*/}
           <div className="col-span-4 pt-10 px-16">
@@ -27,21 +35,25 @@ export default function Home() {
               >
                 For you
               </span>
-              <span
-                className={`col-span-2 py-4 cursor-pointer ${
-                  activeTab === "following"
-                    ? `border-b border-black`
-                    : `border-0`
-                }`}
-                onClick={() => handleClick("following")}
-              >
-                Following
-              </span>
+              {/*<span*/}
+              {/*  className={`col-span-2 py-4 cursor-pointer ${*/}
+              {/*    activeTab === "following"*/}
+              {/*      ? `border-b border-black`*/}
+              {/*      : `border-0`*/}
+              {/*  }`}*/}
+              {/*  onClick={() => handleClick("following")}*/}
+              {/*>*/}
+              {/*  Following*/}
+              {/*</span>*/}
               <span className="col-span-8"></span>
             </div>
             {/*Data*/}
             <div>
-              <Foryou></Foryou>
+                <ForYou
+                  searchKey={searchKey}
+                  searchMode={searchMode}
+                >
+                </ForYou>
             </div>
           </div>
 

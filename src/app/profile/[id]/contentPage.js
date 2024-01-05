@@ -5,7 +5,7 @@ import AboutTab from "./AboutTab";
 import {getAllUsersHook} from "../../../../hooks/getAllUsersHook";
 import {useParams} from "next/navigation";
 
-const ContentPage = (props) => {
+const ContentPage = ({searchKey,searchMode}) => {
   const {id} = useParams()
   const [activeTab, setActiveTab] = useState("Home");
   const handleTabClick = (tabName) => {
@@ -50,7 +50,12 @@ const ContentPage = (props) => {
           About
         </span>
       </div>
-      <div>{activeTab === "Home" ? <HomeTab /> : <AboutTab />}</div>
+      <div>{activeTab === "Home" ?
+          <HomeTab
+              searchKey={searchKey}
+              searchMode={searchMode}
+          />
+          : <AboutTab />}</div>
     </>
   );
 };

@@ -8,9 +8,10 @@ import Comment from "@/image/chat.png";
 import { formatDate } from "../../../../api/getDate";
 import {useParams, useRouter} from "next/navigation";
 
-const HomeTab = () => {
+const HomeTab = ({searchKey,searchMode}) => {
   const {id} = useParams()
   const router = useRouter();
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const { loveData } = useSelector((state) => state.post);
   const [user, setUser] = useState({});
 
@@ -22,8 +23,6 @@ const HomeTab = () => {
   }, []);
 
   const { data: posts = [] } = getAllPostHook()
-  const filterPosts = posts.filter((post) => post.authorId === id);
-
   posts.sort((a, b) => {
     const timeDifferenceA = new Date() - new Date(a.date);
     const timeDifferenceB = new Date() - new Date(b.date);
@@ -34,9 +33,40 @@ const HomeTab = () => {
     router.push(`/posts/${postId}`);
   };
 
+  if(searchMode){
+    const res = posts.filter((post) =>post.authorId === id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      setFilteredPosts(res);
+    }, [searchKey, searchMode, id, posts]);
+  }else{
+    const res = posts.filter((post) => post.authorId === id);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      setFilteredPosts(res);
+    }, [searchKey, searchMode, id, posts]);
+  }
+
+  const HighlightedTitle = ({ title, searchKey }) => {
+    if (!searchKey) {
+      return <span className="font-bold mb-3 text-2xl">{title}</span>;
+    }
+    const index = title.toLowerCase().indexOf(searchKey.toLowerCase());
+    if (index === -1) {
+      return <span className="font-bold mb-3 text-2xl">{title}</span>;
+    }
+    return (
+        <span className="font-bold mb-3 text-2xl">
+      {title.substring(0, index)}
+          <span className="bg-gradient-to-r from-green-200 to-green-500">{title.substring(index, index + searchKey.length)}</span>
+          {title.substring(index + searchKey.length)}
+    </span>
+    );
+  };
+
   return (
     <div className="no-scrollbar">
-      {filterPosts.map((post) => (
+      {filteredPosts.map((post) => (
           <div
             className="grid grid-cols-5 px-8 py-10 border-b border-gray-300 mx-5 cursor-pointer"
             key={post._id}
@@ -51,7 +81,7 @@ const HomeTab = () => {
                   handleClick(post._id);
                 }}
               >
-                {post.title}
+                <HighlightedTitle title={post.title} searchKey={searchKey} />
               </span>
               <span
                 className="line-clamp-3"

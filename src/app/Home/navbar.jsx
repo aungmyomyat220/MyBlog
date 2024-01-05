@@ -5,7 +5,7 @@ import { useState ,useEffect} from "react";
 import Image from "next/image";
 import Swal from "sweetalert2";
 
-const Navbar = () => {
+const Navbar = ({navFlag,handleChange}) => {
   const [showProfile, setShowProfile] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const router = useRouter();
@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   const uploadPost = () => {
-    router.push(`admin-dashboard/${user._id}`);
+      router.push(`admin-dashboard/${user._id}`);
   };
 
   useEffect(() => {
@@ -39,6 +39,9 @@ const Navbar = () => {
     router.push("/Home");
   };
 
+  const search = (e) => {
+    handleChange({ key: e.target.value, searchMode: true });
+  }
   const showDropDown = () => {
     setDropDown(!dropDown);
   };
@@ -57,8 +60,6 @@ const Navbar = () => {
         sessionStorage.clear()
       }
     });
-
-
   }
  
   return (
@@ -76,6 +77,7 @@ const Navbar = () => {
             placeholder="Search"
             name="text"
             className="input"
+            onChange={search}
           />
           <svg
             fill="#000000"

@@ -5,9 +5,10 @@ import { getPost } from "../../../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "../../../api/getDate";
 
-const Foryou = () => {
+const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
   const [user, setUser] = useState({});
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   useEffect(() => {
     const userData = sessionStorage["user"];
@@ -26,8 +27,25 @@ const Foryou = () => {
     refetchOnMount : true,
     refetchOnWindowFocus : true
   });
+  posts.sort((a, b) => {
+    const timeDifferenceA = new Date() - new Date(a.date);
+    const timeDifferenceB = new Date() - new Date(b.date);
+    return timeDifferenceA - timeDifferenceB;
+  });
 
-  const filteredPosts = posts.filter((post) => post.authorId !== user._id);
+  if(searchMode){
+    const res = posts.filter((post) => post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      setFilteredPosts(res);
+    }, [searchKey, searchMode, user._id, posts]);
+  }else{
+    const res = posts.filter((post) => post.authorId !== user._id);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      setFilteredPosts(res);
+    }, [searchKey, searchMode, user._id, posts]);
+  }
 
   if (isLoading) {
     return (
@@ -48,6 +66,26 @@ const Foryou = () => {
 
   const handleClick = (postId) => {
     router.push(`/posts/${postId}`);
+  };
+
+  const HighlightedTitle = ({ title, searchKey }) => {
+    if (!searchKey) {
+      return <span className="font-bold mb-3 text-2xl">{title}</span>;
+    }
+
+    const index = title.toLowerCase().indexOf(searchKey.toLowerCase());
+
+    if (index === -1) {
+      return <span className="font-bold mb-3 text-2xl">{title}</span>;
+    }
+
+    return (
+        <span className="font-bold mb-3 text-2xl">
+      {title.substring(0, index)}
+          <span className="bg-gradient-to-r from-green-200 to-green-500">{title.substring(index, index + searchKey.length)}</span>
+          {title.substring(index + searchKey.length)}
+    </span>
+    );
   };
 
   return (
@@ -71,12 +109,12 @@ const Foryou = () => {
               </span>
             </div>
             <span
-              className="font-bold mb-3 text-2xl"
+              className={`font-bold mb-3 text-2xl `}
               onClick={() => {
                 handleClick(post._id);
               }}
             >
-              {post.title}
+              <HighlightedTitle title={post.title} searchKey={searchKey} />
             </span>
             <span
               className="line-clamp-3 mb-8"
