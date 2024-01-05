@@ -11,7 +11,7 @@ const ViewComment = (props) => {
                     <div key={comment._id}>
                         <div className={'flex mt-7'}>
                             <span>
-                                <Image src={CommentUser} alt={'profile'} height={0} width={0} className={'w-7 h-7 mt-1'}/>
+                                <Image src={comment.cImage} alt={'profile'} height={0} width={0} className={'w-10 h-10 mt-1 rounded-full'}/>
                             </span>
                             <div className={'flex flex-col text-sm ml-3'}>
                                 <span>{comment.cName}</span>

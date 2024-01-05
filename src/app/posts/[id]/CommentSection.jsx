@@ -27,6 +27,7 @@ const CommentSection = (props) => {
     const formattedDate = currentDate.toLocaleDateString("en-GB");
     const commentUser = {
       cName: user.userName,
+      cImage : user.image,
       cContent: commentContent,
       cDate: formattedDate,
     };

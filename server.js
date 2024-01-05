@@ -6,11 +6,10 @@ const cookieParser = require("cookie-parser");
 const sessions = require("express-session");
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.json({ limit: '200mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // MongoDB
 const dbURI = "mongodb://0.0.0.0:27017/Blogging";
@@ -43,6 +42,7 @@ const postSchema = new mongoose.Schema({
     comments: [
         {
             cName: String,
+            cImage : String,
             cContent: String,
             cDate: String
         }
@@ -115,23 +115,6 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
     console.log(existUser)
     res.status(200).json({ user: 'found', userId : existUser._id });
 })
-
-// app.get('/users', (req, res) => {
-//     const userEmail = req.query.userEmail;
-//     User.findOne({ userEmail: userEmail })
-//         .then((checkUserExistOrNot) => {
-//             if (checkUserExistOrNot) {
-//                 res.status(200).json({ user: 'found', userId : checkUserExistOrNot._id });
-//             } else {
-//                 res.status(404).json({ error: 'User Not Found' });
-//             }
-//         })
-//         .catch((error) => {
-//             console.error('Error checking user existence:', error);
-//             res.status(500).json({ error: 'An unexpected error occurred' });
-//         });
-// });
-
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user;

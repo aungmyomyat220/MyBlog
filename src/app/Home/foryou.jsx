@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getPost } from "../../../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "../../../api/getDate";
+import {getAllPostHook} from "../../../hooks/getAllPostHook";
 
 const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
@@ -21,12 +22,7 @@ const Foryou = ({searchKey,searchMode}) => {
     data: posts = [],
     error,
     isLoading,
-  } = useQuery({
-    queryKey: ["get"],
-    queryFn: getPost,
-    refetchOnMount : true,
-    refetchOnWindowFocus : true
-  });
+  } = getAllPostHook()
   posts.sort((a, b) => {
     const timeDifferenceA = new Date() - new Date(a.date);
     const timeDifferenceB = new Date() - new Date(b.date);
