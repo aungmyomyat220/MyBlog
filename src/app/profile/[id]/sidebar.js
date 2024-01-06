@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAllUsersHook } from "../../../../hooks/getAllUsersHook";
 import Image from "next/image";
-import {log} from "next/dist/server/typescript/utils";
 
 const Sidebar = () => {
   const { id } = useParams();
@@ -101,7 +100,7 @@ const Sidebar = () => {
           <div className={"mt-6"}>
             {follower.map((follower) => {
               return (
-                <div className={"mt-5 flex"} key={follower._id}>
+                <div className={"mt-4 flex"} key={follower._id}>
                   <span
                     className={"rounded-full"}
                     onClick={() => router.push(`/profile/${follower._id}`)}
@@ -111,7 +110,7 @@ const Sidebar = () => {
                       alt={follower.userName}
                       width={0}
                       height={0}
-                      className={"cursor-pointer w-7 h-7 mr-5 rounded-full"}
+                      className={"cursor-pointer w-8 h-8 mr-5 rounded-full"}
                     />
                   </span>
                   <span
