@@ -75,13 +75,11 @@ const Page = ({onchange}) => {
             return;
         }
 
-        // Check if the password and confirm password match
         if (user.password !== user.confirmPassword) {
             setError("Password and Confirm Password do not match.");
             return;
         }
 
-        // If all validations pass, create the user
         try {
             const response = await createUser(user);
             if(response.statusCode === 409){

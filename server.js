@@ -1,89 +1,62 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const sessions = require("express-session");
+const sessionConfig = require("./middleware/session");
+const bcrypt = require("bcrypt");
+const {User,Post} = require('./db/mongo')
 
 const app = express();
-app.use(bodyParser.json({ limit: '200mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 app.use(cookieParser());
-
-// MongoDB
-const dbURI = "mongodb://0.0.0.0:27017/Blogging";
-mongoose
-    .connect(dbURI)
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-        console.error("Error connecting to MongoDB", err);
-    });
-
-const userSchema = new mongoose.Schema({
-    userName : String,
-    userEmail : String,
-    password : String,
-    followers : [],
-    image : String
-});
-
-const postSchema = new mongoose.Schema({
-    title : String,
-    content : String,
-    date : String,
-    author : String,
-    authorId : String,
-    authorImage : String,
-    image : String,
-    like : String,
-    comments: [
-        {
-            cName: String,
-            cImage : String,
-            cContent: String,
-            cDate: String
-        }
-    ]
-});
-
-const User = mongoose.model("User", userSchema);
-const Post = mongoose.model("Post", postSchema);
-
-// Session Middleware
-const oneDay = 1000 * 60 * 60 * 24;
-app.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
-    cookie: { maxAge: oneDay },
-    resave: false,
-}));
+app.use(sessionConfig);
 
 // Middleware to check authentication
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
-        const user = await User.findOne({ userEmail: userEmail, password: password });
+        const user = await User.findOne({ userEmail: userEmail});
         if(userEmail === "" || password ===""){
             res.status(404).send("Fill Input Values");
         }
         else if (user) {
-            req.session.user = user;
-            next();
-        } else {
-            res.status(401).send("Authentication Failed");
+            const hashedPassword = user.password
+            try{
+                const match = await bcrypt.compare(password, hashedPassword);
+                if (match){
+                    req.session.user = user;
+                    next();
+                }else {
+                    res.status(401).send("Authentication Failed");
+                }
+            }catch (e) {
+                console.log(e)
+            }
         }
     } catch (err) {
         res.status(500).send("Internal Server Error");
     }
 }
 
+async function passwordHash(password) {
+    const saltRounds = 10;
+    console.log(password)
+    try {
+        const salt = await bcrypt.genSalt(saltRounds);
+        return await bcrypt.hash(password, salt);
+    } catch (err) {
+        console.error(err.message);
+        throw err; // rethrow the error to be caught by the caller
+    }
+}
+
 //Check UserExist middleware
 async function checkDuplicateUser(req,res,next){
-    const  { userEmail } = req.body;
+    const  userData = req.body;
     try {
+        const userEmail = userData.userEmail
         const alreadyRegisteredUser = await User.findOne({ userEmail: userEmail });
         if(alreadyRegisteredUser){
             res.status(409).send("User Already Registered")
@@ -117,13 +90,15 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 })
 
 app.post('/login', authenticate, (req, res) => {
-    const user = req.session.user;
+    const user = req.session.user
     res.status(200).send({ message: 'Authentication Successful', user })
 });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {
     try {
         const userData = req.body
+        const password = userData.password
+        userData.password = await passwordHash(password)
         const newUser = new User(userData);
         await newUser.save();
         res.status(201).json(newUser);
