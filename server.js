@@ -30,6 +30,8 @@ const userSchema = new mongoose.Schema({
     image : String
 });
 
+
+
 const postSchema = new mongoose.Schema({
     title : String,
     content : String,
