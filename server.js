@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const sessionConfig = require("./middleware/session");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
+const passwordHash = require('./middleware/passwordHash')
 
 const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -41,18 +42,6 @@ async function authenticate(req, res, next) {
     }
 }
 
-async function passwordHash(password) {
-    const saltRounds = 10;
-    console.log(password)
-    try {
-        const salt = await bcrypt.genSalt(saltRounds);
-        return await bcrypt.hash(password, salt);
-    } catch (err) {
-        console.error(err.message);
-        throw err; // rethrow the error to be caught by the caller
-    }
-}
-
 //Check UserExist middleware
 async function checkDuplicateUser(req,res,next){
     const  userData = req.body;
@@ -86,7 +75,6 @@ async function checkUserExist(req,res,next){
 
 app.post('/checkuser', checkUserExist ,(req,res) => {
     const existUser = req.existUser
-    console.log(existUser)
     res.status(200).json({ user: 'found', userId : existUser._id });
 })
 
@@ -138,6 +126,21 @@ app.get("/users", async (req, res) => {
     }
 });
 
+app.get("/modifieduser/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error("Error retrieving user:", error);
+        res.status(500).json({ error: "Error retrieving user" });
+    }
+});
+
+
 app.patch("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
     const updatedData = req.body;
@@ -155,11 +158,10 @@ app.patch("/posts/:postId", async (req, res) => {
 
 app.patch("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
-    const updatedData = req.body;
-    console.log(userId)
-    console.log(updatedData)
+    const {updateData,updateCategory} = req.body;
     try {
-        const updatedUser = await User.findByIdAndUpdate({ _id: userId }, { followers: updatedData });
+        const updateObject = { [updateCategory]: updateData };
+        const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateObject, { new: true });
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -169,8 +171,6 @@ app.patch("/users/:userId", async (req, res) => {
         res.status(500).json({ error: "Error updating user" });
     }
 });
-
-
 
 app.listen(8000, () => {
     console.log("Server started on port 8000");

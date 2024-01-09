@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
     userEmail : String,
     password : String,
     followers : [],
-    image : String
+    image : String,
+    userBio : {}
 });
 
 const postSchema = new mongoose.Schema({

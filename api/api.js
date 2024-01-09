@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const API_BASE_URL = "http://localhost:8000";
 export const createUser = async (userData) => {
     try {
@@ -122,32 +124,23 @@ export const getUser = async () => {
     }
 };
 
+export const getModifiedUser = async (userId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/modifieduser/${userId}`);
+        console.log("REs API",response.data)
+        return await response.data
+    } catch (error) {
+        console.error(`Error getting user with ID ${userId}:`, error);
+    }
+};
+
+
 export const getPost = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/posts`);
         return await response.json();
     } catch (error) {
         console.error("Error getting posts:", error);
-    }
-};
-
-export const updatePost = async (postId, updatedData) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedData),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to update post (status ${response.status})`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error updating post:", error);
-        throw error;
     }
 };
 

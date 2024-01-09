@@ -5,12 +5,11 @@ import Image from "next/image";
 import fire from "../../image/fire.png";
 import { useRouter } from "next/navigation";
 import {getAllUsersHook} from "../../../hooks/getAllUsersHook"
-import {getLoginUserFollower} from '../../../hooks/getLoginUserFollower'
+import {updateUserHook} from '../../../hooks/updateUserHook'
 
 const Suggestion = () => {
-  const {mutateAsync} = getLoginUserFollower()
+  const {mutateAsync} = updateUserHook()
   const [follower,setFollower] = useState([])
-  const [allUser,setAllUser] = useState([])
   const [topThreePosts, setTopThreePosts] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
@@ -48,11 +47,12 @@ const Suggestion = () => {
   }, []);
 
   const follow =  (followUserId) => {
+    const updateCategory = "followers"
     const Id = user._id;
     try {
       setFollower((prevFollower) => {
         const updated =  [...prevFollower,followUserId]
-        mutateAsync({ Id, follower: updated });
+        mutateAsync({ Id, updateData: updated,updateCategory });
         return updated
       });
     } catch (error) {
