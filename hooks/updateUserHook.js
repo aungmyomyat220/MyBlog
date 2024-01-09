@@ -13,7 +13,7 @@ export const updateUserHook = () => {
             return axios.patch(`http://localhost:8000/users/${Id}`, requestData)
         },
         onSuccess : () => {
-            queryClient.invalidateQueries(["getAllUser","getModifiedUser"])
+            queryClient.invalidateQueries("getAllUser","getModifiedUser")
         }
     })
 };

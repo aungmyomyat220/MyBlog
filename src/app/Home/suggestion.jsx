@@ -6,11 +6,15 @@ import fire from "../../image/fire.png";
 import { useRouter } from "next/navigation";
 import {getAllUsersHook} from "../../../hooks/getAllUsersHook"
 import {updateUserHook} from '../../../hooks/updateUserHook'
+import {getModifiedUsersHook} from "../../../hooks/getModifiedUser";
 
 const Suggestion = () => {
+  const { data: users = [] } = getAllUsersHook()
   const {mutateAsync} = updateUserHook()
-  const [follower,setFollower] = useState([])
   const [topThreePosts, setTopThreePosts] = useState([]);
+  const [seeAllUser,setSeeAllUser] = useState(false)
+  const [firstFourUser, setFirstFourUser] = useState([]);
+  const [follower, setFollower] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -19,18 +23,30 @@ const Suggestion = () => {
       setUser(JSON.parse(userData));
     }
   }, []);
+  const Id = user._id
+  const { data, isLoading, error } = getModifiedUsersHook(Id);
 
-  const { data: users = [] } = getAllUsersHook()
+  useEffect(() => {
+    if (!isLoading && !error) {
+      const initialFollowers = data.followers;
+      setFollower(initialFollowers);
+    }
+  }, [data]);
+
   const followerList = users.filter(
       (filterUser) => filterUser._id === user._id
   );
   const filteredUsers = users.filter(
     (filterUser) => filterUser._id !== user._id && !followerList[0]?.followers.includes(filterUser._id)
   );
-  if(filteredUsers.length>3){
-    const firstFourUsers = filteredUsers.slice(0, 3)
 
-  }
+  useEffect(() => {
+    console.log("effect work")
+    if(filteredUsers.length>3){
+      const res = filteredUsers.slice(0, 3)
+      setFirstFourUser(res)
+    }
+  }, [data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,12 +134,9 @@ const Suggestion = () => {
               </span>
             </div>
           );
-        })}
-        {
-          filteredUsers.length>3 &&
-            <span className={'hover:cursor-pointer hover:text-blue-500 pb-10 hover:underline'}>See all ({filteredUsers.length})</span>
+        })
         }
-        </div>
+      </div>
     </div>
   );
 };
