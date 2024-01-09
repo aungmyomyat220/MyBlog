@@ -41,7 +41,6 @@ const Suggestion = () => {
   );
 
   useEffect(() => {
-    console.log("effect work")
     if(filteredUsers.length>3){
       const res = filteredUsers.slice(0, 3)
       setFirstFourUser(res)
