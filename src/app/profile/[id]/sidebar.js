@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAllUsersHook } from "../../../../hooks/getAllUsersHook";
 import Image from "next/image";
+import {getModifiedUsersHook} from "../../../../hooks/getModifiedUser";
+import {updateUserHook} from "../../../../hooks/updateUserHook";
 
 const Sidebar = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [follow, setFollow] = useState(false);
+  const {mutateAsync} = updateUserHook()
   const { data: users = [] } = getAllUsersHook();
+  const [alreadyFollow,setAlreadyFollow] = useState([])
   const viewedUser = users.filter((user) => user._id === id);
   const confirmUser = viewedUser[0];
   const router = useRouter();
@@ -20,6 +24,31 @@ const Sidebar = () => {
       setUser(JSON.parse(userData));
     }
   }, []);
+  const Id = user._id
+  const { data, isLoading, error } = getModifiedUsersHook(Id);
+
+  useEffect(() => {
+    if (!isLoading && !error) {
+      const initialFollowers = data.followers;
+      setAlreadyFollow(initialFollowers);
+    }
+  }, [data]);
+
+  const handleFollow = () => {
+    const updateCategory = "followers"
+    const Id = user._id
+    if (!alreadyFollow.includes(id)){
+      setAlreadyFollow((prevState)=>{
+        const updated = [...prevState,id]
+        mutateAsync({ Id, updateData: updated,updateCategory });
+        return updated
+      })
+    }
+    else if(alreadyFollow.includes(id)){
+      const updated = alreadyFollow.filter(item => item !== id);
+      mutateAsync({ Id, updateData: updated,updateCategory });
+    }
+  }
 
   return (
     <>
@@ -48,14 +77,11 @@ const Sidebar = () => {
           <>
             {/* Follow Button and Mail */}
             <div className="flex mt-5">
-              <span className="mr-3">
+              <span className="mr-3" onClick={handleFollow}>
                 <div className="tooltip-container">
                   <span className="tooltip">{follower.length}</span>
                   <span
                     className="text"
-                    onClick={() => {
-                      setFollow(!follow);
-                    }}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +101,7 @@ const Sidebar = () => {
                         d="M0 109.5C0 83.2665 21.2665 62 47.5 62V62C73.7335 62 95 83.2665 95 109.5V114H0V109.5Z"
                       ></path>
                     </svg>
-                    {follower.includes(id) ? "Following" : "Follow"}
+                    {alreadyFollow.includes(id) ? "Unfollow" : "Follow"}
                   </span>
                 </div>
               </span>

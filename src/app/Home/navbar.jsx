@@ -154,13 +154,6 @@ const Navbar = ({navFlag,handleChange}) => {
           >
             Login
           </button>
-          <button
-            className="bg-gray-600 px-6 py-1 text-white rounded-md ml-3"
-            value="signup"
-            onClick={handleLoginClick}
-          >
-            SignUp
-          </button>
         </div>
       )}
     </div>

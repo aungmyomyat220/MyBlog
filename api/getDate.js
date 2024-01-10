@@ -15,6 +15,7 @@ export const formatDate = (date) => {
     const postDate = new Date(date);
     const now = new Date();
     const timeDifference = now - postDate;
+
     if (timeDifference < 60000) { // Less than 1 minute
         return 'Just Now';
     } else if (timeDifference < 3600000) { // Less than 1 hour
@@ -23,11 +24,13 @@ export const formatDate = (date) => {
     } else if (timeDifference < 86400000) { // Less than 1 day
         const hoursDifference = Math.floor(timeDifference / 3600000);
         return hoursDifference === 1 ? '1 hour ago' : `${hoursDifference} hours ago`;
-    } else if (timeDifference < 2592000000) { // Less than 30 days (approximately 1 month)
+    } else if (timeDifference < 604800000) { // Less than 1 week
         const daysDifference = Math.floor(timeDifference / 86400000);
         return daysDifference === 1 ? '1 day ago' : `${daysDifference} days ago`;
     } else {
-        const monthsDifference = Math.floor(timeDifference / 2592000000);
-        return monthsDifference === 1 ? '1 month ago' : `${monthsDifference} months ago`;
+        // Display the actual date in the format 'DD MMM YYYY'
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return postDate.toLocaleDateString(undefined, options);
     }
 };
+
