@@ -10,7 +10,16 @@ const passwordHash = require('./middleware/passwordHash')
 const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors());
+const allowedOrigins = ['https://my-blog-beta-green.vercel.app'];
+app.use(cors({
+    origin: (origin, callback) => {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+}));
 app.use(cookieParser());
 app.use(sessionConfig);
 
