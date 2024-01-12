@@ -6,20 +6,12 @@ const sessionConfig = require("./middleware/session");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
+const port = 8000;
 
 const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-const allowedOrigins = ['https://my-blog-beta-green.vercel.app'];
-app.use(cors({
-    origin: (origin, callback) => {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-}));
+app.use(cors())
 app.use(cookieParser());
 app.use(sessionConfig);
 
@@ -184,6 +176,6 @@ app.patch("/users/:userId", async (req, res) => {
     }
 });
 
-app.listen(8000, () => {
-    console.log("Server started on port 8000");
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
 });

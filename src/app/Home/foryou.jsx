@@ -1,8 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { getPost } from "../../../api/api";
-import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "../../../api/getDate";
 import {getAllPostHook} from "../../../hooks/getAllPostHook";
 

@@ -18,7 +18,12 @@ const Page = ({onchange}) => {
         "followers" : [{
             followerId : ""
         }],
-        "image" : image
+        "image" : image,
+        userBio : {
+            companyName : "",
+            mainLanguage : "",
+            experience : "",
+        }
     });
 
     const fileInputRef = useRef(null);

@@ -28,7 +28,7 @@ const Page = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const response = await Login(checkUser);
       if (response.statusCode === 200) {
@@ -64,7 +64,7 @@ const Page = () => {
   };
 
   return (
-    <>
+      <>
       <div className="flex flex-col justify-center items-center w-full h-screen">
         <div className="max-w-5xl bg-gray-300 w-full h-[600px] rounded-xl flex p-2">
 
@@ -96,6 +96,11 @@ const Page = () => {
               </div>
               <div className="relative h-11 w-80 mt-4">
                 <input
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        handleSubmit(event)
+                      }
+                    }}
                   placeholder="123456"
                   type="password"
                   name="password" required

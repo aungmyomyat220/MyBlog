@@ -1,6 +1,5 @@
-require('dotenv').config();
 const mongoose = require("mongoose");
-const dbURI = process.env.MONGODB_URL;
+const dbURI = "mongodb+srv://aungmyomyat874:Ammgic1234@myblog.r74l7i4.mongodb.net/Blogging";
 mongoose
     .connect(dbURI)
     .then(() => {
@@ -16,7 +15,11 @@ const userSchema = new mongoose.Schema({
     password : String,
     followers : [],
     image : String,
-    userBio : {}
+    userBio : {
+        companyName : String,
+        mainLanguage : String,
+        experience : String
+    }
 });
 
 const postSchema = new mongoose.Schema({
