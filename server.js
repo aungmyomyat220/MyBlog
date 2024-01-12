@@ -158,7 +158,10 @@ app.patch("/posts/:postId", async (req, res) => {
 
 app.patch("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
-    const {updateData,updateCategory} = req.body;
+    let {updateData,updateCategory} = req.body;
+    if(updateCategory === "password"){
+        updateData = await passwordHash(updateData)
+    }
     try {
         const updateObject = { [updateCategory]: updateData };
         const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateObject, { new: true });

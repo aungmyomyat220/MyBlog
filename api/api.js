@@ -143,15 +143,15 @@ export const getPost = async () => {
     }
 };
 
-export const updateUser = async (dataToUpdate,userId) => {
+export const updateUser = async (requestData,userId) => {
     try {
-        alert("Update user api work!!")
+        console.log(requestData)
         const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(dataToUpdate),
+            body: JSON.stringify(requestData),
         });
 
         if (!response.ok) {

@@ -77,12 +77,15 @@ const Page = () => {
       setLetChangePassword(true);
     } else if (newPassword === confirmPassword) {
       setLetChangePassword(false);
-      const dataToUpdate = {
-        password: newPassword,
+      const updateCategory = "password";
+      const updateData = newPassword
+      const requestData = {
+        updateData,
+        updateCategory
       };
 
       try {
-        const result = await updateUser(dataToUpdate, userId);
+        const result = await updateUser(requestData, userId);
         if(result.statusCode === 200){
           await Swal.fire({
             icon: "success",
