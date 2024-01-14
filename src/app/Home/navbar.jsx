@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import writepost from "../../image/write.png";
+import WritePost from "../../image/write.png";
 import { useState ,useEffect} from "react";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -99,7 +99,7 @@ const Navbar = ({navFlag,handleChange}) => {
         <div className="px-6 mt-3 text-center flex items-center">
           <Link className="flex cursor-pointer" href={`../admin-dashboard/${user._id}`}>
             <Image
-              src={writepost}
+              src={WritePost}
               className="w-5 h-5 mr-2"
               width={0}
               height={0}
