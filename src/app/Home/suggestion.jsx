@@ -123,17 +123,23 @@ const Suggestion = () => {
               <div className="px-3 flex flex-col w-6/12">
                 <span className="font-bold hover:underline cursor-pointer" onClick={()=> router.push(`/profile/${user._id}`)}>{user.userName}</span>
                 {
-                  user.userBio.mainLanguage &&
-                    <>
+                  user.userBio.mainLanguage ?
                       <span className="text-left text-sm text-gray-500">
-                        {user.userBio.mainLanguage} {user.userBio.experience} year{user.userBio.experience>1? "s":""} Developer at {user.userBio.companyName}
+                        {user.userBio.mainLanguage} {user.userBio.experience} year{user.userBio.experience > 1 ? "s" : ""} Developer at {user.userBio.companyName}
                       </span>
-                    </>
+                      :
+                      <span className="text-left text-sm text-gray-500">
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                        Details doesn't update yet
+                      </span>
                 }
 
               </div>
               <span className={'w-4/12'}>
-                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white" onClick={()=>{follow(user._id)}}>
+                <button className="border border-black rounded-full px-3 py-1 hover:bg-black hover:text-white"
+                        onClick={() => {
+                          follow(user._id)
+                        }}>
                   Follow
                 </button>
               </span>

@@ -132,7 +132,6 @@ export const getModifiedUser = async (userId) => {
     }
 };
 
-
 export const getPost = async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/posts`);

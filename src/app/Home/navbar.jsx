@@ -4,6 +4,7 @@ import writepost from "../../image/write.png";
 import { useState ,useEffect} from "react";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 const Navbar = ({navFlag,handleChange}) => {
   const [showProfile, setShowProfile] = useState(false);
@@ -25,9 +26,9 @@ const Navbar = ({navFlag,handleChange}) => {
       : router.push("/auth/signUp");
   };
 
-  const uploadPost = () => {
-      router.push(`admin-dashboard/${user._id}`);
-  };
+  // const uploadPost = () => {
+  //     router.push(`admin-dashboard/${user._id}`);
+  // };
 
   useEffect(() => {
     if (user._id) {
@@ -96,7 +97,7 @@ const Navbar = ({navFlag,handleChange}) => {
 
       {showProfile ? (
         <div className="px-6 mt-3 text-center flex items-center">
-          <span onClick={uploadPost} className="flex cursor-pointer">
+          <Link className="flex cursor-pointer" href={`../admin-dashboard/${user._id}`}>
             <Image
               src={writepost}
               className="w-5 h-5 mr-2"
@@ -105,7 +106,7 @@ const Navbar = ({navFlag,handleChange}) => {
               alt="write post"
             ></Image>
             Write Post
-          </span>
+          </Link>
           {/* Noti */}
           <button className="button ml-5 cursor-pointer">
             <svg viewBox="0 0 448 512" className="bell">

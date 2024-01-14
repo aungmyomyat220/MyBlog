@@ -1,4 +1,3 @@
-npm runimport React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getModifiedUsersHook } from "../../../../hooks/getModifiedUser";
 import Work from "../../../image/suitcase.png";
@@ -8,6 +7,7 @@ import Facebook from "../../../image/facebook.png"
 import Linkedin from '../../../image/linkedin-logo.png'
 import Github from '../../../image/github.png'
 import Image from "next/image";
+import {useEffect, useState} from "react";
 
 const AboutTab = () => {
   const { id } = useParams();
