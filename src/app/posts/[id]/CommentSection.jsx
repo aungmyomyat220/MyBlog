@@ -3,7 +3,7 @@ import ViewComment from "@/app/posts/[id]/ViewComment";
 import {updatePostHook} from "../../../../hooks/updatePostHook";
 
 const CommentSection = (props) => {
-  const {mutate} = updatePostHook()
+  const {mutateAsync} = updatePostHook()
   const { post } = props;
   const [commentContent, setCommentContent] = useState("");
   const [user, setUser] = useState({});
@@ -32,8 +32,9 @@ const CommentSection = (props) => {
       cDate: formattedDate,
     };
     const Id = post._id
+    const updateCategory = "comments"
     const comments = [...post.comments, commentUser]
-    const res = await mutate({ Id, comments: comments });
+    const res = await mutateAsync({ Id, updateData: comments,updateCategory });
     setCommentContent("");
   };
 

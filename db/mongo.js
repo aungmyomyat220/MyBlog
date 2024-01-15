@@ -31,6 +31,7 @@ const postSchema = new mongoose.Schema({
     authorImage : String,
     image : String,
     like : String,
+    delFlag : Boolean,
     comments: [
         {
             cName: String,

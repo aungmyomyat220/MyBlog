@@ -28,13 +28,13 @@ const Foryou = ({searchKey,searchMode}) => {
   });
 
   if(searchMode){
-    const res = posts.filter((post) => post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+    const res = posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       setFilteredPosts(res);
     }, [searchKey, searchMode, user._id, posts]);
   }else{
-    const res = posts.filter((post) => post.authorId !== user._id);
+    const res = posts.filter((post) => post.authorId !== user._id && !post.delFlag);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       setFilteredPosts(res);

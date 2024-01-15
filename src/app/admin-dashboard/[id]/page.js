@@ -30,6 +30,7 @@ const Page = () => {
     date: new Date(),
     image : image,
     like : '',
+    delFlag : false,
     comment : []
   });
 
@@ -63,6 +64,7 @@ const Page = () => {
       image : image,
       author: user.userName,
       authorId: user._id,
+      delFlag: false,
       authorImage : user.image,
     }));
   };
