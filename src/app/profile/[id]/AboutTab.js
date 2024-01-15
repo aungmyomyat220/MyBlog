@@ -1,8 +1,8 @@
 import { useParams } from "next/navigation";
 import { getModifiedUsersHook } from "../../../../hooks/getModifiedUser";
 import Work from "../../../image/suitcase.png";
-import Programming from "../../../image/web-programming.png";
-import Experience from "../../../image/coding.png";
+import Experience from "../../../image/quality.png";
+import Programming from "../../../image/coding.png";
 import Facebook from "../../../image/facebook.png";
 import Linkedin from "../../../image/linkedin-logo.png";
 import Github from "../../../image/github.png";
