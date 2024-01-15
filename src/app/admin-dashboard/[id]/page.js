@@ -6,20 +6,15 @@ import { createPost } from "../../../../api/api";
 import Swal from "sweetalert2";
 import Close from "../../../image/close-button.png"
 import {useRouter} from "next/navigation";
+import {updatePostHook} from "../../../../hooks/updatePostHook";
 
 const Page = () => {
   const [user, setUser] = useState({});
   const [error,setError] = useState("")
   const [image, setImage] = useState("");
+  const [updateMode, setUpdateMode] = useState(false);
   const ref = useRef()
   const router = useRouter()
-
-  useEffect(() => {
-    const userData = sessionStorage["user"];
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
 
   const [postData, setPostData] = useState({
     title: "",
@@ -33,6 +28,34 @@ const Page = () => {
     delFlag : false,
     comment : []
   });
+
+  useEffect(() => {
+    const userData = sessionStorage["user"];
+    const storedPostData = sessionStorage["updatePostData"];
+
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
+    if (storedPostData) {
+      setUpdateMode(true)
+      const parsedPostData = JSON.parse(storedPostData);
+      setPostData({
+        ...postData,
+        title: parsedPostData.title || "",
+        content: parsedPostData.content || "",
+        author: parsedPostData.author || "",
+        authorId: parsedPostData.authorId || "",
+        authorImage: parsedPostData.authorImage || "",
+        date: parsedPostData.date || new Date(),
+        image: parsedPostData.image || "",
+        like: parsedPostData.like || "",
+        delFlag: parsedPostData.delFlag || false,
+        comment: parsedPostData.comment || [],
+      });
+      setImage(parsedPostData.image || "");
+    }
+  }, []);
 
   useEffect(() => {
     setPostData((prevPostData) => ({
@@ -123,6 +146,11 @@ const Page = () => {
     };
   }, [ref]);
 
+  const {mutateAsync} = updatePostHook()
+  const postUpdate = () => {
+      const Id = postData._id
+  }
+
   return (
     <>
       <div className="flex flex-col w-full h-screen items-center mt-10">
@@ -130,12 +158,20 @@ const Page = () => {
           <div className="w-full flex justify-between">
             <span className="font-bold text-5xl cursor-pointer" onClick={()=> {router.push('/Home')}}>My Blog</span>
             <div>
-              <button
-                className="bg-green-600 text-white rounded-full px-3 py-1 mr-3"
-                onClick={postUpload}
-              >
-                Publish
-              </button>
+              {updateMode ?
+                  <button
+                      className="bg-green-600 text-white rounded-full px-3 py-1 mr-3"
+                      onClick={postUpdate}
+                  >
+                    Update
+                  </button> :
+                  <button
+                      className="bg-green-600 text-white rounded-full px-3 py-1 mr-3"
+                      onClick={postUpload}
+                  >
+                    Publish
+                  </button>
+              }
             </div>
           </div>
           <div className="max-w-4xl w-full mt-10 flex flex-col font-serif">

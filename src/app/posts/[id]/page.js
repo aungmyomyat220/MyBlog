@@ -110,12 +110,13 @@ const Post = () => {
                 router.back()
             }
         });
-
     }
 
     const editPost = () => {
-
-    }
+        const postDataString = JSON.stringify(filterPost);
+        sessionStorage.setItem("updatePostData", postDataString);
+        router.push(`/admin-dashboard/${user._id}`);
+    };
 
     return <>
         {comment && <div ref={ref}>
