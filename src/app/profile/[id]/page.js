@@ -5,7 +5,6 @@ import isAuthenticated  from '../../auth/authenticate';
 import ContentPage from "./contentPage";
 import { useEffect } from 'react';
 import { useRouter,useParams } from "next/navigation";
-import Navbar from '../../Home/navbar';
 import NavBar from "@/app/Home/navbar";
 
 const Page = () => {

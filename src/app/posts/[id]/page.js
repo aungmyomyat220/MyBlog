@@ -11,9 +11,10 @@ import {setLoveReact} from "../../../../Global Redux/createSlice/postSlice";
 import CommentSection from "@/app/posts/[id]/CommentSection";
 import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
+import Swal from "sweetalert2";
 
 const Post = () => {
-    const {mutate:deletePost} = updatePostHook()
+    const {mutateAsync:deletePost} = updatePostHook()
     const {id:postId} = useParams();
     const [selectedImage, setSelectedImage] = useState(null);
     const [viewerMode , setViewerMode] = useState(false)
@@ -24,18 +25,6 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-
-    // useEffect(() => {
-    //     const userData = sessionStorage["user"];
-    //     if (userData) {
-    //         setUser(JSON.parse(userData));
-    //     }
-    //     if (user && user._id !== id) {
-    //         setViewerMode(true);
-    //     } else if (user && user._id === id) {
-    //         setViewerMode(false);
-    //     }
-    // }, [viewerMode]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -93,11 +82,36 @@ const Post = () => {
     });
     const filterPost = filterArr[0];
 
-    const deletePosts = async (Id) => {
-        const updateCategory = "delFlag"
-        const res = await deletePost({ Id, updateData: true,updateCategory });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        const userData = sessionStorage["user"];
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+        if (user && user._id !== filterPost.authorId) {
+            setViewerMode(true);
+        } else if (user && user._id === filterPost.authorId) {
+            setViewerMode(false);
+        }
+    }, [viewerMode]);
+
+    const deletePosts = (Id) => {
+        Swal.fire({
+            text: "Do you want to Delete this Post?",
+            icon : "question",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#",
+            confirmButtonText: "Delete"
+        }).then(async(result) => {
+            if (result.isConfirmed) {
+                const updateCategory = "delFlag"
+                await deletePost({ Id, updateData: true,updateCategory });
+                router.back()
+            }
+        });
+
     }
-    console.log(viewerMode)
 
     const editPost = () => {
 
@@ -177,14 +191,14 @@ const Post = () => {
                             <li>
                                 <a
                                   onClick={editPost}
-                                  className="flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                  className="cursor-pointer flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Edit Post
                                 </a>
                             </li>
                             <li>
                                 <a
                                   onClick={()=>deletePosts(filterPost._id)}
-                                  className="flex text-red-500 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                  className="cursor-pointer flex text-red-500 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Delete Post
                                 </a>
                             </li>
