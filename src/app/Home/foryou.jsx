@@ -26,6 +26,8 @@ const Foryou = ({searchKey,searchMode}) => {
     return posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
   }, [posts, searchKey]);
 
+  console.log(filteredPosts)
+
   const now = new Date();
   const postsWithTimeDifferences = filteredPosts.map(post => ({
     ...post,

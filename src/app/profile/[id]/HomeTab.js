@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 import Image from "next/image";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import {useParams, useRouter} from "next/navigation";
 const HomeTab = ({searchKey,searchMode}) => {
   const {id} = useParams()
   const router = useRouter();
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  // const [filteredPosts, setFilteredPosts] = useState([]);
   const { loveData } = useSelector((state) => state.post);
   const [user, setUser] = useState({});
 
@@ -23,29 +23,21 @@ const HomeTab = ({searchKey,searchMode}) => {
   }, []);
 
   const { data: posts = [] } = getAllPostHook()
-  posts.sort((a, b) => {
-    const timeDifferenceA = new Date() - new Date(a.date);
-    const timeDifferenceB = new Date() - new Date(b.date);
-    return timeDifferenceA - timeDifferenceB;
-  });
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) => !post.delFlag && post.authorId === user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+  }, [posts, searchKey]);
+
+  const now = new Date();
+  const postsWithTimeDifferences = filteredPosts.map(post => ({
+    ...post,
+    timeDifference: now - new Date(post.date)
+  }));
+
+  const sortedPosts = postsWithTimeDifferences.sort((a, b) => a.timeDifference - b.timeDifference);
 
   const handleClick = (postId) => {
     router.push(`/posts/${postId}`);
   };
-
-  if(searchMode){
-    const res = posts.filter((post) => !post.delFlag && post.authorId === id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      setFilteredPosts(res);
-    }, [searchKey, searchMode, id, posts]);
-  }else{
-    const res = posts.filter((post) => !post.delFlag && post.authorId === id);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      setFilteredPosts(res);
-    }, [searchKey, searchMode, id, posts]);
-  }
 
   const HighlightedTitle = ({ title, searchKey }) => {
     if (!searchKey) {
@@ -66,7 +58,7 @@ const HomeTab = ({searchKey,searchMode}) => {
 
   return (
     <div className="no-scrollbar">
-      {filteredPosts.map((post) => (
+      {sortedPosts.map((post) => (
           <div
             className="grid grid-cols-5 px-8 py-10 border-b border-gray-300 mx-5 cursor-pointer"
             key={post._id}
