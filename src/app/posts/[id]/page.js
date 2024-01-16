@@ -82,19 +82,6 @@ const Post = () => {
     });
     const filterPost = filterArr[0];
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        const userData = sessionStorage["user"];
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
-        if (user && user._id !== filterPost.authorId) {
-            setViewerMode(true);
-        } else if (user && user._id === filterPost.authorId) {
-            setViewerMode(false);
-        }
-    }, [viewerMode]);
-
     const deletePosts = (Id) => {
         Swal.fire({
             text: "Do you want to Delete this Post?",

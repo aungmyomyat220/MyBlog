@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { formatDate } from "../../../api/getDate";
@@ -7,7 +7,7 @@ import {getAllPostHook} from "../../../hooks/getAllPostHook";
 const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
   const [user, setUser] = useState({});
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [viewerMode,setViewerMode] = useState(false)
 
   useEffect(() => {
     const userData = sessionStorage["user"];
@@ -21,25 +21,18 @@ const Foryou = ({searchKey,searchMode}) => {
     error,
     isLoading,
   } = getAllPostHook()
-  posts.sort((a, b) => {
-    const timeDifferenceA = new Date() - new Date(a.date);
-    const timeDifferenceB = new Date() - new Date(b.date);
-    return timeDifferenceA - timeDifferenceB;
-  });
 
-  if(searchMode){
-    const res = posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      setFilteredPosts(res);
-    }, [searchKey, searchMode, user._id, posts]);
-  }else{
-    const res = posts.filter((post) => post.authorId !== user._id && !post.delFlag);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      setFilteredPosts(res);
-    }, [searchKey, searchMode, user._id, posts]);
-  }
+  const filteredPosts = useMemo(() => {
+    return posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+  }, [posts, searchKey]);
+
+  const now = new Date();
+  const postsWithTimeDifferences = filteredPosts.map(post => ({
+    ...post,
+    timeDifference: now - new Date(post.date) // Memoized time calculation
+  }));
+
+  const sortedPosts = postsWithTimeDifferences.sort((a, b) => a.timeDifference - b.timeDifference);
 
   if (isLoading) {
     return (
@@ -84,7 +77,7 @@ const Foryou = ({searchKey,searchMode}) => {
 
   return (
     <div className="no-scrollbar">
-      {(user ? filteredPosts : posts).map((post) => (
+      {sortedPosts.map((post) => (
         <div
           className="grid grid-cols-5 border-b border-gray-300 mt-8 cursor-pointer"
           key={post._id}
