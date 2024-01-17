@@ -45,13 +45,13 @@ const Post = () => {
         return () => {
             document.body.removeEventListener('click', handleClickOutside);
         };
-    }, [ref]);
+    }, [ref,user._id]);
 
     useEffect(()=>{
         if(user._id !== filterPost.authorId){
-            console.log("userId",user._id)
-            console.log("filid",filterPost.authorId)
             setViewerMode(true)
+        }else{
+            setViewerMode(false)
         }
     }, [user._id, filterPost.authorId])
 
@@ -79,17 +79,6 @@ const Post = () => {
     const openComment = () => {
         setComment(!comment)
     }
-
-
-    // if (isLoading) {
-    //     return (<div>
-    //         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-    //     </div>);
-    // }
-    //
-    // if (error) {
-    //     return <div>Error: {error.message}</div>;
-    // }
 
     const deletePosts = (Id) => {
         Swal.fire({
