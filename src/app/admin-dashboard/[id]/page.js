@@ -31,29 +31,15 @@ const Page = () => {
 
   useEffect(() => {
     const userData = sessionStorage["user"];
-    const storedPostData = sessionStorage["updatePostData"];
+    const storedPostData = JSON.parse(sessionStorage["updatePostData"]);
 
     if (userData) {
       setUser(JSON.parse(userData));
     }
-
     if (storedPostData) {
       setUpdateMode(true)
-      const parsedPostData = JSON.parse(storedPostData);
-      setPostData({
-        ...postData,
-        title: parsedPostData.title || "",
-        content: parsedPostData.content || "",
-        author: parsedPostData.author || "",
-        authorId: parsedPostData.authorId || "",
-        authorImage: parsedPostData.authorImage || "",
-        date: parsedPostData.date || new Date(),
-        image: parsedPostData.image || "",
-        like: parsedPostData.like || "",
-        delFlag: parsedPostData.delFlag || false,
-        comment: parsedPostData.comment || [],
-      });
-      setImage(parsedPostData.image || "");
+      setPostData(storedPostData)
+      setImage(storedPostData.image)
     }
   }, []);
 
@@ -84,11 +70,6 @@ const Page = () => {
     setPostData((prevPostData) => ({
       ...prevPostData,
       [name]: value,
-      image : image,
-      author: user.userName,
-      authorId: user._id,
-      delFlag: false,
-      authorImage : user.image,
     }));
   };
 
@@ -147,8 +128,30 @@ const Page = () => {
   }, [ref]);
 
   const {mutateAsync} = updatePostHook()
-  const postUpdate = () => {
+  const postUpdate = async () => {
+    if (postData.title === "" || postData.title === undefined || postData.title === null ||
+      postData.content === "" || postData.content === undefined || postData.content === null) {
+      setError("Fill both Titles and Content");
+      return false;
+    }
       const Id = postData._id
+    const response = await mutateAsync({ Id, updateData:postData});
+    if(response.status === 200 || 201){
+      await Swal.fire({
+        icon: "success",
+        title: "Post Updated Successfully",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      setPostData({
+        title: "",
+        content: "",
+      });
+      setImage("")
+      setIsRotated(false)
+      router.push(`/posts/${postData._id}`);
+    }
+    sessionStorage.removeItem("updatePostData")
   }
 
   return (

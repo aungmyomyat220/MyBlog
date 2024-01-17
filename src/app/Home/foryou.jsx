@@ -8,25 +8,18 @@ const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
   const [user, setUser] = useState({});
   const [viewerMode,setViewerMode] = useState(false)
+  const { data: posts = [], error, isLoading, } = getAllPostHook()
 
   useEffect(() => {
     const userData = sessionStorage["user"];
     if (userData) {
       setUser(JSON.parse(userData));
     }
-  }, []);
-
-  const {
-    data: posts = [],
-    error,
-    isLoading,
-  } = getAllPostHook()
+  }, [posts]);
 
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
-  }, [posts, searchKey]);
-
-  console.log(filteredPosts)
+  }, [posts, searchKey,user]);
 
   const now = new Date();
   const postsWithTimeDifferences = filteredPosts.map(post => ({

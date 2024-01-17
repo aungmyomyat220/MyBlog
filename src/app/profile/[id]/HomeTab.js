@@ -11,21 +11,20 @@ import {useParams, useRouter} from "next/navigation";
 const HomeTab = ({searchKey,searchMode}) => {
   const {id} = useParams()
   const router = useRouter();
-  // const [filteredPosts, setFilteredPosts] = useState([]);
   const { loveData } = useSelector((state) => state.post);
   const [user, setUser] = useState({});
+  const { data: posts = [] } = getAllPostHook()
 
   useEffect(() => {
     const userData = sessionStorage["user"];
     if (userData) {
       setUser(JSON.parse(userData));
     }
-  }, []);
+  }, [posts]);
 
-  const { data: posts = [] } = getAllPostHook()
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => !post.delFlag && post.authorId === user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
-  }, [posts, searchKey]);
+  }, [posts, searchKey,user]);
 
   const now = new Date();
   const postsWithTimeDifferences = filteredPosts.map(post => ({

@@ -17,12 +17,14 @@ const Suggestion = () => {
   const [follower, setFollower] = useState([]);
   const router = useRouter();
   const [user, setUser] = useState({});
+
   useEffect(() => {
     const userData = sessionStorage["user"];
     if (userData) {
       setUser(JSON.parse(userData));
     }
   }, []);
+
   const Id = user._id
   const { data, isLoading, error } = getModifiedUsersHook(Id);
 

@@ -34,7 +34,10 @@ const CommentSection = (props) => {
     const Id = post._id
     const updateCategory = "comments"
     const comments = [...post.comments, commentUser]
-    const res = await mutateAsync({ Id, updateData: comments,updateCategory });
+    const updateData = {
+      $push: { comments: comments }
+    };
+    const res = await mutateAsync({ Id, updateData});
     setCommentContent("");
   };
 

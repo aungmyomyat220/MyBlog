@@ -92,8 +92,10 @@ const Post = () => {
             confirmButtonText: "Delete"
         }).then(async(result) => {
             if (result.isConfirmed) {
-                const updateCategory = "delFlag"
-                await deletePost({ Id, updateData: true,updateCategory });
+                const updateData = {
+                    $set: { delFlag: true }
+                };
+                await deletePost({ Id, updateData});
                 router.back()
             }
         });
@@ -113,7 +115,7 @@ const Post = () => {
             className={`flex flex-col items-center w-full h-[2000px] ${comment ? ' opacity-50 backdrop-brightness-50 ' : 'opacity-100'}`}>
             <div className="max-w-5xl w-full h-32 flex flex-col mt-10 px-5">
                 <div>
-                    <span className="text-3xl font-bold cursor-pointer" >My Blog</span>
+                    <span className="text-3xl font-bold cursor-pointer" onClick={()=>router.push("/Home")}>My Blog</span>
                 </div>
                 <div className="text-6xl font-semibold mt-12 mb-5">
                     {filterPost.title}

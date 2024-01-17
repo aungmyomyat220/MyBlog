@@ -144,10 +144,9 @@ app.get("/modifieduser/:userId", async (req, res) => {
 
 app.patch("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
-    let {updateData,updateCategory} = req.body;
+    const updateData = req.body;
     try {
-        const updateObject = { [updateCategory]: updateData };
-        const updatedPost = await Post.findByIdAndUpdate({_id : postId}, updateObject, { new: true });
+        const updatedPost = await Post.findByIdAndUpdate({ _id: postId }, updateData, { new: true });
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
