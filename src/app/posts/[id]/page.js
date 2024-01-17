@@ -7,7 +7,7 @@ import Like from "../../../image/love.png";
 import Love from "../../../image/heart.png";
 import Comment from "../../../image/chat.png";
 import {useDispatch, useSelector} from "react-redux";
-import {setLoveReact} from "../../../../Global Redux/createSlice/postSlice";
+import { setAuthor, setLoveReact } from '../../../../Global Redux/createSlice/postSlice'
 import CommentSection from "@/app/posts/[id]/CommentSection";
 import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
@@ -25,8 +25,16 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-
+    const { data: posts, error, isLoading, } = getAllPostHook()
+    const filterArr = posts.filter((post) => {
+        return post._id === postId;
+    });
+    const filterPost = filterArr[0];
     useEffect(() => {
+        const userData = sessionStorage["user"];
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
         const handleClickOutside = (event) => {
             if (ref.current && !ref.current.contains(event.target)) {
                 setComment(false)
@@ -38,6 +46,14 @@ const Post = () => {
             document.body.removeEventListener('click', handleClickOutside);
         };
     }, [ref]);
+
+    useEffect(()=>{
+        if(user._id !== filterPost.authorId){
+            console.log("userId",user._id)
+            console.log("filid",filterPost.authorId)
+            setViewerMode(true)
+        }
+    }, [user._id, filterPost.authorId])
 
     const openImage = (image) => {
         setSelectedImage(image);
@@ -64,23 +80,16 @@ const Post = () => {
         setComment(!comment)
     }
 
-    const {
-        data: posts, error, isLoading,
-    } = getAllPostHook()
 
-    if (isLoading) {
-        return (<div>
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-        </div>);
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
-    const filterArr = posts.filter((post) => {
-        return post._id === postId;
-    });
-    const filterPost = filterArr[0];
+    // if (isLoading) {
+    //     return (<div>
+    //         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+    //     </div>);
+    // }
+    //
+    // if (error) {
+    //     return <div>Error: {error.message}</div>;
+    // }
 
     const deletePosts = (Id) => {
         Swal.fire({

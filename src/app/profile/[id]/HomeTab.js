@@ -22,16 +22,15 @@ const HomeTab = ({searchKey,searchMode}) => {
     }
   }, [posts]);
 
-  const filteredPosts = useMemo(() => {
-    return posts.filter((post) => !post.delFlag && post.authorId === user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
+  const filterPosts = useMemo(() => {
+    return posts.filter((post) => !post.delFlag && post.authorId === id && post.title.toLowerCase().includes(searchKey.toLowerCase()));
   }, [posts, searchKey,user]);
 
   const now = new Date();
-  const postsWithTimeDifferences = filteredPosts.map(post => ({
+  const postsWithTimeDifferences = filterPosts.map(post => ({
     ...post,
     timeDifference: now - new Date(post.date)
   }));
-
   const sortedPosts = postsWithTimeDifferences.sort((a, b) => a.timeDifference - b.timeDifference);
 
   const handleClick = (postId) => {
