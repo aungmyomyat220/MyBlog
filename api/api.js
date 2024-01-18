@@ -124,11 +124,13 @@ export const getUser = async () => {
 };
 
 export const getModifiedUser = async (userId) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/modifieduser/${userId}`);
-        return await response.data
-    } catch (error) {
-        console.error(`Error getting user with ID ${userId}:`, error);
+    if(userId){
+        try {
+            const response = await axios.get(`${API_BASE_URL}/modifieduser/${userId}`);
+            return await response.data
+        } catch (error) {
+            console.error(`Error getting user with ID ${userId}:`, error);
+        }
     }
 };
 

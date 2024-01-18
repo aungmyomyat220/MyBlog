@@ -81,7 +81,6 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user
-    res.cookie("userData", user._id, { maxAge: 1000 * 60 * 60 * 24 ,httpOnly:true,secure: false});
     res.status(200).send({ message: 'Authentication Successful', user })
 });
 
