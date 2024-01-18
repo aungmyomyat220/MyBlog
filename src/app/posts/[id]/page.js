@@ -45,13 +45,13 @@ const Post = () => {
         return () => {
             document.body.removeEventListener('click', handleClickOutside);
         };
-    }, [ref]);
+    }, [ref,user._id]);
 
     useEffect(()=>{
-        if(user._id && user._id !== filterPost.authorId){
-            console.log("userId",user._id)
-            console.log("filid",filterPost.authorId)
+        if(user._id !== filterPost.authorId){
             setViewerMode(true)
+        }else{
+            setViewerMode(false)
         }
     }, [user._id, filterPost.authorId])
 

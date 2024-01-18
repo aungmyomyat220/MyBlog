@@ -15,7 +15,7 @@ const Foryou = ({searchKey,searchMode}) => {
     if (userData) {
       setUser(JSON.parse(userData));
     }
-  }, [posts]);
+  }, []);
 
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => !post.delFlag && post.authorId !== user._id && post.title.toLowerCase().includes(searchKey.toLowerCase()));

@@ -13,8 +13,12 @@ const Page = () => {
   const [error,setError] = useState("")
   const [image, setImage] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+  const [showText, setShowText] = useState(false);
+  const [isRotated, setIsRotated] = useState(false);
   const ref = useRef()
   const router = useRouter()
+  const {mutateAsync} = updatePostHook()
 
   const [postData, setPostData] = useState({
     title: "",
@@ -31,15 +35,17 @@ const Page = () => {
 
   useEffect(() => {
     const userData = sessionStorage["user"];
-    const storedPostData = JSON.parse(sessionStorage["updatePostData"]);
-
+    if(sessionStorage["updatePostData"]){
+      const storedPostData = JSON.parse(sessionStorage["updatePostData"]);
+      if (storedPostData) {
+        setUpdateMode(true)
+        setPostData(storedPostData)
+        setImage(storedPostData.image)
+      }
+    }
+    sessionStorage.removeItem("updatePostData")
     if (userData) {
       setUser(JSON.parse(userData));
-    }
-    if (storedPostData) {
-      setUpdateMode(true)
-      setPostData(storedPostData)
-      setImage(storedPostData.image)
     }
   }, []);
 
@@ -49,10 +55,6 @@ const Page = () => {
       image: image,
     }));
   }, [image]);
-
-  const [showButton, setShowButton] = useState(false);
-  const [showText, setShowText] = useState(false);
-  const [isRotated, setIsRotated] = useState(false);
 
   const convertToBase64 = (e) => {
     let reader = new FileReader();
@@ -127,7 +129,6 @@ const Page = () => {
     };
   }, [ref]);
 
-  const {mutateAsync} = updatePostHook()
   const postUpdate = async () => {
     if (postData.title === "" || postData.title === undefined || postData.title === null ||
       postData.content === "" || postData.content === undefined || postData.content === null) {
@@ -151,7 +152,6 @@ const Page = () => {
       setIsRotated(false)
       router.push(`/posts/${postData._id}`);
     }
-    sessionStorage.removeItem("updatePostData")
   }
 
   return (
