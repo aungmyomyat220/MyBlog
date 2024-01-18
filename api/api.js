@@ -1,5 +1,9 @@
 import axios from "axios";
 const API_BASE_URL = "http://localhost:8000";
+const cookie = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('sessionId='));
+console.log(cookie)
 export const createUser = async (userData) => {
     try {
         const response = await fetch(`${API_BASE_URL}/users`, {
@@ -31,6 +35,7 @@ export const Login = async (checkUser) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                credentials: 'include',
             },
             body: JSON.stringify(checkUser),
         });
