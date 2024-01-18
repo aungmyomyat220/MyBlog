@@ -8,6 +8,7 @@ import Comment from "@/image/chat.png";
 import { formatDate } from "../../../../api/getDate";
 import {useParams, useRouter} from "next/navigation";
 
+
 const HomeTab = ({searchKey,searchMode}) => {
   const {id} = useParams()
   const router = useRouter();

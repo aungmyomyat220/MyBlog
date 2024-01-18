@@ -81,8 +81,19 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user
+    res.cookie("userData", user._id, { maxAge: 1000 * 60 * 60 * 24 ,httpOnly:true,secure: false});
     res.status(200).send({ message: 'Authentication Successful', user })
 });
+
+// app.get('/home', (req, res) => {
+//     console.log("User=>" , req.session.user)
+//     if (req.session.user) {
+//         const user = req.session.user
+//         res.status(200).send({ message: 'Authentication Successful', user })
+//     } else {
+//         res.status(400).send()
+//     }
+// });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {
     try {

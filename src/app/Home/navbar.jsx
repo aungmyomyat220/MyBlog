@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from 'react'
 import { useRouter } from "next/navigation";
 import WritePost from "../../image/write.png";
 import { useState ,useEffect} from "react";
@@ -10,6 +10,7 @@ const Navbar = ({navFlag,handleChange}) => {
   const [showProfile, setShowProfile] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const router = useRouter();
+  const ref = useRef()
   const [user, setUser] = useState({});
   useEffect(() => {
     const userData = sessionStorage["user"];
@@ -26,9 +27,17 @@ const Navbar = ({navFlag,handleChange}) => {
       : router.push("/auth/signUp");
   };
 
-  // const uploadPost = () => {
-  //     router.push(`admin-dashboard/${user._id}`);
-  // };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+          setDropDown(false)
+      }
+    };
+    document.body.addEventListener('click', handleClickOutside);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, [ref]);
 
   useEffect(() => {
     if (user._id) {
@@ -52,8 +61,8 @@ const Navbar = ({navFlag,handleChange}) => {
       text: "Do you want to Logout",
       icon : "question",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#888e91",
       confirmButtonText: "Logout"
     }).then((result) => {
       if (result.isConfirmed) {
@@ -124,6 +133,7 @@ const Navbar = ({navFlag,handleChange}) => {
             ></Image>
             {dropDown && (
               <div
+                ref={ref}
                 id="dropdown"
                 className="z-10 absolute right-5 mt-3 w-32 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
               >

@@ -3,6 +3,8 @@ import NavBar from "./navbar";
 import { useState } from "react";
 import ForYou from "./foryou";
 import Suggestion from "./suggestion";
+import axios from 'axios'
+import Cookies from 'js-cookie';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("foryou");
@@ -11,6 +13,7 @@ export default function Home() {
   const handleClick = (tabname) => {
     setActiveTab(tabname);
   };
+  console.log('Cookies after login:', Cookies.get());
 
     const handleChange = (data) => {
       const {key , searchMode} = data
@@ -18,8 +21,22 @@ export default function Home() {
       setSearchKey(key)
   }
 
+  // const formLoad = async() => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/home');
+  //     if (response.data.message === 'Authentication Successful') {
+  //       const user = response.data.user;
+  //       console.log('User data:', user);
+  //     } else {
+  //       console.log('Not authenticated');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //   }
+  // }
+
   return (
-    <>
+    <div>
       <div className="flex flex-col w-full items-center h-screen">
         <NavBar handleChange={handleChange}></NavBar>
         <div className="grid grid-cols-6 w-full px-36 h-full">
@@ -65,6 +82,6 @@ export default function Home() {
       </div>
       {/*  <AblyConnect></AblyConnect>*/}
       {/*  <AblyConnect></AblyConnect>*/}
-    </>
+    </div>
   );
 }

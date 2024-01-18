@@ -48,7 +48,7 @@ const Post = () => {
     }, [ref]);
 
     useEffect(()=>{
-        if(user._id !== filterPost.authorId){
+        if(user._id && user._id !== filterPost.authorId){
             console.log("userId",user._id)
             console.log("filid",filterPost.authorId)
             setViewerMode(true)
@@ -79,17 +79,6 @@ const Post = () => {
     const openComment = () => {
         setComment(!comment)
     }
-
-
-    // if (isLoading) {
-    //     return (<div>
-    //         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-    //     </div>);
-    // }
-    //
-    // if (error) {
-    //     return <div>Error: {error.message}</div>;
-    // }
 
     const deletePosts = (Id) => {
         Swal.fire({
