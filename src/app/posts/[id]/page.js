@@ -26,6 +26,7 @@ const Post = () => {
     const router = useRouter()
     const [user, setUser] = useState({});
     const { data: filterPost} = getSpecificPostHook(postId)
+    console.log(filterPost)
 
     useEffect(() => {
         const userData = sessionStorage["user"];
