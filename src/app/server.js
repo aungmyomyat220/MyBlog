@@ -127,6 +127,19 @@ app.get("/users", async (req, res) => {
     }
 });
 
+app.get("/posts/:postId", async (req, res) => {
+    try {
+        const postId = req.params.postId;
+        const user = await User.findById(postId);
+        if (user) {
+            res.json(user);
+        }
+    } catch (error) {
+        console.error("Error retrieving user:", error);
+        res.status(500).json({ error: "Error retrieving user" });
+    }
+});
+
 app.get("/modifieduser/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;

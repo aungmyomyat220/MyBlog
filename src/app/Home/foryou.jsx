@@ -7,7 +7,6 @@ import {getAllPostHook} from "../../../hooks/getAllPostHook";
 const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
   const [user, setUser] = useState({});
-  const [viewerMode,setViewerMode] = useState(false)
   const { data: posts = [], error, isLoading, } = getAllPostHook()
 
   useEffect(() => {
