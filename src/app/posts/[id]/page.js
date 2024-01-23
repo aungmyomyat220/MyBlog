@@ -9,10 +9,9 @@ import Comment from "../../../image/chat.png";
 import {useDispatch, useSelector} from "react-redux";
 import { setAuthor, setLoveReact } from '../../../../Global Redux/createSlice/postSlice'
 import CommentSection from "@/app/posts/[id]/CommentSection";
-import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
 import Swal from "sweetalert2";
-import { getSpecificPost } from '@/app/api'
+import { getSpecificPostHook } from '../../../../hooks/getSpecificPost'
 
 const Post = () => {
     const {mutateAsync:deletePost} = updatePostHook()
@@ -26,7 +25,7 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-    const { data: filterPost} = getSpecificPost(postId)
+    const { data: filterPost} = getSpecificPostHook(postId)
 
     useEffect(() => {
         const userData = sessionStorage["user"];

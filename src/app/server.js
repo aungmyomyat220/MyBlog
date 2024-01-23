@@ -129,7 +129,7 @@ app.get("/users", async (req, res) => {
 
 app.get("/specificPost/:postId", async (req, res) => {
     try {
-        console.log("Specific WOrk")
+        console.log("Specific Work")
         const postId = req.params.postId;
         const user = await User.findById(postId);
         if (user) {
