@@ -2,10 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-const sessionConfig = require("./middleware/session");
+const sessionConfig = require("../../middleware/session");
 const bcrypt = require("bcrypt");
-const {User,Post} = require('./db/mongo')
-const passwordHash = require('./middleware/passwordHash')
+const {User,Post} = require('../../db/mongo')
+const passwordHash = require('../../middleware/passwordHash')
 const port = 8000;
 
 const app = express();
@@ -83,16 +83,6 @@ app.post('/login', authenticate, (req, res) => {
     const user = req.session.user
     res.status(200).send({ message: 'Authentication Successful', user })
 });
-
-// app.get('/home', (req, res) => {
-//     console.log("User=>" , req.session.user)
-//     if (req.session.user) {
-//         const user = req.session.user
-//         res.status(200).send({ message: 'Authentication Successful', user })
-//     } else {
-//         res.status(400).send()
-//     }
-// });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {
     try {

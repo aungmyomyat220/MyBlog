@@ -1,7 +1,7 @@
 import React, {useMemo} from "react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { formatDate } from "../../../api/getDate";
+import { formatDate } from "../getDate";
 import {getAllPostHook} from "../../../hooks/getAllPostHook";
 
 const Foryou = ({searchKey,searchMode}) => {

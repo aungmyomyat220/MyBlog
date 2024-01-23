@@ -3,7 +3,6 @@ import NavBar from "./navbar";
 import { useState } from "react";
 import ForYou from "./foryou";
 import Suggestion from "./suggestion";
-import axios from 'axios'
 import Cookies from 'js-cookie';
 
 export default function Home() {

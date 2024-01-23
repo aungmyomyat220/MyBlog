@@ -3,7 +3,7 @@ import Image from "next/image";
 import Eye from "@/image/view.png";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPost } from "../../../api/api";
+import { getPost } from "../api";
 import { useDispatch, useSelector } from "react-redux";
 import { viewCount } from "../../../Global Redux/createSlice/viewSlice";
 

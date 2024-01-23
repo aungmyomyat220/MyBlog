@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect, useRef, useState} from 'react';
 import { useRouter } from "next/navigation";
-import { createUser } from "../../../../api/api";
+import { createUser } from "../../api";
 import Image from "next/image";
 import ImagePicker from "@/image/plus.jpg";
 import Swal from "sweetalert2";

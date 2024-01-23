@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import imagePicker from "../../../image/noun-image-1066765.png";
-import { createPost } from "../../../../api/api";
+import { createPost } from "../../api";
 import Swal from "sweetalert2";
 import Close from "../../../image/close-button.png"
 import {useRouter} from "next/navigation";

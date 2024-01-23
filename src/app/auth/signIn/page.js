@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { Login } from "../../../../api/api";
+import { Login } from "../../api";
 import LoginBanner from '../../../image/undraw_font_re_efri.svg'
 import Image from "next/image";
 import SignUp from '../signUp/page'

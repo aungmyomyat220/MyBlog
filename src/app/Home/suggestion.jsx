@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import {getPost} from "../../../api/api";
+import {getPost} from "../api";
 import Image from "next/image";
 import fire from "../../image/fire.png";
 import { useRouter } from "next/navigation";
