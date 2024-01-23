@@ -57,7 +57,7 @@ const Suggestion = () => {
         const topThree = posts.slice(0, 3);
         setTopThreePosts(topThree);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error fetching postData:", error);
       }
     };
     fetchData();
