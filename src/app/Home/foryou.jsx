@@ -1,13 +1,12 @@
 import React, {useMemo} from "react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { formatDate } from "../../../api/getDate";
+import { formatDate } from "../getDate";
 import {getAllPostHook} from "../../../hooks/getAllPostHook";
 
 const Foryou = ({searchKey,searchMode}) => {
   const router = useRouter();
   const [user, setUser] = useState({});
-  const [viewerMode,setViewerMode] = useState(false)
   const { data: posts = [], error, isLoading, } = getAllPostHook()
 
   useEffect(() => {

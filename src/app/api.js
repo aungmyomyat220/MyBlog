@@ -1,12 +1,7 @@
 import axios from "axios";
-const API_BASE_URL = "http://localhost:8000";
-const cookie = document.cookie
-    .split('; ')
-    .find((row) => row.startsWith('sessionId='));
-console.log(cookie)
 export const createUser = async (userData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users`, {
+        const response = await fetch(`/users`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -31,11 +26,10 @@ export const createUser = async (userData) => {
 //Login API Function
 export const Login = async (checkUser) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/login`, {
+        const response = await fetch(`/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                credentials: 'include',
             },
             body: JSON.stringify(checkUser),
         });
@@ -69,7 +63,7 @@ export const Login = async (checkUser) => {
 
 export const checkUserExist = async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/checkuser`, {
+        const response = await fetch(`/checkuser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -101,7 +95,7 @@ export const checkUserExist = async (email) => {
 
 export const createPost = async (postData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/posts`, {
+        const response = await fetch(`/posts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -121,7 +115,7 @@ export const createPost = async (postData) => {
 
 export const getUser = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/users`);
+        const response = await fetch(`/users`);
         return await response.json();
     } catch (error) {
         console.error("Error getting users:", error);
@@ -131,7 +125,7 @@ export const getUser = async () => {
 export const getModifiedUser = async (userId) => {
     if(userId){
         try {
-            const response = await axios.get(`${API_BASE_URL}/modifieduser/${userId}`);
+            const response = await axios.get(`/modifieduser/${userId}`);
             return await response.data
         } catch (error) {
             console.error(`Error getting user with ID ${userId}:`, error);
@@ -139,9 +133,20 @@ export const getModifiedUser = async (userId) => {
     }
 };
 
+export const getSpecificPost = async (postId) => {
+    if(postId){
+        try {
+            const response = await axios.get(`/specificPost/${postId}`);
+            return await response.data
+        } catch (error) {
+            console.error(`Error getting post with ID ${postId}:`, error);
+        }
+    }
+};
+
 export const getPost = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/posts`);
+        const response = await fetch(`/posts`);
         return await response.json();
     } catch (error) {
         console.error("Error getting posts:", error);
@@ -151,7 +156,7 @@ export const getPost = async () => {
 export const updateUser = async (requestData,userId) => {
     try {
         console.log(requestData)
-        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        const response = await fetch(`/users/${userId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

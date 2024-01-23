@@ -8,7 +8,7 @@ export const updatePostHook = () => {
     return useMutation(
         async ({Id,updateData}) => {
             console.log(updateData)
-          return await axios.patch(`http://localhost:8000/posts/${Id}`, updateData);
+          return await axios.patch(`/posts/${Id}`, updateData);
         },
         {
             onSuccess: () => {

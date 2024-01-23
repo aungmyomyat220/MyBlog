@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import Like from "@/image/love.png";
 import Comment from "@/image/chat.png";
-import { formatDate } from "../../../../api/getDate";
+import { formatDate } from "../../getDate";
 import {useParams, useRouter} from "next/navigation";
 
 
