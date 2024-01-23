@@ -25,7 +25,7 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-    const { data} = getSpecificPostHook(postId)
+    const { data:filterPost} = getSpecificPostHook(postId)
     // const filterPost = data.filter(post => {
     //     return postId === post._id
     // })
