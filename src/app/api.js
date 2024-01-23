@@ -136,7 +136,7 @@ export const getModifiedUser = async (userId) => {
 export const getSpecificPost = async (postId) => {
     if(postId){
         try {
-            const response = await axios.get(`/specificPost/${postId}`);
+            const response = await axios.get(`/posts/${postId}`);
             return await response.data
         } catch (error) {
             console.error(`Error getting post with ID ${postId}:`, error);

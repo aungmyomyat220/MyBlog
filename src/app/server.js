@@ -129,17 +129,16 @@ app.get("/users", async (req, res) => {
     }
 });
 
-app.get("/specificPost/:postId", async (req, res) => {
+app.get("/posts/:postId", async (req, res) => {
     try {
-        console.log("Specific Work")
         const postId = req.params.postId;
         const user = await User.findById(postId);
         if (user) {
             res.json(user);
         }
     } catch (error) {
-        console.error("Error retrieving user:", error);
-        res.status(500).json({ error: "Error retrieving user" });
+        console.error("Error retrieving post:", error);
+        res.status(500).json({ error: "Error retrieving post" });
     }
 });
 
