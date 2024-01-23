@@ -10,7 +10,7 @@ export const updateUserHook = () => {
                 updateData,
                 updateCategory
             };
-            return axios.patch(`http://localhost:8000/users/${Id}`, requestData)
+            return axios.patch(`/users/${Id}`, requestData)
         },
         onSuccess : () => {
             queryClient.invalidateQueries("getAllUser","getModifiedUser")

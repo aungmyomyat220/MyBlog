@@ -1,5 +1,4 @@
 import axios from "axios";
-const API_BASE_URL = "http://localhost:8000";
 export const createUser = async (userData) => {
     try {
         const response = await fetch(`/users`, {
