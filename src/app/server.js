@@ -129,18 +129,18 @@ app.get("/users", async (req, res) => {
     }
 });
 
-app.get("/posts/:postId", async (req, res) => {
-    try {
-        const postId = req.params.postId;
-        const post = await Post.findById(postId);
-        if (post) {
-            res.json(post);
-        }
-    } catch (error) {
-        console.error("Error retrieving post:", error);
-        res.status(500).json({ error: "Error retrieving post" });
-    }
-});
+// app.get("/posts/:postId", async (req, res) => {
+//     try {
+//         const postId = req.params.postId;
+//         const post = await Post.findById(postId);
+//         if (post) {
+//             res.json(post);
+//         }
+//     } catch (error) {
+//         console.error("Error retrieving post:", error);
+//         res.status(500).json({ error: "Error retrieving post" });
+//     }
+// });
 
 app.get("/modifieduser/:userId", async (req, res) => {
     try {

@@ -12,6 +12,7 @@ import CommentSection from "@/app/postData/[id]/CommentSection";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
 import Swal from "sweetalert2";
 import { getSpecificPostHook } from '../../../../hooks/getSpecificPost'
+import {getAllPostHook} from "../../../../hooks/getAllPostHook";
 
 const Post = () => {
     const {mutateAsync:deletePost} = updatePostHook()
@@ -25,8 +26,10 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-    const { data: filterPost} = getSpecificPostHook(postId)
-    console.log(filterPost)
+    const { data} = getAllPostHook()
+    const filterPost = data.filter(post => {
+        return postId === post._id
+    })
 
     useEffect(() => {
         const userData = sessionStorage["user"];
