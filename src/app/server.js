@@ -1,12 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const cookieParser = require("cookie-parser");
 const sessionConfig = require("../../middleware/session");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('../../db/mongo')
 const passwordHash = require('../../middleware/passwordHash')
-const generateUUID = require('../../middleware/uuidGenerate')
 const port = 8000;
 
 const app = express();
@@ -14,7 +12,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
 app.use(sessionConfig);
-app.use(generateUUID);
 
 // Middleware to check authentication
 async function authenticate(req, res, next) {
@@ -89,10 +86,6 @@ app.post('/login', authenticate, (req, res) => {
 });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {
-    const uuid = req.uuid;
-    if (!uuid){
-        res.status(401).json({ error: 'Unauthorized' });
-    }
     try {
         const userData = req.body
         const password = userData.password
@@ -127,10 +120,6 @@ app.get("/posts", async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
-    const uuid = req.uuid;
-    if (!uuid){
-        res.status(401).json({ error: 'Unauthorized' });
-    }
     try {
         const users = await User.find();
         res.json(users);

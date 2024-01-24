@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/posts/:postId", "destination": "/posts/[id]/page.js" },
+    { "source": "/posts/:postId", "destination": "/postData/[id]/page.js" },
     { "source": "/(.*)", "destination": "/api" }
   ]
 }
