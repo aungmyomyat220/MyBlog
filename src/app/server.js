@@ -5,6 +5,7 @@ const sessionConfig = require("../../middleware/session");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('../../db/mongo')
 const passwordHash = require('../../middleware/passwordHash')
+import * as bufferutil from 'bufferutil';
 const port = 8000;
 
 const app = express();
