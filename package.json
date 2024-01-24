@@ -8,7 +8,7 @@
     "start": "npm run dev",
     "lint": "next lint",
     "server": "node src/app/server.js",
-    "vercel-build" : "next build"
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
@@ -42,7 +42,8 @@
     "redis": "^4.6.12",
     "redux": "^4.2.1",
     "sweetalert2": "^11.9.0",
-    "tailwindcss": "3.3.3"
+    "tailwindcss": "3.3.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "postcss-nesting": "^12.0.2"
