@@ -28,7 +28,7 @@ const Post = ({ post }) => {
     const router = useRouter()
     const [user, setUser] = useState({});
 
-    export async function getStaticProps({ params }) {
+    async function getStaticProps({ params }) {
         const { id: postId } = params;
 
         const filterPost = await getSpecificPostHook(postId);
