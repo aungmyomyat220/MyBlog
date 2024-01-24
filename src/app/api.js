@@ -149,7 +149,7 @@ export const getPost = async () => {
         const response = await fetch(`/posts`);
         return await response.json();
     } catch (error) {
-        console.error("Error getting postData:", error);
+        console.error("Error getting posts:", error);
     }
 };
 

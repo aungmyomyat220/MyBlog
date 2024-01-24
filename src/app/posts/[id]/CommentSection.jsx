@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import ViewComment from "@/app/postData/[id]/ViewComment";
+import ViewComment from "@/app/posts/[id]/ViewComment";
 import {updatePostHook} from "../../../../hooks/updatePostHook";
 
 const CommentSection = (props) => {

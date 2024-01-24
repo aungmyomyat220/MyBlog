@@ -8,7 +8,7 @@ import Love from "../../../image/heart.png";
 import Comment from "../../../image/chat.png";
 import {useDispatch, useSelector} from "react-redux";
 import { setAuthor, setLoveReact } from '../../../../Global Redux/createSlice/postSlice'
-import CommentSection from "@/app/postData/[id]/CommentSection";
+import CommentSection from "@/app/posts/[id]/CommentSection";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
 import Swal from "sweetalert2";
 import { getSpecificPostHook } from '../../../../hooks/getSpecificPost'
