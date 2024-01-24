@@ -13,7 +13,6 @@ const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
-app.use(cookieParser());
 app.use(sessionConfig);
 app.use(generateUUID);
 
@@ -31,6 +30,7 @@ async function authenticate(req, res, next) {
                 const match = await bcrypt.compare(password, hashedPassword);
                 if (match){
                     req.session.user = user;
+                    req.session.userId = user._id
                     next();
                 }else {
                     res.status(401).send("Authentication Failed");
@@ -83,6 +83,8 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 
 app.post('/login', authenticate, (req, res) => {
     const user = req.session.user
+    console.log(req.session.userId.toString())
+    res.cookie('sessionId', req.session.userId.toString());
     res.status(200).send({ message: 'Authentication Successful', user })
 });
 
@@ -120,7 +122,7 @@ app.get("/posts", async (req, res) => {
         const posts = await Post.find();
         res.json(posts);
     } catch (error) {
-        res.status(500).json({ error: "Error retrieving posts" });
+        res.status(500).json({ error: "Error retrieving postData" });
     }
 });
 
@@ -129,21 +131,20 @@ app.get("/users", async (req, res) => {
         const users = await User.find();
         res.json(users);
     } catch (error) {
-        res.status(500).json({ error: "Error retrieving posts" });
+        res.status(500).json({ error: "Error retrieving postData" });
     }
 });
 
-app.get("/specificPost/:postId", async (req, res) => {
+app.get("/posts/:postId", async (req, res) => {
     try {
-        console.log("Specific Work")
         const postId = req.params.postId;
-        const user = await User.findById(postId);
-        if (user) {
-            res.json(user);
+        const post = await Post.findById(postId);
+        if (post) {
+            res.json(post);
         }
     } catch (error) {
-        console.error("Error retrieving user:", error);
-        res.status(500).json({ error: "Error retrieving user" });
+        console.error("Error retrieving post:", error);
+        res.status(500).json({ error: "Error retrieving post" });
     }
 });
 

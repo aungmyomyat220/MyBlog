@@ -8,7 +8,7 @@ import Love from "../../../image/heart.png";
 import Comment from "../../../image/chat.png";
 import {useDispatch, useSelector} from "react-redux";
 import { setAuthor, setLoveReact } from '../../../../Global Redux/createSlice/postSlice'
-import CommentSection from "@/app/posts/[id]/CommentSection";
+import CommentSection from "@/app/postData/[id]/CommentSection";
 import { updatePostHook } from '../../../../hooks/updatePostHook'
 import Swal from "sweetalert2";
 import { getSpecificPostHook } from '../../../../hooks/getSpecificPost'
@@ -25,7 +25,10 @@ const Post = () => {
     const ref = useRef()
     const router = useRouter()
     const [user, setUser] = useState({});
-    const { data: filterPost} = getSpecificPostHook(postId)
+    const { data:filterPost} = getSpecificPostHook(postId)
+    // const filterPost = data.filter(post => {
+    //     return postId === post._id
+    // })
 
     useEffect(() => {
         const userData = sessionStorage["user"];
