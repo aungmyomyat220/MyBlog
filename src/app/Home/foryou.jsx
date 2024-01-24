@@ -46,7 +46,7 @@ const Foryou = ({searchKey,searchMode}) => {
   }
 
   const handleClick = (postId) => {
-    router.push(`/posts/${postId}`);
+    router.push(`/postData/${postId}`);
   };
 
   const HighlightedTitle = ({ title, searchKey }) => {
