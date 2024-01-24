@@ -134,7 +134,7 @@ app.get("/posts/:postId", async (req, res) => {
         const postId = req.params.postId;
         const post = await Post.findById(postId);
         if (post) {
-            res.json(post);
+            res.status(200).json({message : "Post Found",post})
         }
     } catch (error) {
         console.error("Error retrieving post:", error);
