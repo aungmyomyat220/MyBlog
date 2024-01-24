@@ -127,6 +127,10 @@ app.get("/posts", async (req, res) => {
 });
 
 app.get("/users", async (req, res) => {
+    const uuid = req.uuid;
+    if (!uuid){
+        res.status(401).json({ error: 'Unauthorized' });
+    }
     try {
         const users = await User.find();
         res.json(users);
