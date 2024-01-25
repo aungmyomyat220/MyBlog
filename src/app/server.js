@@ -174,13 +174,12 @@ app.patch("/posts/:postId", async (req, res) => {
 
 app.patch("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
-    let {updateData,updateCategory} = req.body;
-    if(updateCategory === "password"){
-        updateData = await passwordHash(updateData)
-    }
+    const updateData = req.body;
+    // if(updateCategory === "password"){
+    //     updateData = await passwordHash(updateData)
+    // }
     try {
-        const updateObject = { [updateCategory]: updateData };
-        const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateObject, { new: true });
+        const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateData, { new: true });
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
