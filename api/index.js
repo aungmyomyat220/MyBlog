@@ -1,3 +1,3 @@
-import server from '../src/app/server'
+import server from '../server'
 
 export default server

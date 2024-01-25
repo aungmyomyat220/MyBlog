@@ -1,11 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const sessionConfig = require("../../middleware/session");
+const sessionConfig = require("./middleware/session");
 const bcrypt = require("bcrypt");
-const {User,Post} = require('../../db/mongo')
-const passwordHash = require('../../middleware/passwordHash')
-import * as bufferutil from 'bufferutil';
+const {User,Post} = require('./db/mongo')
+const passwordHash = require('./middleware/passwordHash')
 const port = 8000;
 
 const app = express();
@@ -172,12 +171,9 @@ app.patch("/posts/:postId", async (req, res) => {
     }
 });
 
-app.patch("/users/:userId", async (req, res) => {
+app.put("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
     const updateData = req.body;
-    // if(updateCategory === "password"){
-    //     updateData = await passwordHash(updateData)
-    // }
     try {
         const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateData, { new: true });
         if (!updatedUser) {
