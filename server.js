@@ -158,7 +158,7 @@ app.get("/modifieduser/:userId", async (req, res) => {
 });
 
 
-app.patch("/posts/:postId", async (req, res) => {
+app.put("/posts/:postId", async (req, res) => {
     const postId = req.params.postId;
     const updateData = req.body;
     try {
