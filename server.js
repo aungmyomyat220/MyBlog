@@ -176,8 +176,10 @@ app.patch("/posts/:postId", async (req, res) => {
 app.put("/users/:userId", async (req, res) => {
     const userId = req.params.userId;
     const updateData = req.body;
-    console.log(userId);
-    console.log(updateData);
+    if(updateData.password){
+        updateData.password = await passwordHash(updateData.password)
+    }
+    
     try {
         const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateData, { new: true });
         if (!updatedUser) {
