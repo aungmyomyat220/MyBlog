@@ -1,4 +1,4 @@
-const apiKey = "927e0f9a-4451-4210-8dd1-eb47f8ca9089";
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 function validateApiKey(req, res, next) {
     const apiKeyHeader = req.get('API_KEY');
     if (apiKeyHeader === apiKey) {
