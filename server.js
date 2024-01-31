@@ -21,7 +21,10 @@ async function authenticate(req, res, next) {
     try {
         const user = await User.findOne({ userEmail: userEmail});
         if(userEmail === "" || password ===""){
-            res.status(404).send("Fill Input Values");
+            res.status(400).send("Fill Input Values");
+        }
+        else if(!user){
+            res.status(404).send("User Not Found");
         }
         else if (user) {
             const hashedPassword = user.password
@@ -31,7 +34,7 @@ async function authenticate(req, res, next) {
                     req.session.user = user;
                     req.session.userId = user._id
                     next();
-                }else {
+                }else if(!match) {
                     res.status(401).send("Authentication Failed");
                 }
             }catch (e) {
