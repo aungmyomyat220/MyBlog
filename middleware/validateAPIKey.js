@@ -1,5 +1,4 @@
-require('dotenv').config();
-const apiKey = process.env.API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 function validateApiKey(req, res, next) {
     const apiKeyHeader = req.get('API_KEY');
     if (apiKeyHeader === apiKey) {
