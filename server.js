@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const validateAPIKey = require("./middleware/validateAPIKey");
+// const validateAPIKey = require("./middleware/validateAPIKey");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
