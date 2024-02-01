@@ -8,7 +8,7 @@
     "start": "npm run dev",
     "lint": "next lint",
     "server": "node src/app/server.js",
-    "vercel-build": "next build"  
+    "vercel-build": "next build"
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
@@ -31,6 +31,7 @@
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
+    "framer-motion": "^11.0.3",
     "js-cookie": "^3.0.5",
     "mongodb": "^6.3.0",
     "mongoose": "^7.5.0",
