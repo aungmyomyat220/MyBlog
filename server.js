@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const validateAPIKey = require("./middleware/validateAPIKey");
+// const validateAPIKey = require("./middleware/validateAPIKey");
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(cors())
-app.use(validateAPIKey);
+// app.use(validateAPIKey);
 
 // Middleware to check authentication
 async function authenticate(req, res, next) {
