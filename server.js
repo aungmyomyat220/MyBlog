@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
-// const port = 8000;
+const port = 8000;
 
 const app = express();
 app.use(bodyParser.json({ limit: '100mb' }));
@@ -193,6 +193,6 @@ app.put("/users/:userId", async (req, res) => {
     }
 });
 
-// app.listen(port, () => {
-//     console.log(`Server started on port ${port}`);
-// });
+app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+});
