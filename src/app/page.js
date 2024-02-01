@@ -9,7 +9,6 @@ export default function Home1() {
         transition: { duration: 2 },
       }}
       className="text-5xl mb-5">Hello Welcome</motion.div>
-      <motion.div style={{ scaleX: scrollYProgress }}>This is My Blog Server</motion.div>
     </div>
   );
 }
