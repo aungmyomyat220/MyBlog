@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const dbURI = "mongodb+srv://aungmyomyat874:aungmyomyat4980@myblog.r74l7i4.mongodb.net/Blogging?retryWrites=true&w=majority";
+const dbURI = process.env.NEXT_PUBLIC_MONGODB_URL;
 mongoose
     .connect(dbURI)
     .then(() => {
