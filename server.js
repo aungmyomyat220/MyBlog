@@ -17,7 +17,7 @@ app.use(cors())
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
-        const user = await User.findOne({ userEmail: userEmail});
+        const user = await User.findOne({ userEmail: userEmail});0
         if(userEmail === "" || password ===""){
             res.status(400).send("Fill Input Values");
         }
