@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+const corsMiddleware = require('./middleware/cors');
 const bodyParser = require('body-parser');
 const validateAPIKey = require("./middleware/validateAPIKey");
 const bcrypt = require("bcrypt");
@@ -10,7 +10,8 @@ const port = 8000;
 const app = express();
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
-app.use(cors())
+const allowedOrigins = ['https://myblog-two-lake.vercel.app', 'http://localhost:3000'];
+app.use(corsMiddleware(allowedOrigins));
 app.use(validateAPIKey);
 
 // Middleware to check authentication
