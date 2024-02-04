@@ -6,8 +6,10 @@ const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
 const port = 8000;
+const sessionMiddleware = require('./middleware/session')
 
 const app = express();
+app.use(sessionMiddleware);
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(cors({
