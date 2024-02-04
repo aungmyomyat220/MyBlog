@@ -140,6 +140,7 @@ app.get("/posts/:postId", async (req, res) => {
         const postId = req.params.postId;
         const post = await Post.findById(postId);
         if (post) {
+            res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
             res.status(200).json({message : "Post Found",post})
         }
     } catch (error) {
@@ -155,6 +156,7 @@ app.get("/modifieduser/:userId", async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
+        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.json(user);
     } catch (error) {
         console.error("Error retrieving user:", error);
@@ -171,6 +173,7 @@ app.put("/posts/:postId", async (req, res) => {
         if (!updatedPost) {
             return res.status(404).json({ error: "Post not found" });
         }
+        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.json(updatedPost);
     } catch (error) {
         console.error("Error updating post:", error);
@@ -184,12 +187,12 @@ app.put("/users/:userId", async (req, res) => {
     if(updateData.password){
         updateData.password = await passwordHash(updateData.password)
     }
-    
     try {
         const updatedUser = await User.findByIdAndUpdate({ _id: userId }, updateData, { new: true });
         if (!updatedUser) {
             return res.status(404).json({ error: "User not found" });
         }
+        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.status(200).json({ message: "User updated successfully", user: updatedUser });
     } catch (error) {
         console.error("Error updating user:", error);
