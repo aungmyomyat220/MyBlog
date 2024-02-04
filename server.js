@@ -96,6 +96,7 @@ app.post('/users',checkDuplicateUser, async (req, res) => {
         userData.password = await passwordHash(password)
         const newUser = new User(userData);
         await newUser.save();
+        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.status(201).json(newUser);
     } catch (error) {
         console.error('Error creating user:', error);
