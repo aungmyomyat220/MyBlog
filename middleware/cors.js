@@ -12,17 +12,6 @@ function corsMiddleware(allowedOrigins) {
       },
       credentials: true,
       methods: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-      allowedHeaders: [
-        'X-CSRF-Token',
-        'X-Requested-With',
-        'Accept',
-        'Accept-Version',
-        'Content-Length',
-        'Content-MD5',
-        'Content-Type',
-        'Date',
-        'X-Api-Version'
-      ]
     };
 
     cors(corsOptions)(req, res, next);
