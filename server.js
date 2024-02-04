@@ -18,6 +18,8 @@ app.use(validateAPIKey);
 // Middleware to check authentication
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
+    console.log("Email====>",userEmail);
+    console.log("Password====>",password);
     try {
         const user = await User.findOne({ userEmail: userEmail});
         if(userEmail === "" || password ===""){
