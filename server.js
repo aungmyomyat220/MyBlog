@@ -18,7 +18,7 @@ app.use(validateAPIKey);
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
-        const user = await User.findOne({ userEmail: userEmail});0
+        const user = await User.findOne({ userEmail: userEmail});
         if(userEmail === "" || password ===""){
             res.status(400).send("Fill Input Values");
         }
