@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require('./middleware/cors')
+const cors = require('./middleware/cors');
 const bodyParser = require('body-parser');
 const validateAPIKey = require("./middleware/validateAPIKey");
 const bcrypt = require("bcrypt");
