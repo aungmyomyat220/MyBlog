@@ -11,8 +11,7 @@ app.use(cors())
 
 app.get("/posts", async (req, res) => {
     try {
-        const posts = await Post.find();
-        res.json(posts);
+        res.send("Hello This is Post Method")
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
@@ -20,8 +19,7 @@ app.get("/posts", async (req, res) => {
 
 app.get("/users", async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users);
+        res.send("Hello This is Users Method")
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
