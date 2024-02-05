@@ -12,7 +12,6 @@ app.use(cors())
 app.get("/posts", async (req, res) => {
     try {
         const posts = await Post.find();
-        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.json(posts);
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
@@ -22,7 +21,6 @@ app.get("/posts", async (req, res) => {
 app.get("/users", async (req, res) => {
     try {
         const users = await User.find();
-        res.setHeader('Access-Control-Allow-Origin', 'https://myblog-two-lake.vercel.app');
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
