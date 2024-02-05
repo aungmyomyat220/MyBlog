@@ -80,7 +80,7 @@ app.post('/login', authenticate, (req, res) => {
     // const user = req.session.user
     // console.log(req.session.userId.toString())
     // res.cookie('sessionId', req.session.userId.toString());
-    res.status(200).send({ message: 'Authentication Successful', user })
+    res.status(200).send({ message: 'Authentication Successful' })
 });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {
