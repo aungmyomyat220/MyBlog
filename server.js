@@ -24,8 +24,8 @@ async function authenticate(req, res, next) {
             try{
                 const match = await bcrypt.compare(password, hashedPassword);
                 if (match){
-                    req.session.user = user;
-                    req.session.userId = user._id
+                    // req.session.user = user;
+                    // req.session.userId = user._id
                     next();
                 }else {
                     res.status(401).send("Authentication Failed");
@@ -77,9 +77,9 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 })
 
 app.post('/login', authenticate, (req, res) => {
-    const user = req.session.user
-    console.log(req.session.userId.toString())
-    res.cookie('sessionId', req.session.userId.toString());
+    // const user = req.session.user
+    // console.log(req.session.userId.toString())
+    // res.cookie('sessionId', req.session.userId.toString());
     res.status(200).send({ message: 'Authentication Successful', user })
 });
 
