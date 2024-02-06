@@ -115,7 +115,7 @@ app.post('/posts', async (req, res) => {
 app.get("/posts", async (req, res) => {
     try {
         const posts = await Post.find();
-        res.send({message:"get post success",posts})
+        res.send({message:"get post success",data:posts})
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
@@ -124,7 +124,7 @@ app.get("/posts", async (req, res) => {
 app.get("/users", async (req, res) => {
     try {
         const users = await User.find();
-        res.send({message:"get user success",users})
+        res.send({message:"get user success",data : users})
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
