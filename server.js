@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
+const session = require('./middleware/session')
 const validateApiKey = require('./middleware/validateAPIKey')
 const port = 8000;
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
+app.use(session)
 
 // Middleware to check authentication
 async function authenticate(req, res, next) {
@@ -34,7 +36,6 @@ async function authenticate(req, res, next) {
             }
         }
     } catch (err) {
-
         res.status(500).send("Internal Server Error");
     }
 }
@@ -76,6 +77,7 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 })
 
 app.post('/login', authenticate, (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.status(200).send({ message: 'Authentication Successful' })
 });
 
