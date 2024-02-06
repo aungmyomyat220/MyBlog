@@ -13,7 +13,7 @@ app.get("/posts", async (req, res) => {
     try {
         console.log("Post Method Work");
         const post = await Post.find();
-        res.send({data:"Hello This is Post Method",post})
+        res.send.json(post)
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
@@ -23,7 +23,7 @@ app.get("/users", async (req, res) => {
     try {
         console.log("User Method Work");
         const user = await User.find();
-        res.send({data:"Hello This is User Method",user})
+        res.send.json(user)
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
