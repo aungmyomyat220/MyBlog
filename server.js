@@ -11,6 +11,7 @@ app.use(cors())
 
 app.get("/posts", async (req, res) => {
     try {
+        console.log("Post Method Work");
         const post = await Post.find();
         res.send({data:"Hello This is Post Method",post})
     } catch (error) {
@@ -20,6 +21,7 @@ app.get("/posts", async (req, res) => {
 
 app.get("/users", async (req, res) => {
     try {
+        console.log("User Method Work");
         const user = await User.find();
         res.send({data:"Hello This is User Method",user})
     } catch (error) {
