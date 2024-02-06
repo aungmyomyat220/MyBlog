@@ -11,7 +11,8 @@ app.use(cors())
 
 app.get("/posts", async (req, res) => {
     try {
-        res.send("Hello This is Post Method")
+        const post = Post.find();
+        res.send("Hello This is Post Method",post)
     } catch (error) {
         res.status(500).json({ error: "Error retrieving posts" });
     }
