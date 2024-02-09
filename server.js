@@ -19,8 +19,6 @@ app.use(validateApiKey)
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
-        console.log(userEmail);
-        console.log(password);
         const user = await User.findOne({ userEmail: userEmail});
         if (!user && user === null) {
             res.status(400).send({ message: 'User Not Found' });
