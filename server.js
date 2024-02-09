@@ -21,7 +21,7 @@ async function authenticate(req, res, next) {
     try {
         const user = await User.findOne({ userEmail: userEmail});
         if (!user && user === null) {
-            res.status(400).send({ message: 'User Not Found' });
+            res.status(404).send({ message: 'User Not Found' });
         }else if (user) {
             const hashedPassword = user.password
             try{
