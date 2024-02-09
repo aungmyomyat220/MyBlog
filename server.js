@@ -13,23 +13,23 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
 app.use(session)
+app.use(validateApiKey)
 
 // Middleware to check authentication
 async function authenticate(req, res, next) {
     const { userEmail, password } = req.body;
     try {
         const user = await User.findOne({ userEmail: userEmail});
-        if(userEmail === "" || password ===""){
-            res.status(404).send("Fill Input Values");
-        }
-        else if (user) {
+        if (!user && user === null) {
+            res.status(400).send({ message: 'User Not Found' });
+        }else if (user) {
             const hashedPassword = user.password
             try{
                 const match = await bcrypt.compare(password, hashedPassword);
                 if (match){
                     next();
                 }else {
-                    res.status(401).send("Authentication Failed");
+                    res.status(401).send({ message: 'Authentication Failed' })
                 }
             }catch (e) {
                 console.log(e)
@@ -77,7 +77,6 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 })
 
 app.post('/login', authenticate, (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.status(200).send({ message: 'Authentication Successful' })
 });
 
