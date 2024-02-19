@@ -6,6 +6,7 @@ const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
 const session = require('./middleware/session')
 const validateApiKey = require('./middleware/validateAPIKey')
+const sendGrid = require('./mail_service/sendgrid');
 const port = 8000;
 
 const app = express();
@@ -80,6 +81,18 @@ app.post('/checkuser', checkUserExist ,(req,res) => {
 
 app.post('/login', authenticate, (req, res) => {
     res.status(200).send({ message: 'Authentication Successful', "user" : req.session.user })
+});
+
+app.post('/verify_email', async (req, res) => {
+    const { from, to, template_id } = req.body;
+
+    try {
+        const response = await sendGrid.sendEmail({ from, to, template_id });
+        res.json({ message: 'Email sent successfully!', response });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: 'Error sending email' });
+    }
 });
 
 app.post('/users',checkDuplicateUser, async (req, res) => {

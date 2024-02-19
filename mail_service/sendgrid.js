@@ -1,19 +1,21 @@
-// using Twilio SendGrid's v3 Node.js Library
-// https://github.com/sendgrid/sendgrid-nodejs
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey('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')
-const msg = {
-  to: 'war.wnn@example.com', // Change to your recipient
-  from: 'aungmyomyat874@gmail.com', // Change to your verified sender
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-}
-sgMail
-  .send(msg)
-  .then(() => {
-    console.log('Email sent')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+sgMail.setApiKey('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')
+
+const emailData = {
+  from: 'aungmyomyat874@gmail.com',
+  to: 'war.wnn@gmail.com',
+  content : '',
+  template_id: 'd-76a78520ccd04bfd82f84f86713b5edb'
+};
+const sendEmail = async (emailData) => {
+  try {
+    const response = await sgMail.send(emailData);
+    console.log('Email sent successfully:', response.statusCode);
+    return response;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error; // Re-throw for proper error handling in server.js
+  }
+};
+
+module.exports = { sendEmail };
