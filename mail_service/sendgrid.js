@@ -9,6 +9,7 @@ const sendEmail = async ({userName,userEmail}) => {
     to: userEmail,
     dynamic_template_data: {
       "first_name" : userName,
+      "verification_link" : "https://my-blog-server-rho.vercel.app/users",
       "uuid" : Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
     },
     template_id: 'd-76a78520ccd04bfd82f84f86713b5edb'
