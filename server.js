@@ -84,10 +84,11 @@ app.post('/login', authenticate, (req, res) => {
 });
 
 app.post('/verify_email', async (req, res) => {
-    const { from, to, template_id } = req.body;
-
+    const { userName,userEmail } = req.body;
+    console.log('Name',userName);
+    console.log('Email',userEmail);
     try {
-        const response = await sendGrid.sendEmail({ from, to, template_id });
+        const response = await sendGrid.sendEmail({ userName,userEmail });
         res.json({ message: 'Email sent successfully!', response });
     } catch (error) {
         console.error('Error sending email:', error);
