@@ -94,7 +94,21 @@ app.post('/verify_email', async (req, res) => {
     }
 });
 
-app.post('/users',checkDuplicateUser, async (req, res) => {
+app.post('/checkDuplicateUser',checkDuplicateUser, async (req, res) => {
+    try {
+        const userData = req.body
+        const password = userData.password
+        userData.password = await passwordHash(password)
+        const newUser = new User(userData);
+        await newUser.save();
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/users', async (req, res) => {
     try {
         const userData = req.body
         const password = userData.password
