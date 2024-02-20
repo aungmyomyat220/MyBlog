@@ -47,10 +47,10 @@ async function authenticate(req, res, next) {
 async function checkDuplicateUser(req,res,next){
     const  userData = req.body;
     try {
-        const userEmail = userData.userEmail
+        const userEmail = userData.email
         const alreadyRegisteredUser = await User.findOne({ userEmail: userEmail });
         if(alreadyRegisteredUser){
-            res.status(409).send("User Already Registered")
+            res.json({message : "User Already Registered",statusCode : '409'})
         }else{
             next();
         }
@@ -95,7 +95,7 @@ app.post('/verify_email', async (req, res) => {
 });
 
 app.post('/checkDuplicateUser',checkDuplicateUser, async (req, res) => {
-    res.status(200).json({ user: 'found', userId : existUser._id });
+    res.status(200).json({ message : "No Duplicate User",statusCode : '200'});
 });
 
 app.post('/users', async (req, res) => {

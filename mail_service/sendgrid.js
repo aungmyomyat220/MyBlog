@@ -3,12 +3,13 @@ const dotenv = require('dotenv');
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const sendEmail = async ({userName,userEmail}) => {
+const sendEmail = async (user) => {
   const emailData = {
-    from: 'aungmyomyat874@gmail.com',
-    to: userEmail,
+    from: 'noreply@gmail.com',
+    to: user.userEmail,
     dynamic_template_data: {
-      "first_name" : userName,
+      "first_name" : user.userName,
+      "data" : user,
       "verification_link" : "https://myblog-two-lake.vercel.app/confirm",
       "uuid" : Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
     },
