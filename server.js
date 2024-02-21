@@ -7,6 +7,7 @@ const passwordHash = require('./middleware/passwordHash')
 const session = require('./middleware/session')
 const validateApiKey = require('./middleware/validateAPIKey')
 const sendGrid = require('./mail_service/sendgrid');
+const generateSixDigits = require('./middleware/genereateSixDigits');
 const port = 8000;
 
 const app = express();
@@ -86,9 +87,19 @@ app.post('/login', authenticate, (req, res) => {
 app.post('/verify_email', async (req, res) => {
     const { userName,userEmail } = req.body;
     const preuser = req.body;
-    req.session.preuser = preuser;
+    // req.session.preuser = preuser;
+    const verificationCode = generateSixDigits();
+    // req.session.verificationCode = verificationCode;
+    // console.log(req.session);
+
+    // setTimeout(() => {
+    //     req.session.verificationCode = '';
+    // }, 3 * 60 * 1000);
+
     try {
-        const response = await sendGrid.sendEmail({ userName,userEmail });
+        const response = await sendGrid.sendEmail({ userName,userEmail,verificationCode });
+        req.session.verificationCode = verificationCode;
+        console.log('Session after storing code:', req.session);
         res.json({ message: 'Email sent successfully!', response });
     } catch (error) {
         console.error('Error sending email:', error);
@@ -98,6 +109,18 @@ app.post('/verify_email', async (req, res) => {
 
 app.post('/checkDuplicateUser',checkDuplicateUser, async (req, res) => {
     res.status(200).json({ message : "No Duplicate User",statusCode : '200'});
+});
+
+app.post('/checkVerificationCode', async (req, res) => {
+    const verifyCode = req.body
+    console.log('Session in checkVerificationCode:', req.session);
+    const codeFromSession = req.session.verificationCode;
+    console.log('Code from session:', codeFromSession);
+    if (verifyCode === codeFromSession) {
+        res.status(200).json({ message: "Verification code matched", statusCode: 200 });
+    } else {
+        res.status(400).json({ message: "Verification code does not match", statusCode: 400 });
+    }
 });
 
 app.post('/users', async (req, res) => {

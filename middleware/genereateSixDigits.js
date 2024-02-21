@@ -2,4 +2,4 @@ function genereateSixDigits() {
     return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 }
 
-module.exports = genereateSixDigits
+module.exports = genereateSixDigits;
