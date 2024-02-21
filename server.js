@@ -85,6 +85,8 @@ app.post('/login', authenticate, (req, res) => {
 
 app.post('/verify_email', async (req, res) => {
     const { userName,userEmail } = req.body;
+    const preuser = req.body;
+    req.session.preuser = preuser;
     try {
         const response = await sendGrid.sendEmail({ userName,userEmail });
         res.json({ message: 'Email sent successfully!', response });
