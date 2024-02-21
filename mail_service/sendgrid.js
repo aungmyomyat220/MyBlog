@@ -2,7 +2,6 @@ const sgMail = require('@sendgrid/mail')
 const dotenv = require('dotenv');
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-const randomSixDigits = require('./middleware/getRandomSixDigitNumber')
 
 const sendEmail = async (user) => {
   const emailData = {
@@ -11,7 +10,7 @@ const sendEmail = async (user) => {
     dynamic_template_data: {
       "first_name" : user.userName,
       "verification_link" : "https://myblog-two-lake.vercel.app/confirm",
-      "uuid" : randomSixDigits
+      "uuid" : '123456'
     },
     template_id: 'd-76a78520ccd04bfd82f84f86713b5edb'
   };
