@@ -85,21 +85,16 @@ app.post('/login', authenticate, (req, res) => {
 });
 
 app.post('/verify_email', async (req, res) => {
-    const { userName,userEmail } = req.body;
-    const preuser = req.body;
-    // req.session.preuser = preuser;
+    const user = req.body;
+    const userName = user.userName
+    const userEmail = user.userEmail
     const verificationCode = generateSixDigits();
-    // req.session.verificationCode = verificationCode;
-    // console.log(req.session);
-
-    // setTimeout(() => {
-    //     req.session.verificationCode = '';
-    // }, 3 * 60 * 1000);
 
     try {
         const response = await sendGrid.sendEmail({ userName,userEmail,verificationCode });
         req.session.verificationCode = verificationCode;
-        console.log('Session after storing code:', req.session);
+        req.session.preUser = user;
+        console.log("***********************Session*****************",req.session);
         res.json({ message: 'Email sent successfully!', response });
     } catch (error) {
         console.error('Error sending email:', error);
@@ -112,25 +107,28 @@ app.post('/checkDuplicateUser',checkDuplicateUser, async (req, res) => {
 });
 
 app.post('/checkVerificationCode', async (req, res) => {
-    const verifyCode = req.body
-    console.log('Session in checkVerificationCode:', req.session);
+    const verificationCode = req.body;
+    let codeString = verificationCode.code;
+    let codeNumber = parseInt(codeString);
     const codeFromSession = req.session.verificationCode;
-    console.log('Code from session:', codeFromSession);
-    if (verifyCode === codeFromSession) {
-        res.status(200).json({ message: "Verification code matched", statusCode: 200 });
+    if (codeNumber === codeFromSession) {
+        res.status(200).json({ message: "Verification code match", statusCode: 200 });
     } else {
         res.status(400).json({ message: "Verification code does not match", statusCode: 400 });
     }
 });
 
-app.post('/users', async (req, res) => {
+app.get('/createUsers', async (req, res) => {
+    console.log('Work');
+    console.log("***********************Session in create User*****************",req.session);
     try {
-        const userData = req.body
-        const password = userData.password
-        userData.password = await passwordHash(password)
-        const newUser = new User(userData);
+        const preUser = req.session.preUser
+        console.log("PreUser====>",preUser);
+        const password = preUser.password
+        preUser.password = await passwordHash(password)
+        const newUser = new User(preUser);
         await newUser.save();
-        res.status(201).json(newUser);
+        res.status(201).json({ message: "Account Create Successful", statusCode: 201});
     } catch (error) {
         console.error('Error creating user:', error);
         res.status(500).json({ error: 'Internal Server Error' });

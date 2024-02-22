@@ -16,7 +16,7 @@ const sendEmail = async ({userEmail,userName,verificationCode}) => {
   };
   try {
     const response = await sgMail.send(emailData);
-    console.log('Email sent successfully:');
+    console.log('Email sent successfully');
     return response;
   } catch (error) {
     console.error('Error sending email:', error);
