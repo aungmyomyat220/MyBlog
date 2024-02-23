@@ -111,6 +111,7 @@ app.post('/checkVerificationCode', async (req, res) => {
     let codeString = verificationCode.code;
     let codeNumber = parseInt(codeString);
     const codeFromSession = req.session.verificationCode;
+    console.log("***********************Session in Check Verification Code*****************",req.session);
     if (codeNumber === codeFromSession) {
         res.status(200).json({ message: "Verification code match", statusCode: 200 });
     } else {
