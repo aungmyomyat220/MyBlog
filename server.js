@@ -114,7 +114,7 @@ app.post('/portfolio_mailservice', async (req, res) => {
     const {email,subject,content} = req.body;
     try {
         const response = await portfolio_mailservice.sendEmail({ email,subject,content });
-        res.status(200).json({message : "Email Succefully Sent",response})
+        res.status(200).json({message : "Email Succefully Sent", statusCode : 200})
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: 'Error sending email' });
