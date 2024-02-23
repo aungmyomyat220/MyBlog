@@ -1,20 +1,29 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require('body-parser');
+const session = require("express-session");
+const cookieParser = require('cookie-parser');
 const bcrypt = require("bcrypt");
 const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
-const session = require('./middleware/session')
 const validateApiKey = require('./middleware/validateAPIKey')
 const sendGrid = require('./mail_service/sendgrid');
+const portfolio_mailservice = require('./mail_service/portfolio_mailservice');
 const generateSixDigits = require('./middleware/genereateSixDigits');
 const port = 8000;
 
 const app = express();
+app.use(cookieParser());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors())
-app.use(session)
+app.use(session({
+    secret: 'keyboard cat',
+    name: 'verify-code_cookie',
+    resave: false,
+    saveUninitialized: false,
+    httpOnly : true
+  }))
 app.use(validateApiKey)
 
 // Middleware to check authentication
@@ -92,10 +101,20 @@ app.post('/verify_email', async (req, res) => {
 
     try {
         const response = await sendGrid.sendEmail({ userName,userEmail,verificationCode });
+        console.log("Verification Code =======>",verificationCode);
         req.session.verificationCode = verificationCode;
-        req.session.preUser = user;
-        console.log("***********************Session*****************",req.session);
         res.json({ message: 'Email sent successfully!', response });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: 'Error sending email' });
+    }
+});
+
+app.post('/portfolio_mailservice', async (req, res) => {
+    const {email,subject,content} = req.body;
+    try {
+        const response = await portfolio_mailservice.sendEmail({ email,subject,content });
+        res.status(200).json({message : "Email Succefully Sent",response})
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: 'Error sending email' });
@@ -111,10 +130,13 @@ app.post('/checkVerificationCode', async (req, res) => {
     let codeString = verificationCode.code;
     let codeNumber = parseInt(codeString);
     const codeFromSession = req.session.verificationCode;
-    console.log("***********************Session in Check Verification Code*****************",req.session);
+    console.log('CodeNumber=====>',codeNumber);
+    console.log('COde From Session=====>',codeFromSession);
     if (codeNumber === codeFromSession) {
+        console.log('****************Succeess*********************');
         res.status(200).json({ message: "Verification code match", statusCode: 200 });
     } else {
+        console.log('**************400 Return*******************');
         res.status(400).json({ message: "Verification code does not match", statusCode: 400 });
     }
 });

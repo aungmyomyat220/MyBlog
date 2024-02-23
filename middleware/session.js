@@ -1,10 +1,8 @@
 const sessions = require("express-session");
-
 const sessionConfig = {
-  secret: 'my-secret',
-  resave: false, 
-  saveUninitialized: true,
-  httpOnly: true
+  secret: 'keyboardcat',
+  resave: false,
+  saveUninitialized: false,
 };
 
 module.exports = sessions(sessionConfig);
