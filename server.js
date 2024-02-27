@@ -8,7 +8,6 @@ const {User,Post} = require('./db/mongo')
 const passwordHash = require('./middleware/passwordHash')
 const validateApiKey = require('./middleware/validateAPIKey')
 const sendGrid = require('./mail_service/sendgrid');
-const portfolio_mailservice = require('./mail_service/portfolio_mailservice');
 const generateSixDigits = require('./middleware/genereateSixDigits');
 const port = 8000;
 
@@ -104,17 +103,6 @@ app.post('/verify_email', async (req, res) => {
         console.log("Verification Code =======>",verificationCode);
         req.session.verificationCode = verificationCode;
         res.json({ message: 'Email sent successfully!', response });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ error: 'Error sending email' });
-    }
-});
-
-app.post('/portfolio_mailservice', async (req, res) => {
-    const {email,subject,content} = req.body;
-    try {
-        const response = await portfolio_mailservice.sendEmail({ email,subject,content });
-        res.status(200).json({message : "Email Succefully Sent",response})
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ error: 'Error sending email' });
