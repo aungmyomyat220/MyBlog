@@ -15,13 +15,20 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
 app.use(session({
     secret: 'keyboard cat',
     name: 'verify-code_cookie',
     resave: false,
     saveUninitialized: false,
-    httpOnly : true
+    cookie : {
+        secure : false,
+        httpOnly : true,
+        maxAge : 1000 * 60 * 30
+    }
   }))
 app.use(validateApiKey)
 
@@ -102,6 +109,7 @@ app.post('/verify_email', async (req, res) => {
         const response = await sendGrid.sendEmail({ userName,userEmail,verificationCode });
         console.log("Verification Code =======>",verificationCode);
         req.session.verificationCode = verificationCode;
+        req.session.preUser = user;
         res.json({ message: 'Email sent successfully!', response });
     } catch (error) {
         console.error('Error sending email:', error);
@@ -118,23 +126,16 @@ app.post('/checkVerificationCode', async (req, res) => {
     let codeString = verificationCode.code;
     let codeNumber = parseInt(codeString);
     const codeFromSession = req.session.verificationCode;
-    console.log('CodeNumber=====>',codeNumber);
-    console.log('COde From Session=====>',codeFromSession);
     if (codeNumber === codeFromSession) {
-        console.log('****************Succeess*********************');
-        res.status(200).json({ message: "Verification code match", statusCode: 200 });
-    } else {
-        console.log('**************400 Return*******************');
+        res.redirect('/createUsers')
+    } else if (codeNumber !== codeFromSession) {
         res.status(400).json({ message: "Verification code does not match", statusCode: 400 });
     }
 });
 
 app.get('/createUsers', async (req, res) => {
-    console.log('Work');
-    console.log("***********************Session in create User*****************",req.session);
     try {
         const preUser = req.session.preUser
-        console.log("PreUser====>",preUser);
         const password = preUser.password
         preUser.password = await passwordHash(password)
         const newUser = new User(preUser);
