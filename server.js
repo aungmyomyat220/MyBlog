@@ -90,6 +90,14 @@ async function checkUserExist(req,res,next){
     }
 }
 
+app.get('/' , (req, res) => {
+    const sessionId = req.session.userId
+    if (sessionId) {
+        res.status(200).send({ message: 'Authentication Successful', "user" : req.session.user })
+    }
+        res.status(401).send({ message: 'Authentication Failed'})
+});
+
 app.post('/checkuser', checkUserExist ,(req,res) => {
     const existUser = req.existUser
     res.status(200).json({ user: 'found', userId : existUser._id });
